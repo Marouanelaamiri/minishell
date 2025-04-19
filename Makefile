@@ -6,7 +6,7 @@
 #    By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/13 15:01:51 by malaamir          #+#    #+#              #
-#    Updated: 2025/04/16 14:40:47 by malaamir         ###   ########.fr        #
+#    Updated: 2025/04/19 17:32:59 by malaamir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ execution/helpers/is_num.c \
 execution/helpers/simple_split.c \
 execution/builtin.c \
 execution/env_utils.c \
+parsing/tokenizing/ft_tokenize.c \
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
 #------------------------------Compiler and Flages------------------------------#
