@@ -6,19 +6,11 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/17 15:14:05 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/20 16:42:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*
-** builtin_echo:
-**  - args: the array of command arguments, where args[0] is "echo"
-**  - env: not used for echo (pass NULL or ignore)
-**
-** If the first argument after "echo" is "-n", do not output a newline.
-*/
 
 int ft_echo(t_cmd *cmd, t_env **env)
 {
@@ -126,26 +118,63 @@ int ft_env(t_cmd *cmd, t_env **env)
 }
 
 
-int	ft_exit(t_cmd *cmd, t_env **env)
+int ft_exit(t_cmd *cmd, t_env **env)
 {
-	t_token *token = cmd->args->next;
-	int status = 0;
-	(void)env;
+    t_token *tok = cmd->args->next;
+    long     status = 0;
+    int      sign = 1;
+    char    *s;
 
-	if(token)
-	{
-		status = atoi(token->value);
-		if (is_numeric(token->value) == 0)
-		{
-			write(2, "exit: numeric argument required\n", 33);
-			exit(255);
-		}
-		if (token->next)
-		{
-			write(2, "exit: too many arguments\n", 25);
-			return (1);
-		}
-	}
-	printf("exit\n");
-	exit(status);
+    (void)env;
+    /* Always print 'exit' first */
+    printf("exit\n");
+
+    /* No argument: exit with status 0 */
+    if (tok == NULL)
+    {
+        exit(0);
+    }
+
+    /* Handle optional leading '+' or '-' */
+    s = tok->value;
+    if (*s == '+' || *s == '-')
+    {
+        if (*s == '-')
+            sign = -1;
+        s++;
+    }
+
+    /* Must have at least one digit */
+    if (*s == '\0')
+    {
+        write(2, "exit: numeric argument required\n", 33);
+        exit(255);
+    }
+
+    /* Parse digits */
+    while (*s)
+    {
+        if (!isdigit(*s))
+        {
+            write(2, "exit: numeric argument required\n", 33);
+            exit(255);
+        }
+        status = status * 10 + (*s - '0');
+        s++;
+    }
+    status = status * sign;
+
+    /* Too many arguments? */
+    if (tok->next != NULL)
+    {
+        write(2, "exit: too many arguments\n", 25);
+        return (1);
+    }
+
+    /* Clamp into 0–255 */
+    status = status % 256;
+    if (status < 0)
+        status = status + 256;
+
+    exit((int)status);
 }
