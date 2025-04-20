@@ -6,19 +6,20 @@
 #    By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/13 15:01:51 by malaamir          #+#    #+#              #
-#    Updated: 2025/04/19 17:32:59 by malaamir         ###   ########.fr        #
+#    Updated: 2025/04/20 11:08:31 by malaamir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #------------------------------Source Files------------------------------------#
-SRC = minishell.c \
+SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
 execution/helpers/handl_builtins.c \
 execution/helpers/is_num.c \
-execution/helpers/simple_split.c \
+execution/helpers/ft_substr.c \
 execution/builtin.c \
 execution/env_utils.c \
 parsing/tokenizing/ft_tokenize.c \
+parsing/syntax_check/ft_syntax_check.c\
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
 #------------------------------Compiler and Flages------------------------------#

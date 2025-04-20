@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/19 17:29:28 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:05:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,40 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	t_token	*tokens;
 	t_cmd	*cmd_list;
 
+	(void)env;
+	(void)cmd_list;
+	
+	if (!ft_check_quotes(input))
+		return (NULL);
 	// lexer
 	tokens = ft_tokenize(input);
 	if (!tokens)
 		return (NULL);
-	
+	if (!ft_syntax_check(tokens))
+	{
+		// ft_free_tokens(tokens);
+		return (NULL);
+	}
+	return (NULL);
+}
+void print_tokens(t_token *token)
+{
+	while (token)
+	{
+		printf("  [Type: %d, Value: \"%s\"]\n", token->type, token->value);
+		token = token->next;
+	}
+}
+
+void print_cmd_list(t_cmd *cmd)
+{
+	int i = 0;
+	while (cmd)
+	{
+		printf("Command %d:\n", ++i);
+		print_tokens(cmd->args);
+		cmd = cmd->next;
+	}
 }
 
 // --- Main Shell Loop ---
@@ -45,8 +74,6 @@ int main(int argc, char **argv, char **envp)
 		if (*line)
 			add_history(line);
 		cmd = ft_process_input(line, env);
-		// 1) Tokenize
-
 		// 3) Dispatch built‑ins
 		if (cmd)
 			status = handle_builtins(cmd, &env);
@@ -56,6 +83,5 @@ int main(int argc, char **argv, char **envp)
 		//     status = execute_cmds(cmd, env);
 		// }
 	}
-	free_env(env);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:53:17 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/19 17:31:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:03:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,48 +36,56 @@ static int	ft_is_ope_start(const char *str)
 
 static t_token	*ft_parse_operator(const char *input, int *i)
 {
+	if (!input || !input[*i])
+		return (NULL);
 	t_token *token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
+	token->next = NULL;
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		token->type = APPEND;
-		token->value = ft_strdup(">>");
+		token->value = strdup(">>");
 		*i += 2;
 	}
 	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
 		token->type = HEREDOC;
-		token->value = ft_strdup("<<");
+		token->value = strdup("<<");
 		*i += 2;
 	}
 	else if (input[*i] == '>')
 	{
 		token->type = REDIR_OUT;
-		token->value = ft_strdup(">");
+		token->value = strdup(">");
 		*i += 1;
 	}
 	else if (input[*i] == '<')
 	{
 		token->type = REDIR_IN;
-		token->value = ft_strdup("<");
+		token->value = strdup("<");
 		*i += 1;
 	}
 	else if (input[*i] == '|')
 	{
 		token->type = PIPE;
-		token->value = ft_strdup("|");
+		token->value = strdup("|");
+		(*i) += 1;
 	}
 	else
 	{
 		free(token);
 		return (NULL);
 	}
-	token->next = NULL;
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
 	return (token);
 }
 
-static t_token *ft_pars_word(const char *input, int *i)
+static t_token *ft_parse_word(const char *input, int *i)
 {
 	int start = *i;
 	char quote = 0;
@@ -140,7 +148,7 @@ t_token	*ft_tokenize(const char	*input)
 	{
 		if (ft_isspace(input[i]))
 			i++;
-		else if (is_ope_start(input + i))
+		else if (ft_is_ope_start(input + i))
 		{
 			op = ft_parse_operator(input, &i);
 			ft_add_token(&head, &last, op);		

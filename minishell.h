@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/17 15:05:49 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/20 11:02:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_cmd
 // helpers
 int ft_strcmp(const char *s1, const char *s2);
 int	is_numeric(const char *str);
-char **simple_split(char *input);
+char	*ft_substr(const char *s, unsigned int start, size_t len);
 
 
 
@@ -93,5 +93,7 @@ void free_env(t_env *env_list);
 // parsing
 
 int handle_builtins(t_cmd *cmd, t_env **env);
-
+t_token	*ft_tokenize(const char	*input);
+int	ft_syntax_check(t_token *tokens);
+int ft_check_quotes(const char *input);
 # endif
