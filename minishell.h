@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:07:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:52:29 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,18 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
+typedef struct s_redir
+{
+	t_type		type; // REDIR_IN, REDIR_OUT, HEREDOC, APPEND
+	char			*value; // file name
+	struct s_redir	*next;
+}			t_redir;
+
 typedef struct s_cmd
 {
 	t_token *args; // head of the token list
-	struct s_cmd *next;
+	t_redir *redir; // head of the redirection list
+	struct s_cmd *next; // next command in the list specified by the pipe
 }			t_cmd;
 
 // helpers

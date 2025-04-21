@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:46:06 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/20 21:59:09 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:05:38 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,97 @@
 
 static t_cmd *ft_create_cmd(void)
 {
-	t_cmd *cmd;
-	cmd = malloc(sizeof(t_cmd));
+	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
+	cmd->redir = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-static void	ft_add_token_to_cmd(t_cmd *cmd, t_token *new_token)
+
+static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value)
 {
-	t_token *current = cmd->args;
-	if (!cmd->args)
-		cmd->args = new_token;
+	t_redir *new = malloc(sizeof(t_redir));
+	if (!new)
+		return;
+	new->type = type;
+	new->value = value;
+	new->next = NULL;
+
+	if (!cmd->redir)
+		cmd->redir = new;
 	else
 	{
-		while (current->next)
-			current = current->next;
-		current->next = new_token;
+		t_redir *curr = cmd->redir;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new;
 	}
 }
+
+
+static void	ft_add_arg_to_cmd(t_cmd *cmd, t_token *arg)
+{
+	if (!cmd->args)
+		cmd->args = arg;
+	else
+	{
+		t_token *curr = cmd->args;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = arg;
+	}
+}
+
 
 t_cmd	*ft_parse_commands(t_token *tokens)
 {
 	t_cmd *head = NULL;
 	t_cmd *last = NULL;
-	t_cmd *current_cmd = NULL;
+	t_cmd *current = NULL;
 
 	while (tokens)
 	{
-		if (!current_cmd)
+		if (!current)
 		{
-			current_cmd = ft_create_cmd();
+			current = ft_create_cmd();
 			if (!head)
-				head = current_cmd;
-			else 
-				last->next = current_cmd;
+				head = current;
+			else
+				last->next = current;
 		}
+
 		if (tokens->type == PIPE)
 		{
-			last = current_cmd;
-			current_cmd = NULL;
+			last = current;
+			current = NULL;
+			tokens = tokens->next;
+			continue;
+		}
+		else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
+			|| tokens->type == HEREDOC || tokens->type == APPEND)
+		{
+			t_type redir_type = tokens->type;
+			tokens = tokens->next;
+			if (!tokens || tokens->type != WORD)
+				return (NULL);
+			char *file = ft_strdup(tokens->value);
+			ft_add_redir_to_cmd(current, redir_type, file);
+			tokens = tokens->next;
+		}
+		else if (tokens->type == WORD)
+		{
+			t_token *arg = malloc(sizeof(t_token));
+			arg->type = tokens->type;
+			arg->value = ft_strdup(tokens->value);
+			arg->next = NULL;
+			ft_add_arg_to_cmd(current, arg);
+			tokens = tokens->next;
 		}
 		else
-		{
-			t_token *copy = malloc(sizeof(t_token));
-			copy->type = tokens->type;
-			copy->value = ft_strdup(tokens->value);
-			copy->next = NULL;
-			ft_add_token_to_cmd(current_cmd, copy);
-		}
-		tokens = tokens->next;
+			tokens = tokens->next;
 	}
 	return (head);
 }

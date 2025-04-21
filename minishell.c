@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:33:03 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:44:04 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,6 @@ static const char *get_token_type_name(t_type type)
 	if (type == APPEND) return "APPEND";
 	return "UNKNOWN";
 }
-static void print_commands(t_cmd *cmds)
-{
-	int cmd_num = 1;
-	while (cmds)
-	{
-		printf("== Command %d ==\n", cmd_num++);
-		t_token *arg = cmds->args;
-		while (arg)
-		{
-			printf("  [%s] \"%s\"\n", get_token_type_name(arg->type), arg->value);
-			arg = arg->next;
-		}
-		cmds = cmds->next;
-	}
-}
 static void print_tokens(t_token *token)
 {
 	printf("---- Tokens ----\n");
@@ -47,6 +32,58 @@ static void print_tokens(t_token *token)
 		token = token->next;
 	}
 	printf("----------------\n");
+}
+static void print_redir(t_redir *redir)
+{
+    while (redir)
+    {
+        if (redir->type == REDIR_IN)
+            printf("REDIR_IN: %s ", redir->value);
+        else if (redir->type == REDIR_OUT)
+            printf("REDIR_OUT: %s ", redir->value);
+        else if (redir->type == HEREDOC)
+            printf("HEREDOC: %s ", redir->value);
+        else if (redir->type == APPEND)
+            printf("APPEND: %s ", redir->value);
+        redir = redir->next;
+    }
+}
+
+static void print_args(t_token *args)
+{
+    while (args)
+    {
+        printf("%s ", args->value);
+        args = args->next;
+    }
+}
+
+static void ft_print_cmds(t_cmd *cmd)
+{
+    int cmd_number = 1;
+
+    while (cmd)
+    {
+        printf("[t_cmd %d]\n", cmd_number++);
+        
+        // Print args
+        printf("  args: ");
+        if (cmd->args)
+            print_args(cmd->args);
+        else
+            printf("(no args)");
+        
+        // Print redir
+        printf("\n  redir: ");
+        if (cmd->redir)
+            print_redir(cmd->redir);
+        else
+            printf("(no redirection)");
+        
+        printf("\n\n");
+        
+        cmd = cmd->next;
+    }
 }
 // -- end debug functions --
 static t_cmd *ft_process_input(char *input, t_env *env)
@@ -62,7 +99,7 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	tokens = ft_tokenize(input); // tokenize input
 	if (!tokens)
 		return (NULL);
-	// print_tokens(tokens);
+	print_tokens(tokens);
 	if (!ft_syntax_check(tokens)) // syntax check
 	{
 		// ft_free_tokens(tokens);
@@ -98,7 +135,7 @@ int main(int argc, char **argv, char **envp)
 		// 3) Dispatch built‑ins
 		if (cmd)
 		{
-			// print_commands(cmd);
+			ft_print_cmds(cmd);
 			status = handle_builtins(cmd, &env);
 		}
 		if (status < 0)
