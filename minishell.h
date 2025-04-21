@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:43:37 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:55:27 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int ft_export(t_cmd *cmd, t_env **env);
 int ft_unset(t_cmd *cmd, t_env **env);
 int ft_env(t_cmd *cmd, t_env **env);
 int	ft_exit(t_cmd *cmd, t_env **env);
+int is_builtin(t_cmd *cmd);
+int handle_builtins(t_cmd *cmd, t_env **env);
 
 // env_utils
 
@@ -99,7 +101,7 @@ void free_env(t_env *env_list);
 
 // parsing
 
-int handle_builtins(t_cmd *cmd, t_env **env);
+
 t_token	*ft_tokenize(const char	*input);
 int	ft_syntax_check(t_token *tokens);
 int ft_check_quotes(const char *input);
