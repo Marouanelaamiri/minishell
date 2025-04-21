@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenize.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:53:17 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/20 11:03:38 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:11:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,31 @@ static t_token	*ft_parse_operator(const char *input, int *i)
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		token->type = APPEND;
-		token->value = strdup(">>");
+		token->value = ft_strdup(">>");
 		*i += 2;
 	}
 	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
 		token->type = HEREDOC;
-		token->value = strdup("<<");
+		token->value = ft_strdup("<<");
 		*i += 2;
 	}
 	else if (input[*i] == '>')
 	{
 		token->type = REDIR_OUT;
-		token->value = strdup(">");
+		token->value = ft_strdup(">");
 		*i += 1;
 	}
 	else if (input[*i] == '<')
 	{
 		token->type = REDIR_IN;
-		token->value = strdup("<");
+		token->value = ft_strdup("<");
 		*i += 1;
 	}
 	else if (input[*i] == '|')
 	{
 		token->type = PIPE;
-		token->value = strdup("|");
+		token->value = ft_strdup("|");
 		(*i) += 1;
 	}
 	else

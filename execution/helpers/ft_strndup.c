@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 23:29:37 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/21 12:42:43 by malaamir         ###   ########.fr       */
+/*   Created: 2025/04/21 12:06:16 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/21 12:08:16 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+char	*ft_strndup(const char *src, size_t n)
 {
-	size_t	s_l;
+	char	*dst;
 	size_t	i;
-	char	*sub;
 
-	if (!s)
-		return (NULL);
-	s_l = ft_strlen(s);
 	i = 0;
-	if (start >= s_l)
-		return (ft_strdup(""));
-	if (len > (s_l - start))
-		len = s_l - start;
-	sub = (char *)malloc(len + 1);
-	if (!sub)
+	dst = malloc(n + 1);
+	if (dst == NULL)
 		return (NULL);
-	ft_strlcpy(sub, &s[start], len + 1);
-	sub[len] = '\0';
-	return (sub);
+	while (i < n && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
 }

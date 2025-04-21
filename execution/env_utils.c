@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/17 15:51:13 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:10:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ t_env *init_env(char **envp)
 
 	while (envp[i])
 	{
-		equal_sign = strchr(envp[i], '=');
+		equal_sign = ft_strchr(envp[i], '=');
 		if (equal_sign)
 		{
 			new_node = malloc(sizeof *(new_node));
 			if (!new_node)
 				return (NULL);
-			new_node->name = strndup(envp[i], equal_sign - envp[i]);
-			new_node->value = strdup(equal_sign + 1);
+			new_node->name = ft_strndup(envp[i], equal_sign - envp[i]);
+			new_node->value = ft_strdup(equal_sign + 1);
 			new_node->next = NULL;
 			if (!head)
 				head = new_node;
@@ -49,7 +49,7 @@ int env_set(t_env **env , const char *name, const char *value)
 
 	while (current)
 	{
-		if (strcmp(current->name, name) == 0)
+		if (ft_strcmp(current->name, name) == 0)
 		{
 			free(current->value);
 			current->value = strdup(value);
@@ -60,8 +60,8 @@ int env_set(t_env **env , const char *name, const char *value)
 	node = malloc(sizeof *(node));
 	if (!node)
 		return (1); // failure
-	node->name = strdup(name);
-	node->value = strdup(value);
+	node->name = ft_strdup(name);
+	node->value = ft_strdup(value);
 	node->next = *env;
 	*env = node;
 	return (0); // success
@@ -73,7 +73,7 @@ int env_unset(t_env **env, const char *name)
 
 	while (current)
 	{
-		if (strcmp(current->name, name) == 0) // todo
+		if (ft_strcmp(current->name, name) == 0) // todo
 		{
 			if (prev == NULL)
 				*env = current->next; // head is being removed

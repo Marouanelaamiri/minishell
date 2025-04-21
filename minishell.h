@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/20 11:02:38 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:43:37 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,16 @@ typedef struct s_cmd
 }			t_cmd;
 
 // helpers
-int ft_strcmp(const char *s1, const char *s2);
-int	is_numeric(const char *str);
+int		ft_atoi(const char *str);
+char	*ft_strchr(const char *s, int c);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strdup(const char *s1);
+size_t	ft_strlen(const char *s);
+char	*ft_strndup(const char *src, size_t n);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
+int		is_numeric(const char *str);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+
 
 
 

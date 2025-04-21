@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 23:29:37 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/21 12:42:43 by malaamir         ###   ########.fr       */
+/*   Created: 2025/04/21 12:43:03 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/21 12:43:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t	s_l;
 	size_t	i;
-	char	*sub;
 
-	if (!s)
-		return (NULL);
-	s_l = ft_strlen(s);
 	i = 0;
-	if (start >= s_l)
-		return (ft_strdup(""));
-	if (len > (s_l - start))
-		len = s_l - start;
-	sub = (char *)malloc(len + 1);
-	if (!sub)
-		return (NULL);
-	ft_strlcpy(sub, &s[start], len + 1);
-	sub[len] = '\0';
-	return (sub);
+	if (dstsize > 0)
+	{
+		if (dstsize > ft_strlen(src) + 1)
+		{
+			while (src[i])
+			{
+				dst[i] = src[i];
+				i++;
+			}
+		}
+		else
+		{
+			while (i < dstsize - 1 && src[i])
+			{
+				dst[i] = src[i];
+				i++;
+			}
+		}
+		dst[i] = '\0';
+	}
+	return (ft_strlen(src));
 }

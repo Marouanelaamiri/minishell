@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 23:29:37 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/21 12:42:43 by malaamir         ###   ########.fr       */
+/*   Created: 2025/04/21 12:02:26 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/21 12:02:50 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+char	*ft_strchr(const char *s, int c)
 {
-	size_t	s_l;
 	size_t	i;
-	char	*sub;
+	char	ch;
 
-	if (!s)
-		return (NULL);
-	s_l = ft_strlen(s);
+	ch = (char) c;
 	i = 0;
-	if (start >= s_l)
-		return (ft_strdup(""));
-	if (len > (s_l - start))
-		len = s_l - start;
-	sub = (char *)malloc(len + 1);
-	if (!sub)
+	while (s[i])
+	{
+		if (s[i] == ch)
+			return ((char *) &s[i]);
+		i++;
+	}
+	if (s[i] == ch)
+		return ((char *)&s[i]);
+	else
 		return (NULL);
-	ft_strlcpy(sub, &s[start], len + 1);
-	sub[len] = '\0';
-	return (sub);
 }

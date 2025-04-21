@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 11:45:59 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 12:03:21 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	int newline = 1;
 
 	(void)env;
-	if (token && token->type == WORD && strcmp(token->value, "-n") == 0)
+	if (token && token->type == WORD && ft_strcmp(token->value, "-n") == 0)
 	{
 		newline = 0;
 		token = token->next;
@@ -81,7 +81,7 @@ int ft_export(t_cmd *cmd, t_env **env)
 		return ft_env(cmd, env); // no arguments, print env
 	while (token)
 	{
-		equal_sign = strchr(token->value, '=');
+		equal_sign = ft_strchr(token->value, '=');
 		if (!equal_sign)
 			env_set(env, token->value, "");
 		else
@@ -139,7 +139,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 		write(2, "exit: too many arguments\n", 25);
 		return (1);
 	}
-	status = atol(arg->value);
+	status = ft_atoi(arg->value);
 	status = (status % 256 + 256) % 256;
 	exit((int)status);
 }
