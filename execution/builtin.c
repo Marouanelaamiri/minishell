@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/20 16:42:59 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 11:45:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,63 +118,29 @@ int ft_env(t_cmd *cmd, t_env **env)
 }
 
 
-int ft_exit(t_cmd *cmd, t_env **env)
+int	ft_exit(t_cmd *cmd, t_env **env)
 {
-    t_token *tok = cmd->args->next;
-    long     status = 0;
-    int      sign = 1;
-    char    *s;
+	t_token	*arg = cmd->args->next;
+	long	status;
 
-    (void)env;
-    /* Always print 'exit' first */
-    printf("exit\n");
+	(void)env;
+	printf("exit\n");
 
-    /* No argument: exit with status 0 */
-    if (tok == NULL)
-    {
-        exit(0);
-    }
+	if (!arg)
+		exit(0);
 
-    /* Handle optional leading '+' or '-' */
-    s = tok->value;
-    if (*s == '+' || *s == '-')
-    {
-        if (*s == '-')
-            sign = -1;
-        s++;
-    }
-
-    /* Must have at least one digit */
-    if (*s == '\0')
-    {
-        write(2, "exit: numeric argument required\n", 33);
-        exit(255);
-    }
-
-    /* Parse digits */
-    while (*s)
-    {
-        if (!isdigit(*s))
-        {
-            write(2, "exit: numeric argument required\n", 33);
-            exit(255);
-        }
-        status = status * 10 + (*s - '0');
-        s++;
-    }
-    status = status * sign;
-
-    /* Too many arguments? */
-    if (tok->next != NULL)
-    {
-        write(2, "exit: too many arguments\n", 25);
-        return (1);
-    }
-
-    /* Clamp into 0–255 */
-    status = status % 256;
-    if (status < 0)
-        status = status + 256;
-
-    exit((int)status);
+	if (!is_numeric(arg->value))
+	{
+		write(2, "exit: numeric argument required\n", 33);
+		exit(255);
+	}
+	if (arg->next)
+	{
+		write(2, "exit: too many arguments\n", 25);
+		return (1);
+	}
+	status = atol(arg->value);
+	status = (status % 256 + 256) % 256;
+	exit((int)status);
 }
+
