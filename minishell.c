@@ -3,53 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:18:43 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:29:22 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // -- debug functions --
-// static const char *get_token_type_name(t_type type)
-// {
-// 	if (type == WORD) return "WORD";
-// 	if (type == PIPE) return "PIPE";
-// 	if (type == REDIR_IN) return "REDIR_IN";
-// 	if (type == REDIR_OUT) return "REDIR_OUT";
-// 	if (type == HEREDOC) return "HEREDOC";
-// 	if (type == APPEND) return "APPEND";
-// 	return "UNKNOWN";
-// }
-// static void print_commands(t_cmd *cmds)
-// {
-// 	int cmd_num = 1;
-// 	while (cmds)
-// 	{
-// 		printf("== Command %d ==\n", cmd_num++);
-// 		t_token *arg = cmds->args;
-// 		while (arg)
-// 		{
-// 			printf("  [%s] \"%s\"\n", get_token_type_name(arg->type), arg->value);
-// 			arg = arg->next;
-// 		}
-// 		cmds = cmds->next;
-// 	}
-// }
-
-
-// static void print_tokens(t_token *token)
-// {
-// 	printf("---- Tokens ----\n");
-// 	while (token)
-// 	{
-// 		printf("[%s] \"%s\"\n", get_token_type_name(token->type), token->value);
-// 		token = token->next;
-// 	}
-// 	printf("----------------\n");
-// }
+static const char *get_token_type_name(t_type type)
+{
+	if (type == WORD) return "WORD";
+	if (type == PIPE) return "PIPE";
+	if (type == REDIR_IN) return "REDIR_IN";
+	if (type == REDIR_OUT) return "REDIR_OUT";
+	if (type == HEREDOC) return "HEREDOC";
+	if (type == APPEND) return "APPEND";
+	return "UNKNOWN";
+}
+static void print_commands(t_cmd *cmds)
+{
+	int cmd_num = 1;
+	while (cmds)
+	{
+		printf("== Command %d ==\n", cmd_num++);
+		t_token *arg = cmds->args;
+		while (arg)
+		{
+			printf("  [%s] \"%s\"\n", get_token_type_name(arg->type), arg->value);
+			arg = arg->next;
+		}
+		cmds = cmds->next;
+	}
+}
+static void print_tokens(t_token *token)
+{
+	printf("---- Tokens ----\n");
+	while (token)
+	{
+		printf("[%s] \"%s\"\n", get_token_type_name(token->type), token->value);
+		token = token->next;
+	}
+	printf("----------------\n");
+}
 // -- end debug functions --
 static t_cmd *ft_process_input(char *input, t_env *env)
 {
