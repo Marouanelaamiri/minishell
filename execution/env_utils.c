@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:10:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:31:18 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_env *init_env(char **envp)
 		i++;
 	}
 	return (head);
+	
 }
 
 int env_set(t_env **env , const char *name, const char *value)
@@ -100,16 +101,16 @@ char *ft_getenv(t_env *env_list, const char *name)
 	}
 	return (NULL);
 }
-void free_env(t_env *env_list)
-{
-	t_env *temp;
+// void free_env(t_env *env_list)
+// {
+// 	t_env *temp;
 
-	while (env_list)
-	{
-		temp = env_list->next;
-		free(env_list->name);
-		free(env_list->value);
-		free(env_list);
-		env_list = temp;
-	}
-}
+// 	while (env_list)
+// 	{
+// 		temp = env_list->next;
+// 		free(env_list->name);
+// 		free(env_list->value);
+// 		free(env_list);
+// 		env_list = temp;
+// 	}
+// }
