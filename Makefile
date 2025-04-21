@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+         #
+#    By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/13 15:01:51 by malaamir          #+#    #+#              #
-#    Updated: 2025/04/21 12:55:56 by malaamir         ###   ########.fr        #
+#    Updated: 2025/04/21 15:07:21 by malaamir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ execution/builtin_utils.c \
 execution/env_utils.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/syntax_check/ft_syntax_check.c\
+parsing/parse_cmd/ft_parse_commands.c\
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
 #------------------------------Compiler and Flages------------------------------#

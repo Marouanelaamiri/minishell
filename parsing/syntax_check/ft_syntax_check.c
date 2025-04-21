@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:37:24 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/19 20:35:54 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:24:21 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	ft_syntax_check(t_token *tokens)
 				return (0);
 			}
 		}
-
 		// Redirection checks
 		if (current->type == REDIR_IN || current->type == REDIR_OUT ||
 			current->type == APPEND || current->type == HEREDOC)

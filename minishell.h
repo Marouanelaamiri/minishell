@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:55:27 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:07:02 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define BUFFER_SIZE 1024
 # define MAX_ARGS 100
-# define PATH_MAX 4096
+# define PATH_MAX 10000000
 
 
 // ENV
@@ -105,4 +105,5 @@ void free_env(t_env *env_list);
 t_token	*ft_tokenize(const char	*input);
 int	ft_syntax_check(t_token *tokens);
 int ft_check_quotes(const char *input);
+t_cmd	*ft_parse_commands(t_token *tokens);
 # endif

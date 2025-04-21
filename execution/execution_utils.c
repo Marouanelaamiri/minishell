@@ -3,24 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:50:38 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:15:55 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-setup_redirections(t_cmd *cmd)
+void setup_redirections(t_cmd *cmd)
 {
 	
 }
-find_executable(char *cmd, t_env *env)
+char *find_executable(char *cmd, t_env *env)
 {
 	
 }
-token_to_av(t_token *token)
+char **token_to_av(t_token *token)
+{
+	
+}
+char **env_list_to_envp(t_env *env)
 {
 	
 }

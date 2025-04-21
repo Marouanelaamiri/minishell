@@ -3,182 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:59:08 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:18:43 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static t_cmd *ft_process_input(char *input, t_env *env)
+// -- debug functions --
+// static const char *get_token_type_name(t_type type)
 // {
-// 	t_token	*tokens;
-// 	t_cmd	*cmd_list;
-
-// 	(void)env;
-// 	(void)cmd_list;
-	
-// 	if (!ft_check_quotes(input))
-// 		return (NULL);
-// 	// lexer
-// 	tokens = ft_tokenize(input);
-// 	if (!tokens)
-// 		return (NULL);
-// 	if (!ft_syntax_check(tokens))
-// 	{
-// 		// ft_free_tokens(tokens);
-// 		return (NULL);
-// 	}
-// 	return (NULL);
+// 	if (type == WORD) return "WORD";
+// 	if (type == PIPE) return "PIPE";
+// 	if (type == REDIR_IN) return "REDIR_IN";
+// 	if (type == REDIR_OUT) return "REDIR_OUT";
+// 	if (type == HEREDOC) return "HEREDOC";
+// 	if (type == APPEND) return "APPEND";
+// 	return "UNKNOWN";
 // }
-// void print_tokens(t_token *token)
+// static void print_commands(t_cmd *cmds)
 // {
+// 	int cmd_num = 1;
+// 	while (cmds)
+// 	{
+// 		printf("== Command %d ==\n", cmd_num++);
+// 		t_token *arg = cmds->args;
+// 		while (arg)
+// 		{
+// 			printf("  [%s] \"%s\"\n", get_token_type_name(arg->type), arg->value);
+// 			arg = arg->next;
+// 		}
+// 		cmds = cmds->next;
+// 	}
+// }
+
+
+// static void print_tokens(t_token *token)
+// {
+// 	printf("---- Tokens ----\n");
 // 	while (token)
 // 	{
-// 		printf("  [Type: %d, Value: \"%s\"]\n", token->type, token->value);
+// 		printf("[%s] \"%s\"\n", get_token_type_name(token->type), token->value);
 // 		token = token->next;
 // 	}
+// 	printf("----------------\n");
 // }
-
-// void print_cmd_list(t_cmd *cmd)
-// {
-// 	int i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("Command %d:\n", ++i);
-// 		print_tokens(cmd->args);
-// 		cmd = cmd->next;
-// 	}
-// }
-
-// // --- Main Shell Loop ---
-// int main(int argc, char **argv, char **envp)
-// {
-// 	t_env  *env = init_env(envp);
-// 	char   *line;
-// 	int     status = 0;
-// 	t_cmd   *cmd = NULL;
-
-// 	(void)argc; (void)argv;
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		if (!line)
-// 		{
-// 			printf("exit\n");
-// 			clear_history();
-// 			break;
-// 		}
-// 		if (*line)
-// 			add_history(line);
-// 		cmd = ft_process_input(line, env);
-// 		// 3) Dispatch built‑ins
-// 		if (cmd)
-// 			status = handle_builtins(cmd, &env);
-// 		// if (status < 0)
-// 		// {
-// 		//     // 4) Not a built‑in → external execution (you implement execute_cmds)
-// 		//     status = execute_cmds(cmd, env);
-// 		// }
-// 	}
-// 	return 0;
-// }
-
-static t_token *tokenize(const char *line)
+// -- end debug functions --
+static t_cmd *ft_process_input(char *input, t_env *env)
 {
-    t_token *head = NULL, *tail = NULL;
-    char *copy = strdup(line), *word, *saveptr;
-    word = strtok_r(copy, " ", &saveptr);
-    while (word)
-    {
-        t_token *tok = malloc(sizeof *tok);
-        tok->type  = WORD;
-        tok->value = strdup(word);
-        tok->next  = NULL;
-        if (!head) head = tok; else tail->next = tok;
-        tail = tok;
-        word = strtok_r(NULL, " ", &saveptr);
-    }
-    free(copy);
-    return head;
+	t_token	*tokens;
+	t_cmd	*cmd_list;
+
+	(void)env;
+	
+	if (!ft_check_quotes(input)) // check for unclosed quotes
+		return (NULL);
+	// lexer
+	tokens = ft_tokenize(input); // tokenize input
+	if (!tokens)
+		return (NULL);
+	// print_tokens(tokens);
+	if (!ft_syntax_check(tokens)) // syntax check
+	{
+		// ft_free_tokens(tokens);
+		return (NULL);
+	}
+	// parser
+	cmd_list = ft_parse_commands(tokens); // parse commands 
+	return (cmd_list);
 }
 
-// --- Build a single-command list (no actual parsing of pipes/redirs yet) ---
-static t_cmd *build_cmd_list(t_token *tokens)
-{
-    if (!tokens) return NULL;
-    t_cmd *cmd = malloc(sizeof *cmd);
-    cmd->args = tokens;
-    cmd->next = NULL;
-    return cmd;
-}
-
-// --- Free functions ---
-static void free_tokens(t_token *tok)
-{
-    t_token *next;
-    while (tok)
-    {
-        next = tok->next;
-        free(tok->value);
-        free(tok);
-        tok = next;
-    }
-}
-static void free_cmds(t_cmd *cmd)
-{
-    // if you extend to multiple cmds, traverse and free each->args with free_tokens
-    free(cmd);
-}
 
 // --- Main Shell Loop ---
 int main(int argc, char **argv, char **envp)
 {
-    t_env  *env;
-    char   *line;
-    int     status;
-    int     last_status = 0;
+	t_env  *env = init_env(envp);
+	char   *line;
+	int     status = 0;
+	t_cmd   *cmd = NULL;
 
-    (void)argc; (void)argv;
-    env = init_env(envp);
-
-    while (1)
-    {
-        line = readline("minishell$ ");
-        if (!line)  // EOF / Ctrl‑D
-            break;
-
-        if (*line)
-            add_history(line);
-
-        // 1) Lex + parse into a single cmd
-        t_token *tokens = tokenize(line);
-        free(line);
-        t_cmd   *cmd    = build_cmd_list(tokens);
-
-        if (cmd && cmd->args)
-        {
-            // 2) Builtin?
-            if (is_builtin(cmd))
-                status = handle_builtins(cmd, &env);
-            else
-            {
-                // 3) External command(s)
-				printf("make one lol\n");
-                // status = execute_cmds(cmd, &env);
-            }
-            // last_status = status;
-        }
-
-        // 4) Clean up
-        free_tokens(tokens);
-        free_cmds(cmd);
-    }
-
-    // Clean exit
-    printf("exit\n");
-    free_env(env);
-    return last_status;
+	(void)argc; (void)argv;
+	while (1)
+	{
+		line = readline("minishell$ ");
+		if (!line)
+		{
+			printf("exit\n");
+			clear_history();
+			break;
+		}
+		if (*line)
+			add_history(line);
+		cmd = ft_process_input(line, env); // process input and return commands list
+		// 3) Dispatch built‑ins
+		if (cmd)
+		{
+			// print_commands(cmd);
+			status = handle_builtins(cmd, &env);
+		}
+		if (status < 0)
+		{
+		    // 4) Not a built‑in → external execution (you implement execute_cmds)
+			printf("make one lol\n");
+		    // status = execute_cmds(cmd, env);
+		}
+	}
+	return 0;
 }
