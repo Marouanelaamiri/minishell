@@ -6,23 +6,23 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:30:26 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:33:03 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // -- debug functions --
-// static const char *get_token_type_name(t_type type)
-// {
-// 	if (type == WORD) return "WORD";
-// 	if (type == PIPE) return "PIPE";
-// 	if (type == REDIR_IN) return "REDIR_IN";
-// 	if (type == REDIR_OUT) return "REDIR_OUT";
-// 	if (type == HEREDOC) return "HEREDOC";
-// 	if (type == APPEND) return "APPEND";
-// 	return "UNKNOWN";
-// }
+static const char *get_token_type_name(t_type type)
+{
+	if (type == WORD) return "WORD";
+	if (type == PIPE) return "PIPE";
+	if (type == REDIR_IN) return "REDIR_IN";
+	if (type == REDIR_OUT) return "REDIR_OUT";
+	if (type == HEREDOC) return "HEREDOC";
+	if (type == APPEND) return "APPEND";
+	return "UNKNOWN";
+}
 static void print_commands(t_cmd *cmds)
 {
 	int cmd_num = 1;
