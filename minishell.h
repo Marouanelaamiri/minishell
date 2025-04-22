@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/04/22 14:36:57 by sojammal         ###   ########.fr       */
+=======
+/*   Updated: 2025/04/22 14:55:11 by malaamir         ###   ########.fr       */
+>>>>>>> 7fadabd3284d515401b0a3e2aaef8dddfc5248b6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +85,11 @@ char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *src, size_t n);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
-int		is_numeric(const char *str);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-
-
-
-
+int	ft_isalnum(int c);
+int	ft_isalpha(int c);
+int ft_isdigit(int c);
+int ft_isnum(const char *str);
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);
@@ -98,7 +101,8 @@ int ft_env(t_cmd *cmd, t_env **env);
 int	ft_exit(t_cmd *cmd, t_env **env);
 int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
-
+char *strip_quotes(const char *s);
+int is_valid_id(const char *str);
 // env_utils
 
 t_env *init_env(char **envp);

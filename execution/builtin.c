@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:03:21 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:15:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int ft_echo(t_cmd *cmd, t_env **env)
 {
 	t_token *token = cmd->args->next;
 	int newline = 1;
+	char *str;
 
 	(void)env;
 	if (token && token->type == WORD && ft_strcmp(token->value, "-n") == 0)
@@ -26,7 +27,11 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	while (token)
 	{
 		if (token->type == WORD)
-			printf("%s", token->value);
+		{
+			str = strip_quotes(token->value);
+			printf("%s", str);
+			free(str);
+		}
 		token = token->next;
 		if (token)
 			printf(" ");
@@ -75,24 +80,52 @@ int ft_pwd(t_cmd *cmd, t_env **env)
 }
 int ft_export(t_cmd *cmd, t_env **env)
 {
-	t_token *token = cmd->args->next;
-	char *equal_sign;
-	if (!token)
-		return ft_env(cmd, env); // no arguments, print env
-	while (token)
-	{
-		equal_sign = ft_strchr(token->value, '=');
-		if (!equal_sign)
-			env_set(env, token->value, "");
-		else
-		{
-			*equal_sign = '\0'; // split name and value
-			env_set(env, token->value, equal_sign + 1);
-			*equal_sign = '='; // restore the '='
-		}
-		token = token->next;
-	}
-	return (0);
+    t_token *token = cmd->args->next;
+    int      status = 0;
+    if (token == NULL)
+        return ft_env(cmd, env);
+    while (token)
+    {
+        char *equal = ft_strchr(token->value, '=');
+        char *name;
+        char *value;
+        if (equal == NULL)
+        {
+            name  = token->value;
+            value = NULL;
+        }
+        else
+        {
+            *equal = '\0';
+            name  = token->value;
+            value = equal + 1;
+        }
+        if (is_valid_id(name) == 0)
+        {
+			write(2, "minishell", 10);
+			write(2, " : export: `", 13);
+			write(2 , token->value, ft_strlen(token->value));
+			write(2, "': not a valid identifier\n", 26);
+            status = 1;
+        }
+        else
+        {
+            char *clean_name  = strip_quotes(name);
+            char *clean_value = NULL;
+            if (value)
+                clean_value = strip_quotes(value);
+            else
+                clean_value = ft_strdup("");
+            env_set(env, clean_name, clean_value);
+            free(clean_name);
+            free(clean_value);
+        }
+        if (equal)
+            *equal = '=';
+        token = token->next;
+    }
+
+    return status;
 }
 int ft_unset(t_cmd *cmd, t_env **env)
 {
@@ -129,7 +162,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	if (!arg)
 		exit(0);
 
-	if (!is_numeric(arg->value))
+	if (!ft_isnum(arg->value))
 	{
 		write(2, "exit: numeric argument required\n", 33);
 		exit(255);

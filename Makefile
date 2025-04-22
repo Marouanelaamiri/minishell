@@ -3,10 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+         #
+#    By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/13 15:01:51 by malaamir          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2025/04/22 15:03:10 by sojammal         ###   ########.fr        #
+=======
+#    Updated: 2025/04/22 14:57:57 by malaamir         ###   ########.fr        #
+>>>>>>> 7fadabd3284d515401b0a3e2aaef8dddfc5248b6
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +25,9 @@ execution/helpers/ft_strndup.c \
 execution/helpers/ft_strdup.c \
 execution/helpers/ft_strlen.c \
 execution/helpers/ft_strlcpy.c \
+execution/helpers/ft_isalnum.c \
+execution/helpers/ft_isnum.c \
+execution/helpers/ft_isalpha.c \
 execution/builtin.c \
 execution/builtin_utils.c \
 execution/env_utils.c \
