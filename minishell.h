@@ -5,12 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/22 14:36:57 by sojammal         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/22 14:55:11 by malaamir         ###   ########.fr       */
->>>>>>> 7fadabd3284d515401b0a3e2aaef8dddfc5248b6
+/*   Created: 2025/04/22 15:50:20 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/22 16:03:22 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +29,7 @@
 
 # define BUFFER_SIZE 1024
 # define MAX_ARGS 100
-# define PATH_MAX 10000000
+# define PATH_MAX 4096
 
 
 // ENV
