@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 17:52:29 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:36:57 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,5 @@ t_token	*ft_tokenize(const char	*input);
 int	ft_syntax_check(t_token *tokens);
 int ft_check_quotes(const char *input);
 t_cmd	*ft_parse_commands(t_token *tokens);
+void ft_signal_handler(void);
 # endif

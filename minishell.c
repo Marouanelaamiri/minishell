@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 17:44:04 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:21:30 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ int main(int argc, char **argv, char **envp)
 	t_cmd   *cmd = NULL;
 
 	(void)argc; (void)argv;
+	ft_signal_handler(); // set up signal handlers
 	while (1)
 	{
 		line = readline("minishell$ ");

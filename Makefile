@@ -6,7 +6,7 @@
 #    By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/13 15:01:51 by malaamir          #+#    #+#              #
-#    Updated: 2025/04/21 17:05:51 by sojammal         ###   ########.fr        #
+#    Updated: 2025/04/22 15:03:10 by sojammal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,12 @@ execution/env_utils.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/syntax_check/ft_syntax_check.c\
 parsing/parse_cmd/ft_parse_commands.c\
+parsing/sig_handler/ft_signal_handler.c \
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
+READLINE_INCLUDE = $(shell brew --prefix readline)/include
+READLINE_LIB = $(shell brew --prefix readline)/lib
+LDLIB = -L$(READLINE_LIB) -lreadline
 #------------------------------Compiler and Flages------------------------------#
 CC = cc
 
@@ -41,10 +45,10 @@ all: $(NAME)
 
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJ) $(LDLIB) -o $(NAME)
 
 %.o: %.c minishell.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
 #------------------------------Clean---------------------------------------------#
 clean :
 	rm -f $(OBJ)
