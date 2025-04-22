@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:44 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 12:54:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:55:56 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,27 @@ int handle_builtins(t_cmd *cmd, t_env **env)
     if (strcmp(name, "exit") == 0)
 		return ft_exit(cmd, env);
     return -1;
+}
+char *strip_quotes(const char *s)
+{
+	size_t len = ft_strlen(s);
+	if (len >= 2 && (((s[0]) == '"' && s[len - 1 ] == '"') || (s[0]== '\'' && s[len - 1] == '\'')))
+	{
+		return (ft_strndup(s + 1, len - 2));
+	}
+	return (ft_strdup(s));
+}
+int is_valid_id(const char *str)
+{
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	while (*str)
+	{
+		if (!ft_isalnum(*str) && *str != '_')
+			return (0);
+		str++;
+	}
+	return (1);
 }
