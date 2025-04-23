@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:55 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:28:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:31:40 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int main(int argc, char **argv, char **envp)
 	update_shell_level(&env);
 	char   *line;
 	int     status = 0;
+	int ret;
 	t_cmd   *cmd = NULL;
 
 	(void)argc; 
@@ -144,15 +145,11 @@ int main(int argc, char **argv, char **envp)
 		if (*line)
 			add_history(line);
 		cmd = ft_process_input(line, env);
-		if (cmd)
-		{
-			// ft_print_cmds(cmd);
-			status = handle_builtins(cmd, &env);
-		}
-		if (status < 0)
-		{
-		    // status = execute_cmds(cmd, env);
-		}
+		ret = handle_builtins(cmd, &env);
+		if (ret > 0)
+			status = ret;
+		// else
+			// status = execute_cmd(cmd, env); // execute the command
 	}
 	free_env(env);
 	return 0;
