@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 22:43:10 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:10:40 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,6 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	return (cmd_list);
 }
 
-
-// --- Main Shell Loop ---
 int main(int argc, char **argv, char **envp)
 {
 	t_env  *env = init_env(envp);
@@ -121,7 +119,8 @@ int main(int argc, char **argv, char **envp)
 	int     status = 0;
 	t_cmd   *cmd = NULL;
 
-	(void)argc; (void)argv;
+	(void)argc; 
+	(void)argv;
 	ft_signal_handler(); // set up signal handlers
 	while (1)
 	{
@@ -134,8 +133,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (*line)
 			add_history(line);
-		cmd = ft_process_input(line, env); // process input and return commands list
-		// 3) Dispatch built‑ins
+		cmd = ft_process_input(line, env);
 		if (cmd)
 		{
 			// ft_print_cmds(cmd);
@@ -143,7 +141,6 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (status < 0)
 		{
-		    // 4) Not a built‑in → external execution (you implement execute_cmds)
 			printf("make one lol\n");
 		    // status = execute_cmds(cmd, env);
 		}

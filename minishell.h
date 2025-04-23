@@ -17,7 +17,7 @@
 
 # define BUFFER_SIZE 1024
 # define MAX_ARGS 100
-# define PATH_MAX 10000000
+# define PATH_MAX 4096
 
 
 // ENV
@@ -27,7 +27,6 @@ typedef struct l_env
 	char			*name; // "/usr/bin:/bin"
 	struct l_env	*next;
 }			t_env;
-
 
 // TOKEN & COMMAND
 typedef enum e_type
@@ -89,6 +88,7 @@ int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
 char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
+
 // env_utils
 
 t_env *init_env(char **envp);
@@ -98,7 +98,6 @@ char *ft_getenv(t_env *env_list, const char *name);
 void free_env(t_env *env_list);
 
 // parsing
-
 
 t_token	*ft_tokenize(const char	*input);
 int	ft_syntax_check(t_token *tokens);

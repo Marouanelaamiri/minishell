@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal_handler.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:26:31 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/22 15:24:43 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:06:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void ft_ctre_c(int sig)
 
 void ft_signal_handler(void)
 {
+
 	rl_catch_signals = 0; // Catch SIGINT
 	signal(SIGINT, ft_ctre_c); // Handle Ctrl+C
 	signal(SIGQUIT, SIG_IGN);//  Ignore Ctrl+\ (SIGQUIT)
