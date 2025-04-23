@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_syntax_check.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:37:24 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/20 21:24:21 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:05:33 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int ft_check_quotes(const char *input)
 			printf("Syntax error: unclosed double quote\n");
 		return (0);
 	}
+	
 	return (1);
 }
