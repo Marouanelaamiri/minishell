@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:50:20 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 16:39:14 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:16:47 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define BUFFER_SIZE 1024
 # define MAX_ARGS 100
-# define PATH_MAX 4096
+# define PATH_MAX 1024
 
 
 // ENV
@@ -99,6 +99,7 @@ int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
 char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
+int  cd_walk_path(const char *path);
 
 // env_utils
 

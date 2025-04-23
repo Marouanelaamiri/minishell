@@ -26,7 +26,7 @@ LDLIB = -L$(READLINE_LIB) -lreadline
 #------------------------------Compiler and Flages------------------------------#
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror
 #------------------------------Includes and Exuctables--------------------------#
 NAME = minishell
 

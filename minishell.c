@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 10:54:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:28:23 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,14 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	cmd_list = ft_parse_commands(tokens); // parse commands 
 	return (cmd_list);
 }
-
+static void on_exit(void) {
+    char cmd[64];
+    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+    system(cmd);
+}
 int main(int argc, char **argv, char **envp)
 {
+	atexit(on_exit);
 	t_env  *env = init_env(envp);
 	char   *line;
 	int     status = 0;
@@ -143,5 +148,6 @@ int main(int argc, char **argv, char **envp)
 		    // status = execute_cmds(cmd, env);
 		}
 	}
+	free_env(env);
 	return 0;
 }
