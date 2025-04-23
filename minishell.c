@@ -3,19 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 17:47:07 by sojammal         ###   ########.fr       */
-=======
-/*   Created: 2025/04/23 14:14:55 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:28:02 by malaamir         ###   ########.fr       */
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
+/*   Created: 2025/04/23 17:57:50 by sojammal          #+#    #+#             */
+/*   Updated: 2025/04/23 17:58:58 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "minishell.h"
 
@@ -62,12 +55,9 @@ int main(int argc, char **argv, char **envp)
 {
 	// atexit(on_exit);
 	t_env  *env = init_env(envp);
-<<<<<<< HEAD
 	// printf("here : %s\n", env->name);
 	// printf("here : %s\n", env->value);
-=======
 	update_shell_level(&env);
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 	char   *line;
 	int     status = 0;
 	t_cmd   *cmd = NULL;
@@ -93,18 +83,11 @@ int main(int argc, char **argv, char **envp)
 			// ft_print_cmds(cmd);
 			status = handle_builtins(cmd, &env);
 		}
-<<<<<<< HEAD
 		// if (status < 0)
 		// {
 		// 	printf("make one lol\n");
 		//     // status = execute_cmds(cmd, env);
 		// }
-=======
-		if (status < 0)
-		{
-		    // status = execute_cmds(cmd, env);
-		}
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 	}
 	free_env(env);
 	return 0;

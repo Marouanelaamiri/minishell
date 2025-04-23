@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:42:10 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:58:02 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,9 @@ int ft_isnum(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
-<<<<<<< HEAD
 void ft_update_exit_status(int status);
 int ft_get_exit_status(void);
-=======
 
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);

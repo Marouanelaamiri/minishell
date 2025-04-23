@@ -3,40 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 17:12:11 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 17:12:16 by sojammal         ###   ########.fr       */
-=======
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 14:41:46 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:42:47 by malaamir         ###   ########.fr       */
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
+/*   Created: 2025/04/23 18:00:19 by sojammal          #+#    #+#             */
+/*   Updated: 2025/04/23 18:01:20 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-<<<<<<< HEAD
 static int	ft_count_nb(int nb)
 {
 	int	nb_l;
 
 	nb_l = 0;
-=======
-static size_t	int_len(int nb)
-{
-	size_t	count;
-
-	count = 0;
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 	if (nb == 0)
 		return (1);
 	if (nb < 0)
 	{
-<<<<<<< HEAD
 		nb_l = 1;
 		nb = -nb;
 	}
@@ -98,44 +82,3 @@ char	*ft_itoa(int n)
 	nb_l = ft_count_nb(n);
 	return (ft_locate_list(nb_l, n));
 }
-=======
-		count = 1;
-		nb = -nb;
-	}
-	while (nb != 0)
-	{
-		nb /= 10;
-		count++;
-	}
-	return (count);
-}
-
-char	*ft_itoa(int n)
-{
-	char		*str;
-	size_t		len;
-	long int	nb;
-
-	nb = n;
-	if (nb == -2147483648)
-		return (ft_strdup("-2147483648"));
-	len = int_len(nb) + 1;
-	str = malloc((len) * sizeof(char));
-	if (!str)
-		return (NULL);
-	str[len - 1] = '\0';
-	if (nb == 0)
-		str[0] = '0';
-	else if (nb < 0)
-	{
-		str[0] = '-';
-		nb = -nb;
-	}
-	while (nb)
-	{
-		str[--len - 1] = (nb % 10) + '0';
-		nb = nb / 10;
-	}
-	return (str);
-}
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114

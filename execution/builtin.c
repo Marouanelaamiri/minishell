@@ -5,12 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/23 15:28:08 by sojammal         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/23 15:36:10 by malaamir         ###   ########.fr       */
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
+/*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
+/*   Updated: 2025/04/23 18:04:19 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +29,6 @@ int ft_echo(t_cmd *cmd, t_env **env)
 		if (token->type == WORD)
 		{
 			str = ft_strdup(token->value);
-<<<<<<< HEAD
-			// str = strip_quotes(token->value);
-=======
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 			printf("%s", str);
 			free(str);
 		}
@@ -129,7 +121,6 @@ int ft_export(t_cmd *cmd, t_env **env)
 			write(2, "': not a valid identifier\n", 26);
             status = 1;
         }
-<<<<<<< HEAD
         else
         {
             char *clean_name  = ft_strdup(name);
@@ -142,12 +133,6 @@ int ft_export(t_cmd *cmd, t_env **env)
             free(clean_name);
             free(clean_value);
         }
-=======
-      else
-	  {
-		env_set(env, name, value);
-	  }
->>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
         if (equal)
             *equal = '=';
         token = token->next;
