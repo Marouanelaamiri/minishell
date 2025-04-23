@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
+/*   Updated: 2025/04/23 22:08:34 by sojammal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -49,7 +60,7 @@ int main(int argc, char **argv, char **envp)
 	update_shell_level(&env);
 	char   *line;
 	int     status = 0;
-	int ret;
+	// int ret;
 	t_cmd   *cmd = NULL;
 
 	(void)argc; 
@@ -68,29 +79,16 @@ int main(int argc, char **argv, char **envp)
 		if (*line)
 			add_history(line);
 		cmd = ft_process_input(line, env);
-
-		ret = handle_builtins(cmd, &env);
-		if (ret > 0)
-			status = ret;
+		// ret = handle_builtins(cmd, &env);
+		// if (ret > 0)
+		// 	status = ret;
 		// else
 			// status = execute_cmd(cmd, env); // execute the command
-
 		if (cmd)
 		{
 			// ft_print_cmds(cmd);
 			status = handle_builtins(cmd, &env);
 		}
-		// if (status < 0)
-		// {
-		// 	printf("make one lol\n");
-		//     // status = execute_cmds(cmd, env);
-		// }
-
-		if (status < 0)
-		{
-		    // status = execute_cmds(cmd, env);
-		}
-
 	}
 	free_env(env);
 	return 0;
