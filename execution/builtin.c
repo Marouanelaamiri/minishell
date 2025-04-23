@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 10:53:35 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:28:08 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	{
 		if (token->type == WORD)
 		{
-			str = strip_quotes(token->value);
+			str = ft_strdup(token->value);
+			// str = strip_quotes(token->value);
 			printf("%s", str);
 			free(str);
 		}
@@ -110,10 +111,10 @@ int ft_export(t_cmd *cmd, t_env **env)
         }
         else
         {
-            char *clean_name  = strip_quotes(name);
+            char *clean_name  = ft_strdup(name);
             char *clean_value = NULL;
             if (value)
-                clean_value = strip_quotes(value);
+                clean_value = ft_strdup(value);
             else
                 clean_value = ft_strdup("");
             env_set(env, clean_name, clean_value);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:44 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 14:55:56 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:44:18 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,26 @@ int is_builtin(t_cmd *cmd)
 int handle_builtins(t_cmd *cmd, t_env **env)
 {
     char *name = cmd->args->value;
+	int status = 0;
 
     if (strcmp(name, "echo") == 0)
-		return ft_echo(cmd, env);
-    if (strcmp(name, "cd") == 0)
-		return ft_cd(cmd, env);
-    if (strcmp(name, "pwd") == 0)
-		return ft_pwd(cmd, env);
-    if (strcmp(name, "env") == 0)
-		return ft_env(cmd, env);
-    if (strcmp(name, "export") == 0)
-		return ft_export(cmd, env);
-    if (strcmp(name, "unset") == 0)
-		return ft_unset(cmd, env);
-    if (strcmp(name, "exit") == 0)
-		return ft_exit(cmd, env);
-    return -1;
-}
-char *strip_quotes(const char *s)
-{
-	size_t len = ft_strlen(s);
-	if (len >= 2 && (((s[0]) == '"' && s[len - 1 ] == '"') || (s[0]== '\'' && s[len - 1] == '\'')))
-	{
-		return (ft_strndup(s + 1, len - 2));
-	}
-	return (ft_strdup(s));
+		status = ft_echo(cmd, env);
+    else if (strcmp(name, "cd") == 0)
+		status = ft_cd(cmd, env);
+    else if (strcmp(name, "pwd") == 0)
+		status = ft_pwd(cmd, env);
+    else if (strcmp(name, "env") == 0)
+		status = ft_env(cmd, env);
+    else if (strcmp(name, "export") == 0)
+		status = ft_export(cmd, env);
+    else if (strcmp(name, "unset") == 0)
+		status = ft_unset(cmd, env);
+    else if (strcmp(name, "exit") == 0)
+		status = ft_exit(cmd, env);
+	else	
+    	return -1;
+	ft_update_exit_status(status);
+	return (status);
 }
 int is_valid_id(const char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 20:12:50 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 14:09:58 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:35:28 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,51 @@ static char *ft_strjoin_free(char *s1, char *s2)
     free(s2);
     return res;
 }
+static char	*ft_expand_var(const char *str, int *i, t_env *env)
+{
+	char	*key;
+	char	*val;
+
+	if (str[*i + 1] == '{') // Handle ${VAR}
+	{
+		int start = *i + 2;
+		int end = start;
+		while (str[end] && str[end] != '}')
+			end++;
+		if (str[end] == '}')
+		{
+			key = ft_substr(str, start, end - start);
+			val = ft_strdup(ft_get_env_value(key, env));
+			free(key);
+			*i = end + 1;
+			return (val);
+		}
+        // TODO: Handle error for unmatched {
+	}
+	else if (ft_isalpha(str[*i + 1]) || str[*i + 1] == '_') // Handle $VAR
+	{
+		int start = ++(*i);
+		while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+			(*i)++;
+		key = ft_substr(str, start, *i - start);
+		val = ft_strdup(ft_get_env_value(key, env));
+		free(key);
+		return (val);
+	}
+    else if (str[*i + 1] == '?') // Handle $? for last command status
+    {
+        (*i) += 2;
+        return (ft_strdup(ft_itoa(ft_get_exit_status())));
+    }
+	else // Just a single $
+	{
+		(*i)++;
+		return (ft_strdup("$"));
+	}
+    return (NULL); // Should not reach here
+}
+
+
 static char *ft_expand_string(char *str, t_env *env)
 {
     char *result = ft_calloc(1, 1);
@@ -50,21 +95,16 @@ static char *ft_expand_string(char *str, t_env *env)
             in_double_quotes = !in_double_quotes;
             i++;
         }
-        else if (str[i] == '$' && !in_single_quotes && (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
+        else if (str[i] == '$' && !in_single_quotes)
         {
-            int var_start = ++i;
-            while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-                i++;
-            char *key = ft_substr(str, var_start, i - var_start);
-            char *val = ft_strdup(ft_get_env_value(key, env));
-            result = ft_strjoin_free(result, val);
-            free(key);
+            char *expanded_value = ft_expand_var(str, &i, env);
+            result = ft_strjoin_free(result, expanded_value);
         }
         else
         {
             result = ft_strjoin_free(result, ft_substr(str, i, 1));
             i++;
-        }q
+        }
     }
 
     return result;
