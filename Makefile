@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 #------------------------------Source Files------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
@@ -24,6 +27,8 @@ parsing/syntax_check/ft_syntax_check.c\
 parsing/parse_cmd/ft_parse_commands.c\
 parsing/sig_handler/ft_signal_handler.c \
 parsing/expansion/ft_expand_cmds.c \
+parsing/debug_func/ft_debug.c \
+parsing/parsing_utils/ft_status.c \
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
 READLINE_INCLUDE = $(shell brew --prefix readline)/include

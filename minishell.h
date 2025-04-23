@@ -13,6 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+extern int g_exit_status;  // global variable to store exit status
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -71,6 +72,10 @@ typedef struct s_cmd
 	t_redir *redir; // head of the redirection list
 	struct s_cmd *next; // next command in the list specified by the pipe
 }			t_cmd;
+// debug
+
+void print_tokens(t_token *token);
+void ft_print_cmds(t_cmd *cmd);
 
 // helpers
 int		ft_atoi(const char *str);
@@ -88,7 +93,12 @@ int ft_isnum(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
+<<<<<<< HEAD
+void ft_update_exit_status(int status);
+int ft_get_exit_status(void);
+=======
 
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);
@@ -100,7 +110,7 @@ int ft_env(t_cmd *cmd, t_env **env);
 int	ft_exit(t_cmd *cmd, t_env **env);
 int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
-char *strip_quotes(const char *s);
+// char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
 int  cd_walk_path(const char *path);
 
