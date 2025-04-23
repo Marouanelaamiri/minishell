@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 20:12:50 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 00:40:27 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:09:58 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char *ft_expand_string(char *str, t_env *env)
         {
             result = ft_strjoin_free(result, ft_substr(str, i, 1));
             i++;
-        }
+        }q
     }
 
     return result;
