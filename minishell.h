@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:50:20 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 16:03:22 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:39:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct l_env
 	char			*name; // "/usr/bin:/bin"
 	struct l_env	*next;
 }			t_env;
-
 
 // TOKEN & COMMAND
 typedef enum e_type
@@ -86,6 +85,7 @@ int	ft_isalnum(int c);
 int	ft_isalpha(int c);
 int ft_isdigit(int c);
 int ft_isnum(const char *str);
+
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);
@@ -99,6 +99,7 @@ int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
 char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
+
 // env_utils
 
 t_env *init_env(char **envp);
@@ -109,10 +110,10 @@ void free_env(t_env *env_list);
 
 // parsing
 
-
 t_token	*ft_tokenize(const char	*input);
 int	ft_syntax_check(t_token *tokens);
 int ft_check_quotes(const char *input);
 t_cmd	*ft_parse_commands(t_token *tokens);
 void ft_signal_handler(void);
+
 # endif

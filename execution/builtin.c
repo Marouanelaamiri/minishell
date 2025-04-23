@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 15:15:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:53:35 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ int ft_export(t_cmd *cmd, t_env **env)
             *equal = '=';
         token = token->next;
     }
-
     return status;
 }
 int ft_unset(t_cmd *cmd, t_env **env)
@@ -164,12 +163,15 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 
 	if (!ft_isnum(arg->value))
 	{
-		write(2, "exit: numeric argument required\n", 33);
+		write(2, "minishell: ", 12);
+		write(2, "exit: ", 7);
+		write(2, arg->value, ft_strlen(arg->value));
+		write(2, ": numeric argument required\n", 28);
 		exit(255);
 	}
 	if (arg->next)
 	{
-		write(2, "exit: too many arguments\n", 25);
+		write(2, "minishell: exit: too many arguments\n", 37);
 		return (1);
 	}
 	status = ft_atoi(arg->value);
