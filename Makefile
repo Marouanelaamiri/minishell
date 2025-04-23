@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 #------------------------------Source Files------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
@@ -33,7 +37,7 @@ LDLIB = -L$(READLINE_LIB) -lreadline
 #------------------------------Compiler and Flages------------------------------#
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror
 #------------------------------Includes and Exuctables--------------------------#
 NAME = minishell
 

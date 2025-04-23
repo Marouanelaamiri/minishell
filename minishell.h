@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/23 14:42:10 by malaamir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -18,7 +30,7 @@ extern int g_exit_status;  // global variable to store exit status
 
 # define BUFFER_SIZE 1024
 # define MAX_ARGS 100
-# define PATH_MAX 4096
+# define PATH_MAX 1024
 
 
 // ENV
@@ -81,8 +93,12 @@ int ft_isnum(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
+<<<<<<< HEAD
 void ft_update_exit_status(int status);
 int ft_get_exit_status(void);
+=======
+
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);
@@ -96,6 +112,7 @@ int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
 // char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
+int  cd_walk_path(const char *path);
 
 // env_utils
 
@@ -104,6 +121,7 @@ int env_set(t_env **env , const char *name, const char *value);
 int env_unset(t_env **env, const char *name);
 char *ft_getenv(t_env *env_list, const char *name);
 void free_env(t_env *env_list);
+void update_shell_level(t_env **env);
 
 // parsing
 

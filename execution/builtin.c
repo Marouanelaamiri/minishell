@@ -6,7 +6,11 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/04/23 15:28:08 by sojammal         ###   ########.fr       */
+=======
+/*   Updated: 2025/04/23 15:36:10 by malaamir         ###   ########.fr       */
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +33,10 @@ int ft_echo(t_cmd *cmd, t_env **env)
 		if (token->type == WORD)
 		{
 			str = ft_strdup(token->value);
+<<<<<<< HEAD
 			// str = strip_quotes(token->value);
+=======
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
 			printf("%s", str);
 			free(str);
 		}
@@ -45,29 +52,42 @@ int ft_echo(t_cmd *cmd, t_env **env)
 
 int ft_cd(t_cmd *cmd, t_env **env)
 {
-	t_token *token = cmd->args->next;
-	char *path;
-	char cwd[PATH_MAX];
-	int ret;
-	
-	if (token != NULL && token->type == WORD)
-		path = token->value;
-	else
-		path = ft_getenv(*env, "HOME");
-	
-	if (path == NULL)
-		return((write(2, "cd: HOME not set\n",18) ,1));
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (perror("getcwd"), 1);
-	ret = chdir(path);
-	if (ret < 0)
+    t_token *tok       = cmd->args->next;
+    char    *path;
+    char     oldcwd[PATH_MAX];
+    char     newcwd[PATH_MAX];
+
+    if (tok && tok->type == WORD)
+        path = tok->value;
+    else
+        path = ft_getenv(*env, "HOME");
+
+    if (!path)
+		return( write(2, "cd: HOME not set\n", 17), 1);
+    if (!getcwd(oldcwd, sizeof oldcwd))
 		return (perror("cd"), 1);
-	env_set(env, "OLDPWD", cwd);
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		env_set(env, "PWD", cwd);
-	else
-		return (perror("getcwd"), 1);
-	return (0);
+    if (path[0] == '/')
+    {
+        if (chdir("/") < 0)
+        {
+            perror("cd");
+            return 1;
+        }
+    }
+    if (cd_walk_path(path) < 0)
+    {
+        perror("cd");
+        chdir(oldcwd);
+        return 1;
+    }
+    if (!getcwd(newcwd, sizeof newcwd))
+    {
+        return (chdir(oldcwd), 0);
+        return 0;
+    }
+    env_set(env, "OLDPWD", oldcwd);
+    env_set(env, "PWD",    newcwd);
+    return 0;
 }
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
@@ -109,6 +129,7 @@ int ft_export(t_cmd *cmd, t_env **env)
 			write(2, "': not a valid identifier\n", 26);
             status = 1;
         }
+<<<<<<< HEAD
         else
         {
             char *clean_name  = ft_strdup(name);
@@ -121,6 +142,12 @@ int ft_export(t_cmd *cmd, t_env **env)
             free(clean_name);
             free(clean_value);
         }
+=======
+      else
+	  {
+		env_set(env, name, value);
+	  }
+>>>>>>> 1a8796a6b425341a194f576d94b9d8649d953114
         if (equal)
             *equal = '=';
         token = token->next;
