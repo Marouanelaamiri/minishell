@@ -1,3 +1,5 @@
+
+#------------------------------Source Files------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
 execution/helpers/is_num.c \
@@ -10,7 +12,10 @@ execution/helpers/ft_strlen.c \
 execution/helpers/ft_strlcpy.c \
 execution/helpers/ft_isalnum.c \
 execution/helpers/ft_isnum.c \
+execution/helpers/ft_strjoin.c \
+execution/helpers/ft_calloc.c \
 execution/helpers/ft_isalpha.c \
+execution/helpers/ft_itoa.c \
 execution/builtin.c \
 execution/builtin_utils.c \
 execution/env_utils.c \
@@ -18,6 +23,7 @@ parsing/tokenizing/ft_tokenize.c \
 parsing/syntax_check/ft_syntax_check.c\
 parsing/parse_cmd/ft_parse_commands.c\
 parsing/sig_handler/ft_signal_handler.c \
+parsing/expansion/ft_expand_cmds.c \
 #------------------------------Object Files------------------------------------#
 OBJ = $(SRC:.c=.o)
 READLINE_INCLUDE = $(shell brew --prefix readline)/include

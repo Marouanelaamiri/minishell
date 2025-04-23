@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/22 15:50:20 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 12:16:47 by malaamir         ###   ########.fr       */
+/*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
+/*   Updated: 2025/04/23 14:42:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ int	ft_isalnum(int c);
 int	ft_isalpha(int c);
 int ft_isdigit(int c);
 int ft_isnum(const char *str);
+char	*ft_strjoin(char *s1, char *s2);
+void	*ft_calloc(size_t count, size_t size);
+char	*ft_itoa(int n);
 
 // builtins
 
@@ -108,6 +111,7 @@ int env_set(t_env **env , const char *name, const char *value);
 int env_unset(t_env **env, const char *name);
 char *ft_getenv(t_env *env_list, const char *name);
 void free_env(t_env *env_list);
+void update_shell_level(t_env **env);
 
 // parsing
 
@@ -117,4 +121,6 @@ int ft_check_quotes(const char *input);
 t_cmd	*ft_parse_commands(t_token *tokens);
 void ft_signal_handler(void);
 
+// expansion
+void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
 # endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:33:09 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:41:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ t_env *init_env(char **envp)
 		i++;
 	}
 	return (head);
-	
 }
 
 int env_set(t_env **env , const char *name, const char *value)
@@ -53,7 +52,7 @@ int env_set(t_env **env , const char *name, const char *value)
 		if (ft_strcmp(current->name, name) == 0)
 		{
 			free(current->value);
-			current->value = strdup(value);
+			current->value = ft_strdup(value);
 			return (0); // success
 		}
 		current = current->next;
@@ -112,5 +111,26 @@ void free_env(t_env *env_list)
 		free(env_list->value);
 		free(env_list);
 		env_list = temp;
+	}
+}
+void update_shell_level(t_env **env)
+{
+	char *lvl_str = ft_getenv(*env, "SHLVL");
+	int lvl = 0;
+	char *new_lvl = NULL;
+
+	if (lvl_str)
+		lvl = atoi(lvl_str);
+	lvl++;
+	if (lvl < 0)
+		lvl = 0;
+	else if (lvl > 999)
+		lvl = 1;
+
+	new_lvl = ft_itoa(lvl); // instead of snprintf
+	if (new_lvl)
+	{
+		env_set(env, "SHLVL", new_lvl);
+		free(new_lvl);
 	}
 }
