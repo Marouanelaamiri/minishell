@@ -1,19 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 15:01:48 by malaamir          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/22 14:36:57 by sojammal         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/22 14:55:11 by malaamir         ###   ########.fr       */
->>>>>>> 7fadabd3284d515401b0a3e2aaef8dddfc5248b6
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -90,6 +74,8 @@ int	ft_isalnum(int c);
 int	ft_isalpha(int c);
 int ft_isdigit(int c);
 int ft_isnum(const char *str);
+char	*ft_strjoin(char *s1, char *s2);
+void	*ft_calloc(size_t count, size_t size);
 // builtins
 
 int ft_echo(t_cmd *cmd, t_env **env);
@@ -119,4 +105,7 @@ int	ft_syntax_check(t_token *tokens);
 int ft_check_quotes(const char *input);
 t_cmd	*ft_parse_commands(t_token *tokens);
 void ft_signal_handler(void);
+
+// expansion
+void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
 # endif

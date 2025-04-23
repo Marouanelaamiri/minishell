@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:01:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/22 15:48:23 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/22 22:43:10 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	}
 	// parser
 	cmd_list = ft_parse_commands(tokens); // parse commands 
+	ft_expand_cmds(cmd_list, env); // expand variables in commands
+	
 	return (cmd_list);
 }
 
@@ -148,3 +150,4 @@ int main(int argc, char **argv, char **envp)
 	}
 	return 0;
 }
+// --- End of Main Shell Loop ---

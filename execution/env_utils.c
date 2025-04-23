@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/21 15:33:09 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/22 22:42:27 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ t_env *init_env(char **envp)
 		i++;
 	}
 	return (head);
-	
 }
 
 int env_set(t_env **env , const char *name, const char *value)
