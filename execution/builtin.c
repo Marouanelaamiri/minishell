@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:16:53 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:09:34 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:36:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	{
 		if (token->type == WORD)
 		{
-			str = strip_quotes(token->value);
+			str = ft_strdup(token->value);
 			printf("%s", str);
 			free(str);
 		}
@@ -121,18 +121,10 @@ int ft_export(t_cmd *cmd, t_env **env)
 			write(2, "': not a valid identifier\n", 26);
             status = 1;
         }
-        else
-        {
-            char *clean_name  = strip_quotes(name);
-            char *clean_value = NULL;
-            if (value)
-                clean_value = strip_quotes(value);
-            else
-                clean_value = ft_strdup("");
-            env_set(env, clean_name, clean_value);
-            free(clean_name);
-            free(clean_value);
-        }
+      else
+	  {
+		env_set(env, name, value);
+	  }
         if (equal)
             *equal = '=';
         token = token->next;
