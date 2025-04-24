@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 18:10:24 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:32:07 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,9 @@
 
 int execute_cmds(t_cmd *cmd_list, t_env *env)
 {
-    // 1) Build envp array
     char **envp = env_list_to_envp(env);
     if (!envp)
         return 1;
-
-    // 2) Count stages and prepare
     int stages = 0;
     t_cmd *cur = cmd_list;
     while (cur)
@@ -27,16 +24,12 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
         stages++;
         cur = cur->next;
     }
-
     int prev_fd = -1;
     int pipefd[2];
     int created = 0;
-
-    // 3) Fork each stage
     cur = cmd_list;
     while (cur)
     {
-        // if not last, create a pipe
         if (cur->next)
         {
             if (pipe(pipefd) < 0)
@@ -45,7 +38,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
                 exit(1);
             }
         }
-
         pid_t pid = fork();
         if (pid < 0)
         {
@@ -55,7 +47,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
 
         if (pid == 0)
         {
-            // CHILD
             if (prev_fd != -1)
             {
                 dup2(prev_fd, STDIN_FILENO);
@@ -84,8 +75,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
             perror("execve");
             _exit(126);
         }
-
-        // PARENT
         if (prev_fd != -1)
         {
             close(prev_fd);
@@ -103,8 +92,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
         created++;
         cur = cur->next;
     }
-
-    // 4) Wait for all children
     int status = 0;
     int waited = 0;
     while (waited < created)
@@ -112,8 +99,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
         wait(&status);
         waited++;
     }
-
-    // 5) Cleanup envp
     char **e = envp;
     while (*e)
     {

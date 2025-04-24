@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 18:20:04 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:31:20 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,39 +126,30 @@ char **env_list_to_envp(t_env *env)
 {
     size_t count = 0;
     t_env *cur = env;
-    // 1) count how many entries
     while (cur)
     {
         count++;
         cur = cur->next;
     }
-
-    // 2) allocate array of pointers (+1 for the NULL)
     char **envp = malloc((count + 1) * sizeof *envp);
     if (!envp)
         return NULL;
-
-    // 3) fill it
     cur = env;
     size_t i = 0;
     while (cur)
     {
-        // allocate exactly enough for "NAME=VALUE\0"
         size_t len = ft_strlen(cur->name) + 1 + ft_strlen(cur->value) + 1;
         envp[i] = malloc(len);
         if (!envp[i])
         {
-            // free any we already made
             while (i-- > 0)
                 free(envp[i]);
             free(envp);
             return NULL;
         }
-        // write "NAME=VALUE"
         ft_strlcpy(envp[i], cur->name, len);
         ft_strlcat(envp[i], "=",      len);
         ft_strlcat(envp[i], cur->value, len);
-
         i++;
         cur = cur->next;
     }
