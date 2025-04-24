@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 17:59:38 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:10:47 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,4 +135,54 @@ int  cd_walk_path(const char *path)
 
     free(dup);
     return ret;
+}
+size_t env_count(t_env *env)
+{
+    size_t cnt = 0;
+    while (env)
+    {
+        cnt++;
+        env = env->next;
+    }
+    return cnt;
+}
+
+// Produce an array of t_env* for sorting
+t_env **env_to_array(t_env *env, size_t *out_n)
+{
+    size_t n = env_count(env);
+    t_env **arr = malloc(sizeof(*arr) * n);
+    size_t i = 0;
+
+    if (!arr)
+        return NULL;
+
+    while (env)
+    {
+        arr[i] = env;
+        env = env->next;
+        i++;
+    }
+    *out_n = n;
+    return arr;
+}
+
+void sort_env_array(t_env **arr, size_t n)
+{
+    size_t i = 0;
+    while (i < n)
+    {
+        size_t j = i + 1;
+        while (j < n)
+        {
+            if (ft_strcmp(arr[j]->name, arr[i]->name) < 0)
+            {
+                t_env *tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 22:08:34 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:47:04 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 	return (cmd_list);
 }
 
-// static void on_exit(void) {
-//     char cmd[64];
-//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-//     system(cmd);
-// }
+static void on_exit(void) {
+    char cmd[64];
+    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+    system(cmd);
+}
 
 int main(int argc, char **argv, char **envp)
 {
-	// atexit(on_exit);
+	atexit(on_exit);
 	t_env  *env = init_env(envp);
 	// printf("here : %s\n", env->name);
 	// printf("here : %s\n", env->value);

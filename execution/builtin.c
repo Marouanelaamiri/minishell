@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 18:04:19 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:21:28 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,54 +91,106 @@ int ft_pwd(t_cmd *cmd, t_env **env)
 	printf("%s\n", cwd);
 	return (0);
 }
+
 int ft_export(t_cmd *cmd, t_env **env)
 {
-    t_token *token = cmd->args->next;
+    t_token *tok = cmd->args->next;
     int      status = 0;
-    if (token == NULL)
-        return ft_env(cmd, env);
-    while (token)
+    if (tok == NULL)
     {
-        char *equal = ft_strchr(token->value, '=');
+        size_t n;
+		size_t i;
+        t_env **arr = env_to_array(*env, &n);
+		
+        if (!arr)
+			return 1;
+        sort_env_array(arr, n);
+        i = 0;
+        while (i < n)
+        {
+            char *name  = arr[i]->name;
+            char *value = arr[i]->value;
+
+            if (value && *value)
+                printf("declare -x %s=\"%s\"\n", name, value);
+            else
+                printf("declare -x %s\n", name);
+
+            i++;
+        }
+        free(arr);
+        return 0;
+    }
+    while (tok)
+    {
+        char *pluseq = ft_strstr(tok->value, "+=");
+        char *eq     = NULL;
         char *name;
         char *value;
-        if (equal == NULL)
+        char *old;
+        if (pluseq)
         {
-            name  = token->value;
-            value = NULL;
-        }
-        else
-        {
-            *equal = '\0';
-            name  = token->value;
-            value = equal + 1;
-        }
-        if (is_valid_id(name) == 0)
-        {
-			write(2, "minishell", 10);
-			write(2, " : export: `", 13);
-			write(2 , token->value, ft_strlen(token->value));
-			write(2, "': not a valid identifier\n", 26);
-            status = 1;
-        }
-        else
-        {
-            char *clean_name  = ft_strdup(name);
-            char *clean_value = NULL;
-            if (value)
-                clean_value = ft_strdup(value);
+            *pluseq = '\0';
+            name   = tok->value;
+            value  = pluseq + 2;
+			
+            if (!is_valid_id(name))
+            {
+                write(2, "minishell: export: `", 20);
+                write(2, name, ft_strlen(name));
+                write(2, "': not a valid identifier\n", 27);
+                status = 1;
+            }
             else
-                clean_value = ft_strdup("");
-            env_set(env, clean_name, clean_value);
-            free(clean_name);
-            free(clean_value);
+            {
+                old = ft_getenv(*env, name);
+                if (!old) old = "";
+                char *new = ft_strjoin(old, value);
+                env_set(env, name, new);
+                free(new);
+            }
+            *pluseq = '+';
         }
-        if (equal)
-            *equal = '=';
-        token = token->next;
+        else
+        {
+            eq = ft_strchr(tok->value, '=');
+            if (eq)
+            {
+                *eq = '\0';
+                name  = tok->value;
+                value = eq + 1;
+                if (!is_valid_id(name))
+                {
+                    write(2, "minishell: export: `", 20);
+                    write(2, name, ft_strlen(name));
+                    write(2, "': not a valid identifier\n", 27);
+                    status = 1;
+                }
+                else
+                {
+                    env_set(env, name, value);
+                }
+                *eq = '=';
+            }
+            else
+            {
+                name = tok->value;
+                if (!is_valid_id(name))
+                {
+                    write(2, "minishell: export: `", 20);
+                    write(2, name, ft_strlen(name));
+                    write(2, "': not a valid identifier\n", 27);
+                    status = 1;
+                }
+                else if (ft_getenv(*env, name) == NULL)
+					env_set(env, name, ""); 
+            }
+        }
+        tok = tok->next;
     }
     return status;
 }
+
 int ft_unset(t_cmd *cmd, t_env **env)
 {
 	t_token *token = cmd->args->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 17:58:02 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:17:09 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
 void ft_update_exit_status(int status);
 int ft_get_exit_status(void);
+char	*ft_strstr(const char *haystack, const char *needle);
 
 // builtins
 
@@ -107,9 +108,11 @@ int ft_env(t_cmd *cmd, t_env **env);
 int	ft_exit(t_cmd *cmd, t_env **env);
 int is_builtin(t_cmd *cmd);
 int handle_builtins(t_cmd *cmd, t_env **env);
-// char *strip_quotes(const char *s);
 int is_valid_id(const char *str);
 int  cd_walk_path(const char *path);
+size_t env_count(t_env *env);
+t_env **env_to_array(t_env *env, size_t *out_n);
+void sort_env_array(t_env **arr, size_t n);
 
 // env_utils
 
