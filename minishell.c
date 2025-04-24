@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/24 21:49:32 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:52:49 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     if (!ft_syntax_check(tokens))
     {
         ft_update_exit_status(258);
-        // ft_free_tokens(tokens);
+        ft_free_tokens(tokens);
         return NULL;
     }
 
     t_cmd *cmd_list = ft_parse_commands(tokens);
+    ft_free_tokens(tokens); // free tokens
     ft_expand_cmds(cmd_list, env);
-    // ft_free_tokens(tokens);
     return cmd_list;
 }
 
@@ -51,19 +51,19 @@ static void on_exit(void)
 
 int main(int ac, char **av, char **envp)
 {
+    atexit(on_exit);
 	(void)ac;
 	(void)av;
-    // atexit(on_exit);
-    ft_signal_handler();
-
     t_env *env = init_env(envp);
     update_shell_level(&env);
+    ft_signal_handler();
 
     while (1)
     {
         char *line = readline("minishell$ ");
         if (!line)
         {
+            ft_update_exit_status(0);
             printf("exit\n");
             clear_history();
             break;
@@ -80,7 +80,7 @@ int main(int ac, char **av, char **envp)
             if (status < 0)
                 status = execute_cmds(cmd, env);
             ft_update_exit_status(status);
-            free_cmd_list(cmd);
+            ft_free_cmds(cmd);
         }
         // on parse error, fd_exit_status was set; just continue
     }

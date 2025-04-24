@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/24 15:10:47 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:17:07 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,24 @@ int is_builtin(t_cmd *cmd)
 }
 int handle_builtins(t_cmd *cmd, t_env **env)
 {
-    char *name = cmd->args->value;
 	int status = 0;
 
-    if (strcmp(name, "echo") == 0)
+    if (!cmd || !cmd->args || cmd->args->type)
+        return -1;
+    
+    if (ft_strcmp(cmd->args->value, "echo") == 0)
 		status = ft_echo(cmd, env);
-    else if (strcmp(name, "cd") == 0)
+    else if (ft_strcmp(cmd->args->value, "cd") == 0)
 		status = ft_cd(cmd, env);
-    else if (strcmp(name, "pwd") == 0)
+    else if (ft_strcmp(cmd->args->value, "pwd") == 0)
 		status = ft_pwd(cmd, env);
-    else if (strcmp(name, "env") == 0)
+    else if (ft_strcmp(cmd->args->value, "env") == 0)
 		status = ft_env(cmd, env);
-    else if (strcmp(name, "export") == 0)
+    else if (ft_strcmp(cmd->args->value, "export") == 0)
 		status = ft_export(cmd, env);
-    else if (strcmp(name, "unset") == 0)
+    else if (ft_strcmp(cmd->args->value, "unset") == 0)
 		status = ft_unset(cmd, env);
-    else if (strcmp(name, "exit") == 0)
+    else if (ft_strcmp(cmd->args->value, "exit") == 0)
 		status = ft_exit(cmd, env);
 	else	
     	return -1;

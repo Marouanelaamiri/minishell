@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_syntax_check.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 18:37:24 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 18:05:33 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/24 22:21:29 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,6 @@ int	ft_syntax_check(t_token *tokens)
 			if (next->type == PIPE)
 			{
 				printf("Syntax error: unexpected pipe\n");
-				return (0);
-			}
-			// ✅ Only WORD is valid right after a pipe (not a redirection alone)
-			if (next->type != WORD)
-			{
-				printf("Syntax error: pipe not followed by a command\n");
 				return (0);
 			}
 		}

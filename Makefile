@@ -1,4 +1,4 @@
-#------------------------------Source Files------------------------------------#
+#------------------------------ Source Files ------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
 execution/helpers/is_num.c \
@@ -29,32 +29,54 @@ parsing/sig_handler/ft_signal_handler.c \
 parsing/expansion/ft_expand_cmds.c \
 parsing/debug_func/ft_debug.c \
 parsing/parsing_utils/ft_status.c \
-#------------------------------Object Files------------------------------------#
+parsing/memory_management/ft_free.c \
+
+#------------------------------ Object Files ------------------------------------#
 OBJ = $(SRC:.c=.o)
+
+#------------------------------ Readline Paths ----------------------------------#
 READLINE_INCLUDE = $(shell brew --prefix readline)/include
 READLINE_LIB = $(shell brew --prefix readline)/lib
 LDLIB = -L$(READLINE_LIB) -lreadline
-#------------------------------Compiler and Flages------------------------------#
-CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
-#------------------------------Includes and Exuctables--------------------------#
+#------------------------------ Compiler and Flags ------------------------------#
+CC = cc
+CFLAGS = -Wall -Wextra -Werror# -g -fsanitize=address
+
+#------------------------------ Executable --------------------------------------#
 NAME = minishell
 
-#------------------------------Rules---------------------------------------------#
+#------------------------------ Rules -------------------------------------------#
 all: $(NAME)
 
-
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LDLIB) -o $(NAME)
+	@echo "\033[1;32m✅ Compiling complete source code into executable...\033[0m"
+	@$(CC) $(CFLAGS) $(OBJ) $(LDLIB) -o $(NAME)
+	@echo "\033[1;32m🎉 Build successful! You can now run ./minishell\033[0m"
+	@echo "\033[1;31m"
+	@echo "███╗   ███╗ ██╗███╗   ██╗ ██╗███████╗██╗  ██╗██████╗  ██╗ ██╗"
+	@echo "████╗ ████║███║████╗  ██║███║██╔════╝██║  ██║╚════██╗███║███║"
+	@echo "██╔████╔██║╚██║██╔██╗ ██║╚██║███████╗███████║ █████╔╝╚██║╚██║"
+	@echo "██║╚██╔╝██║ ██║██║╚██╗██║ ██║╚════██║██╔══██║ ╚═══██╗ ██║ ██║"
+	@echo "██║ ╚═╝ ██║ ██║██║ ╚████║ ██║███████║██║  ██║██████╔╝ ██║ ██║"
+	@echo "╚═╝     ╚═╝ ╚═╝╚═╝  ╚═══╝ ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝  ╚═╝ ╚═╝"
+	@echo "\033[0m"
 
 %.o: %.c minishell.h
-	$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
-#------------------------------Clean---------------------------------------------#
-clean :
-	rm -f $(OBJ)
-	
-fclean : clean
-	rm -f $(NAME)
-#------------------------------Rebuild--------------------------------------------#
-re : fclean all
+	@$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
+	@echo "\033[1;34m🔹 Compiling: $< -> $@\033[0m"
+
+#------------------------------ Cleaning ----------------------------------------#
+clean:
+	@echo "\033[0;33m🧼 Removing compiled object files to clean up...\033[0m"
+	@rm -f $(OBJ)
+	@echo "\033[0;32m✔️  Clean complete.\033[0m"
+
+fclean: clean
+	@echo "\033[0;31m🗑️ Removing final executable (minishell)...\033[0m"
+	@rm -f $(NAME)
+	@echo "\033[0;32m✔️  Full clean complete.\033[0m"
+
+re: fclean all
+
+.PHONY: all clean fclean re banner
