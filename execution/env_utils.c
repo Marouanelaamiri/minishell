@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/23 14:41:10 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:01:56 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_env *init_env(char **envp)
 	}
 	return (head);
 }
-
 int env_set(t_env **env , const char *name, const char *value)
 {
 	t_env *current = *env;
@@ -111,6 +110,19 @@ void free_env(t_env *env_list)
 		free(env_list->value);
 		free(env_list);
 		env_list = temp;
+	}
+}
+void free_cmd_list(t_cmd *cmd_list)
+{
+	t_cmd *temp;
+
+	while (cmd_list)
+	{
+		temp = cmd_list->next;
+		// free_tokens(cmd_list->args);
+		// free_redirs(cmd_list->redir);
+		free(cmd_list);
+		cmd_list = temp;
 	}
 }
 void update_shell_level(t_env **env)

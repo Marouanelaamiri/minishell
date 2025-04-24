@@ -16,9 +16,12 @@ execution/helpers/ft_calloc.c \
 execution/helpers/ft_isalpha.c \
 execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
+execution/helpers/ft_strlcat.c \
 execution/builtin.c \
 execution/builtin_utils.c \
 execution/env_utils.c \
+execution/execution_utils.c \
+execution/execution.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/syntax_check/ft_syntax_check.c\
 parsing/parse_cmd/ft_parse_commands.c\
