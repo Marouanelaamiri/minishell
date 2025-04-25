@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:26:23 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/24 23:42:36 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:59:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,11 @@ void	ft_free_env(t_env *env)
 		free(tmp->value);
 		free(tmp);
 	}
+}
+void free_argv(char **av)
+{
+	size_t i = 0;
+	while (av && av[i])
+		free(av[i++]);
+	free(av);
 }

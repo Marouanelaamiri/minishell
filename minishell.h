@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 21:57:27 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:00:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void ft_free_tokens(t_token *tokens);
 void ft_free_redirs(t_redir *redir);
 void ft_free_cmds(t_cmd *cmd);
 void ft_free_env(t_env *env);
+void free_argv(char **av);
 
 // helpers
 int		ft_atoi(const char *str);

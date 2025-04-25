@@ -6,11 +6,16 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 18:32:07 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:01:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int is_fork_builtin(t_cmd *cmd)
+{
+	return (cmd->next || cmd->redir); // If it's in a pipe or has redirection
+}
 
 int execute_cmds(t_cmd *cmd_list, t_env *env)
 {
@@ -62,17 +67,40 @@ int execute_cmds(t_cmd *cmd_list, t_env *env)
             setup_redirections(cur);
 
             char **argv = token_to_av(cur->args);
-            if (!argv)
-                exit(1);
+            if (!argv || !argv[0] || !argv[0][0])
+			{
+				free_argv(argv);
+                exit(0);
+			}
             char *path = find_executable(argv[0], env);
             if (!path)
             {
                 write(2, argv[0], ft_strlen(argv[0]));
                 write(2, ": command not found\n", 20);
+				free_argv(argv);
                 _exit(127);
             }
+			if (is_builtin(cur)) 
+			{
+				if (is_fork_builtin(cur)) 
+				{
+				// forked builtin: run like an external command
+				int status = handle_builtins(cur, &env);
+				free_argv(argv);
+				ft_update_exit_status(status);
+				exit(status);
+				} 
+				else
+				{
+				// Should never reach here in child, just in case
+				free_argv(argv);
+				exit(0);
+				}
+			}
             execve(path, argv, envp);
             perror("execve");
+			free_argv(argv);
+			free(path);
             _exit(126);
         }
         if (prev_fd != -1)
