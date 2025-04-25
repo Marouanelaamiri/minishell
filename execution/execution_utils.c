@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 23:20:04 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:08:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void setup_redirections(t_cmd *cmd)
 		}
 		else if (r->type == HEREDOC)
 		{
-			fd = open(r->value, O_RDONLY);
+			fd = heredoc_pipe(r->value);
 			if (fd < 0)
 			{
 				perror(r->value);
@@ -158,22 +158,25 @@ char **env_list_to_envp(t_env *env)
     envp[i] = NULL;
     return envp;
 }
+
 int heredoc_pipe(const char *delim)
 {
     int fds[2];
+    char *line;
+
     if (pipe(fds) < 0)
         return -1;
-
-    char *line;
     while (1)
     {
-        line = readline("heredoc> ");
-        if (!line || ft_strcmp(line, delim) == 0)
+        line = readline("> ");
+        if (!line)
+            break;
+        if (strcmp(line, delim) == 0)
         {
             free(line);
             break;
         }
-        write(fds[1], line, ft_strlen(line));
+        write(fds[1], line, strlen(line));
         write(fds[1], "\n", 1);
         free(line);
     }

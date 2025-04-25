@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/24 15:34:49 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:09:23 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int ft_echo(t_cmd *cmd, t_env **env)
 		printf("\n");
 	return (0);
 }
-
 
 int ft_cd(t_cmd *cmd, t_env **env)
 {
@@ -81,6 +80,7 @@ int ft_cd(t_cmd *cmd, t_env **env)
     env_set(env, "PWD",    newcwd);
     return 0;
 }
+
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
 	char cwd[PATH_MAX];
@@ -213,7 +213,6 @@ int ft_env(t_cmd *cmd, t_env **env)
 	}
 	return (0);
 }
-
 
 int	ft_exit(t_cmd *cmd, t_env **env)
 {

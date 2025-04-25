@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/24 23:17:07 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:08:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,6 @@ size_t env_count(t_env *env)
     return cnt;
 }
 
-// Produce an array of t_env* for sorting
 t_env **env_to_array(t_env *env, size_t *out_n)
 {
     size_t n = env_count(env);
