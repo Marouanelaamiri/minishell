@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:57:32 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/25 23:26:08 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:01:16 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,37 +110,89 @@ static char *ft_expand_string(char *str, t_env *env)
     return result;
 }
 
+static char *ft_remove_quates(char *str)
+{
+    char *res = ft_calloc(1, 1);
+    int i = 0;
+    int in_single = 0;
+    int in_double = 0;
+
+    while (str[i])
+    {
+        if (str[i] == '\'' && !is_double)
+            is_single = !is_single;
+        else if (str[i] == '\"' && !is_single)
+            is_double = !is_double;
+        else
+        {
+            char *temp = ft_substr(str, i, 1);
+            res = ft_strjoin_free(res, temp);
+        }
+        i++;
+    }
+    free(str);
+    return res;
+}
+
 // Function to handle the expansion of commands (called after parsing)
 void ft_expand_cmds(t_cmd *cmd_list, t_env *env)
 {
     char *expanded_value;
+    char **split_fields;
+    int i;
     t_token *arg;
     t_redir *redir;
+    t_token *new_node;
+    t_token *next_arg;
 
     while (cmd_list)
     {
         arg = cmd_list->args;
         while (arg)
         {
+            next_arg = arg->next;
             if (arg->type == WORD && arg->value)
             {
-                expanded_value = ft_expand_string(arg->value, env); // Expand the string
+                expanded_value = ft_expand_string(arg->value, env);
+                split_fields = ft_split(expanded_value, ' ');
+                free(expanded_value);
                 free(arg->value);
-                arg->value = expanded_value;
+
+                if (split_fields && split_fields[0])
+                {
+                    arg->value = ft_remove_quotes(ft_strtrim(split_fields[0], " \t\n"));
+                    i = 1;
+                    while (split_fields[i])
+                    {
+                        new_node = malloc(sizeof(t_token));
+                        if (!new_node)
+                            return; // handle malloc fail maybe later
+                        new_node->type = WORD;
+                        new_node->value = ft_remove_quotes(ft_strtrim(split_fields[i], " \t\n"));
+                        new_node->next = arg->next;
+                        arg->next = new_node;
+                        arg = new_node;
+                        i++;
+                    }
+                }
+                free(split_fields);
             }
-            arg = arg->next;
+            arg = next_arg;
         }
+
         redir = cmd_list->redir;
         while (redir)
         {
             if (redir->value)
             {
-                expanded_value = ft_expand_string(redir->value, env); // Expand the string for redirection values
+                expanded_value = ft_expand_string(redir->value, env);
                 free(redir->value);
-                redir->value = expanded_value;
+                redir->value = ft_remove_quotes(ft_strtrim(expanded_value, " \t\n"));
+                free(expanded_value);
             }
             redir = redir->next;
         }
         cmd_list = cmd_list->next;
     }
 }
+
