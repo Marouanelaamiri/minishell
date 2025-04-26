@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:57:32 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 17:57:34 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:26:08 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char *ft_strjoin_free(char *s1, char *s2)
     char *res = ft_strjoin(s1, s2);
     free(s1);
     free(s2);
-    return res;
+    return (res);
 }
 static char	*ft_expand_var(const char *str, int *i, t_env *env)
 {
