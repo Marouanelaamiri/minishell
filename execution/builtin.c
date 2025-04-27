@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/26 16:18:31 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:59:56 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	int newline = 1;
 
 	(void)env;
-	if (token && token->type == WORD && ft_strcmp(token->value, "-n") == 0)
+	if (token && token->type == WORD 
+			&& ft_strcmp(token->value, "-n") == 0)
 	{
 		newline = 0;
 		token = token->next;
@@ -38,41 +39,33 @@ int ft_echo(t_cmd *cmd, t_env **env)
 
 int ft_cd(t_cmd *cmd, t_env **env)
 {
-    t_token *tok       = cmd->args->next;
+    t_token *tok = cmd->args->next;
     char    *path;
-    char     oldcwd[PATH_MAX];
-    char     newcwd[PATH_MAX];
-
+    char    *cwd;
+	
     if (tok && tok->type == WORD)
         path = tok->value;
     else
         path = ft_getenv(*env, "HOME");
 
     if (!path)
-		return( write(2, "cd: HOME not set\n", 17), 1);
-    if (!getcwd(oldcwd, sizeof oldcwd))
-		return (perror("cd"), 1);
-    if (path[0] == '/')
+		return (write(2, "cd: HOME not set\n", 17), 1);
+	if (path[0] == '/')
     {
         if (chdir("/") < 0)
-        {
-            perror("cd");
-            return 1;
-        }
-    }
+			return (perror("cd"), 1);
+	}
+	
     if (cd_walk_path(path) < 0)
-    {
-        perror("cd");
-        chdir(oldcwd);
-        return 1;
-    }
-    if (!getcwd(newcwd, sizeof newcwd))
-    {
-        return (chdir(oldcwd), 0);
-        return 0;
-    }
-    env_set(env, "OLDPWD", oldcwd);
-    env_set(env, "PWD",    newcwd);
+		 return(perror("cd"), 1);
+		 
+    cwd = getcwd(NULL, 0);
+	
+    if (!cwd)
+		return (perror("getcwd"), 1);
+	
+    env_set(env, "PWD", cwd);
+    free(cwd);
     return 0;
 }
 
@@ -99,7 +92,7 @@ int ft_export(t_cmd *cmd, t_env **env)
 		
         if (!arr)
 			return 1;
-        sort_env_array(arr, n);
+        sort_env_array(arr, n); 
         i = 0;
         while (i < n)
         {
@@ -232,6 +225,6 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	}
 	status = ft_atoi(arg->value);
 	status = (status % 256 + 256) % 256;
-	exit((int)status);
+	_exit((int)status);
 }
 

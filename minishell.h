@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/26 16:14:35 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:17:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ extern int g_exit_status;  // global variable to store exit status
 
 # define BUFFER_SIZE 42
 # define MAX_ARGS 100
-# define PATH_MAX 1337
+# define PATH_MAX 1337 //
 
 
 // ENV
