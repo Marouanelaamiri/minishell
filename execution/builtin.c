@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/25 15:09:23 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:18:31 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int ft_echo(t_cmd *cmd, t_env **env)
 {
 	t_token *token = cmd->args->next;
 	int newline = 1;
-	char *str;
 
 	(void)env;
 	if (token && token->type == WORD && ft_strcmp(token->value, "-n") == 0)
@@ -27,11 +26,7 @@ int ft_echo(t_cmd *cmd, t_env **env)
 	while (token)
 	{
 		if (token->type == WORD)
-		{
-			str = ft_strdup(token->value);
-			printf("%s", str);
-			free(str);
-		}
+			printf("%s", token->value);
 		token = token->next;
 		if (token)
 			printf(" ");
@@ -136,9 +131,7 @@ int ft_export(t_cmd *cmd, t_env **env)
 			
             if (!is_valid_id(name))
             {
-                write(2, "minishell: export: `", 20);
-                write(2, name, ft_strlen(name));
-                write(2, "': not a valid identifier\n", 27);
+				print_export_error(name);
                 status = 1;
             }
             else
@@ -161,9 +154,7 @@ int ft_export(t_cmd *cmd, t_env **env)
                 value = eq + 1;
                 if (!is_valid_id(name))
                 {
-                    write(2, "minishell: export: `", 20);
-                    write(2, name, ft_strlen(name));
-                    write(2, "': not a valid identifier\n", 27);
+					print_export_error(name);
                     status = 1;
                 }
                 else
@@ -177,9 +168,7 @@ int ft_export(t_cmd *cmd, t_env **env)
                 name = tok->value;
                 if (!is_valid_id(name))
                 {
-                    write(2, "minishell: export: `", 20);
-                    write(2, name, ft_strlen(name));
-                    write(2, "': not a valid identifier\n", 27);
+					print_export_error(name);
                     status = 1;
                 }
                 else if (ft_getenv(*env, name) == NULL)
@@ -218,14 +207,17 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 {
 	t_token	*arg = cmd->args->next;
 	long	status;
+	char *s; 
 
 	(void)env;
 	printf("exit\n");
 
 	if (!arg)
 		exit(0);
-
-	if (!ft_isnum(arg->value))
+	s = arg->value;
+	if (*s == '-' || *s == '+')
+		s++;
+	if (!*s || !ft_isnum(arg->value))
 	{
 		write(2, "minishell: ", 12);
 		write(2, "exit: ", 7);

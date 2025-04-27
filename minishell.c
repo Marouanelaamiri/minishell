@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/25 17:12:23 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/26 15:11:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     return cmd_list;
 }
 
-static void on_exit(void)
-{
-    char cmd[128];
-    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-    system(cmd);
-}
+// static void on_exit(void)
+// {
+//     char cmd[128];
+//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+//     system(cmd);
+// }
 
 int main(int ac, char **av, char **envp)
 {
-    atexit(on_exit);
+    // atexit(on_exit);
 	(void)ac;
 	(void)av;
     t_env *env = init_env(envp);

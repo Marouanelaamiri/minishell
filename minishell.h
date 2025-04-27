@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/25 17:00:10 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:14:35 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char **token_to_av(t_token *token);
 char **env_list_to_envp(t_env *env);
 char	*ft_strtok(char *str, const char *sep);
 int heredoc_pipe(const char *delim);
+void	print_export_error(const char *arg);
 
 //exe
 int execute_cmds(t_cmd *cmd_list, t_env *env);

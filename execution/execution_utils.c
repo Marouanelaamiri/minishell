@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/25 16:10:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:14:21 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int heredoc_pipe(const char *delim)
         line = readline("> ");
         if (!line)
             break;
-        if (strcmp(line, delim) == 0)
+        if (ft_strcmp(line, delim) == 0)
         {
             free(line);
             break;
@@ -182,4 +182,10 @@ int heredoc_pipe(const char *delim)
     }
     close(fds[1]);
     return fds[0];
+}
+void	print_export_error(const char *arg)
+{
+	write(2, "minishell: export: `", 20);
+	write(2, arg,                ft_strlen(arg));
+	write(2, "': not a valid identifier\n", 27);
 }
