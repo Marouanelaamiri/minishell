@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/24 18:01:56 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:05:30 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,18 @@ int env_set(t_env **env , const char *name, const char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			return (0); // success
+			return (0);
 		}
 		current = current->next;
 	}
 	node = malloc(sizeof *(node));
 	if (!node)
-		return (1); // failure
+		return (1);
 	node->name = ft_strdup(name);
 	node->value = ft_strdup(value);
 	node->next = *env;
 	*env = node;
-	return (0); // success
+	return (0);
 }
 int env_unset(t_env **env, const char *name)
 {
@@ -72,22 +72,22 @@ int env_unset(t_env **env, const char *name)
 
 	while (current)
 	{
-		if (ft_strcmp(current->name, name) == 0) // todo
+		if (ft_strcmp(current->name, name) == 0)
 		{
 			if (prev == NULL)
-				*env = current->next; // head is being removed
+				*env = current->next;
 			else
 				prev->next = current->next;
 
 			free(current->name);
 			free(current->value);
 			free(current);
-			return (0); // success
+			return (0);
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (1); // variable not found
+	return (1);
 }
 char *ft_getenv(t_env *env_list, const char *name)
 {
@@ -98,32 +98,6 @@ char *ft_getenv(t_env *env_list, const char *name)
 		env_list = env_list->next;
 	}
 	return (NULL);
-}
-void free_env(t_env *env_list)
-{
-	t_env *temp;
-
-	while (env_list)
-	{
-		temp = env_list->next;
-		free(env_list->name);
-		free(env_list->value);
-		free(env_list);
-		env_list = temp;
-	}
-}
-void free_cmd_list(t_cmd *cmd_list)
-{
-	t_cmd *temp;
-
-	while (cmd_list)
-	{
-		temp = cmd_list->next;
-		// free_tokens(cmd_list->args);
-		// free_redirs(cmd_list->redir);
-		free(cmd_list);
-		cmd_list = temp;
-	}
 }
 void update_shell_level(t_env **env)
 {

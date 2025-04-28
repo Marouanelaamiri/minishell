@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/27 15:00:34 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:03:35 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int is_valid_id(const char *str)
 	return (1);
 }
 
-char	*ft_strtok(char *str, const char *sep)
+char	*ft_strtok(char *str, const char *sep) // need opt
 {
     static char *next;
     char *start;
@@ -105,7 +105,7 @@ char	*ft_strtok(char *str, const char *sep)
     return start;
 }
 
-int  cd_walk_path(const char *path)
+int  cd_walk_path(const char *path) // need opt
 {
     char *dup = ft_strdup(path);
     char *seg;
@@ -149,7 +149,7 @@ size_t env_count(t_env *env)
     return cnt;
 }
 
-t_env **env_to_array(t_env *env, size_t *out_n)
+t_env **env_to_array(t_env *env, size_t *out_n) // need opt
 {
     size_t n = env_count(env);
     t_env **arr = malloc(sizeof(*arr) * n);

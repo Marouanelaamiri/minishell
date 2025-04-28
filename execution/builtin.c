@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/28 13:01:07 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:03:57 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int ft_pwd(t_cmd *cmd, t_env **env)
 	return (0);
 }
 
-int ft_export(t_cmd *cmd, t_env **env)
+int ft_export(t_cmd *cmd, t_env **env) // need opt and split
 {
     t_token *tok = cmd->args->next;
     int      status = 0;
@@ -197,7 +197,7 @@ int ft_env(t_cmd *cmd, t_env **env)
 	return (0);
 }
 
-int	ft_exit(t_cmd *cmd, t_env **env)
+int	ft_exit(t_cmd *cmd, t_env **env) // need opt
 {
 	t_token	*arg = cmd->args->next;
 	long	status;
