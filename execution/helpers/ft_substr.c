@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 23:29:37 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/21 12:42:43 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:41:37 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	s_l;
-	size_t	i;
 	char	*sub;
 
 	if (!s)
 		return (NULL);
 	s_l = ft_strlen(s);
-	i = 0;
 	if (start >= s_l)
 		return (ft_strdup(""));
 	if (len > (s_l - start))

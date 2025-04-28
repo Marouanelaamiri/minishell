@@ -40,7 +40,7 @@ READLINE_LIB = $(shell brew --prefix readline)/lib
 LDLIB = -L$(READLINE_LIB) -lreadline
 
 #------------------------------ Compiler and Flags ------------------------------#
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Wextra -Werror# -g -fsanitize=address
 
 #------------------------------ Executable --------------------------------------#

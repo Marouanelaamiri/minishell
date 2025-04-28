@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/27 16:59:56 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:01:07 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,14 @@ int ft_cd(t_cmd *cmd, t_env **env)
 
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
-	char cwd[PATH_MAX];
+	char *cwd;
 	(void)cmd;
 	(void)env;
-	if (!getcwd(cwd, sizeof(cwd)))
+    cwd = getcwd(NULL, 0);
+	if (!cwd)
 		return (perror("getcwd"), 1);
 	printf("%s\n", cwd);
+    free(cwd);
 	return (0);
 }
 
@@ -130,7 +132,8 @@ int ft_export(t_cmd *cmd, t_env **env)
             else
             {
                 old = ft_getenv(*env, name);
-                if (!old) old = "";
+                if (!old)
+                    old = "";
                 char *new = ft_strjoin(old, value);
                 env_set(env, name, new);
                 free(new);
@@ -151,9 +154,7 @@ int ft_export(t_cmd *cmd, t_env **env)
                     status = 1;
                 }
                 else
-                {
                     env_set(env, name, value);
-                }
                 *eq = '=';
             }
             else
