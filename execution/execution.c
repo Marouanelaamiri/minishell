@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 15:47:30 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:31:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int is_fork_builtin(t_cmd *cmd)
 {
 	return (cmd->next || cmd->redir);
 }
-
 int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 {
     char **envp = env_list_to_envp(env);

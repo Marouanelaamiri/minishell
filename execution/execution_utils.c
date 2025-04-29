@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 15:46:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:48:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,48 @@
 
 void setup_redirections(t_cmd *cmd)
 {
-	t_redir *r = cmd->redir;
+	t_redir *redir = cmd->redir;
 	int fd;
 
-	while (r)
+	while (redir)
 	{
-		if (r->type == REDIR_IN)
+		fd = -1;
+
+		if (redir->type == REDIR_IN)
+			fd = open(redir->value, O_RDONLY);
+		else if (redir->type == REDIR_OUT)
+			fd = open(redir->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (redir->type == APPEND)
+			fd = open(redir->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else if (redir->type == HEREDOC)
 		{
-			fd = open(r->value, O_RDONLY);
+			fd = redir->fd;
 			if (fd < 0)
 			{
-				perror(r->value);
+				perror("heredoc fd");
 				exit(1);
 			}
+		}
+		else
+		{
+			redir = redir->next;
+			continue;
+		}
+
+		if (fd < 0)
+		{
+			perror(redir->value);
+			exit(1);
+		}
+		if (redir->type == REDIR_IN || redir->type == HEREDOC)
 			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-		else if (r->type == REDIR_OUT)
-		{
-			fd = open(r->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd < 0)
-			{
-				perror(r->value);
-				exit(1);
-			}
+		else
 			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (r->type == APPEND)
-		{
-			fd = open(r->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-			{
-				perror(r->value);
-				exit(1);
-			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (r->type == HEREDOC)
-		{
-			fd = heredoc_pipe(r->value);
-			if (fd < 0)
-			{
-				perror(r->value);
-				exit(1);
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-		r = r->next;
+		close(fd);
+		redir = redir->next;
 	}
 }
+
 char *find_executable(char *cmd, t_env *env)
 {
 	if (!cmd || !*cmd)
@@ -158,34 +148,51 @@ char **env_list_to_envp(t_env *env)
     envp[i] = NULL;
     return envp;
 }
-int heredoc_pipe(const char *delim) // need opt
+int heredoc_pipe(const char *delim)
 {
-    int    fds[2];
-    char  *line = NULL;
-    size_t len  = 0;
-    ssize_t nread;
+	int fds[2];
+	char *line;
 
-    if (pipe(fds) < 0)
-        return -1;
-
-    while (1)
-    {
-        nread = getline(&line, &len, stdin);
-        if (nread < 0)
-            break;
-        if (nread > 0 && line[nread-1] == '\n')
-            line[nread-1] = '\0';
-
-        if (strcmp(line, delim) == 0)
-            break;
-        write(fds[1], line, strlen(line));
-        write(fds[1], "\n", 1);
-    }
-    free(line);
-    close(fds[1]);
-    return fds[0];
+	if (pipe(fds) < 0)
+	{
+		perror("pipe");
+		return (-1);
+	}
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delim) == 0)
+		{
+			free(line);
+			break;
+		}
+		write(fds[1], line, ft_strlen(line));
+		write(fds[1], "\n", 1);
+		free(line);
+	}
+	close(fds[1]);
+	return (fds[0]);
 }
-
+int preprocess_heredocs(t_cmd *cmd_list)
+{
+	t_cmd *cmd = cmd_list;
+	while (cmd)
+	{
+		t_redir *redir = cmd->redir;
+		while (redir)
+		{
+			if (redir->type == HEREDOC)
+			{
+				redir->fd = heredoc_pipe(redir->value);
+				if (redir->fd < 0)
+					return -1;
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+	return 0;
+}
 void	print_export_error(const char *arg)
 {
 	write(2, "minishell: export: `", 20);

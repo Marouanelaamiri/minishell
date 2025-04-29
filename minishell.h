@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 15:46:42 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:49:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	t_type		type;
+	int			fd;
 	char			*value;
 	struct s_redir	*next;
 }			t_redir;
@@ -128,7 +129,7 @@ void print_env_array(t_env **arr, size_t n);
 int handle_one_export(const char *arg, t_env **env);
 int apply_assign(char *copy, t_env **env);
 int apply_append(char *copy, t_env **env);
-// void prepare_heredocs(t_cmd *cmd);
+int preprocess_heredocs(t_cmd *cmd_list);
 
 // exe utils
 void setup_redirections(t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/29 15:23:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:03:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,57 +51,60 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 
 int main(int ac, char **av, char **envp)
 {
-    // atexit(on_exit);
 	(void)ac;
 	(void)av;
-    t_env *env = init_env(envp);
-    update_shell_level(&env);
-    ft_signal_handler();
+	t_env *env = init_env(envp);
+	update_shell_level(&env);
+	ft_signal_handler();
 
-    while (1)
-    {
-        char *line = readline("minishell$ ");
-        if (!line)
-        {
-            ft_update_exit_status(0);
-            printf("exit\n");
-            clear_history();
-            break;
-        }
-        if (*line)
-            add_history(line);
+	while (1)
+	{
+		char *line = readline("minishell$ ");
+		if (!line)
+		{
+			ft_update_exit_status(0);
+			printf("exit\n");
+			clear_history();
+			break;
+		}
+		if (*line)
+			add_history(line);
 
-        t_cmd *cmd = ft_process_input(line, env);
-        free(line);
-		
-        if (cmd && cmd->next == NULL && is_builtin(cmd))
-        {
-            int saved_stdout = -1;
-            if (cmd->redir)
-            {
-                saved_stdout = dup(STDOUT_FILENO);
-                setup_redirections(cmd);
-            }
+		t_cmd *cmd = ft_process_input(line, env);
+		free(line);
 
-            int status = handle_builtins(cmd, &env);
+		if (!cmd)
+			continue;
 
-            if (cmd->redir && saved_stdout != -1)
-            {
-                dup2(saved_stdout, STDOUT_FILENO);
-                close(saved_stdout);
-            }
+		if (preprocess_heredocs(cmd) != 0) //
+		{
+			ft_free_cmds(cmd);
+			continue;
+		}
 
-            ft_update_exit_status(status);
-            ft_free_cmds(cmd);
-        }
-        else if (cmd)
-        {
-            int status = execute_cmds(cmd, env);
-            ft_update_exit_status(status);
-            ft_free_cmds(cmd);
-        }
-    }
-
-    ft_free_env(env);
-    return g_exit_status;
+		if (cmd->next == NULL && is_builtin(cmd))
+		{
+			int saved_stdout = -1;
+			if (cmd->redir)
+			{
+				saved_stdout = dup(STDOUT_FILENO);
+				setup_redirections(cmd);
+			}
+			int status = handle_builtins(cmd, &env);
+			if (cmd->redir && saved_stdout != -1)
+			{
+				dup2(saved_stdout, STDOUT_FILENO);
+				close(saved_stdout);
+			}
+			ft_update_exit_status(status);
+		}
+		else
+		{
+			int status = execute_cmds(cmd, env);
+			ft_update_exit_status(status);
+		}
+		ft_free_cmds(cmd);
+	}
+	ft_free_env(env);
+	return g_exit_status;
 }
