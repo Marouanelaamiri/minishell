@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 17:48:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:51:06 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void setup_redirections(t_cmd *cmd)
 		redir = redir->next;
 	}
 }
-
 char *find_executable(char *cmd, t_env *env)
 {
 	if (!cmd || !*cmd)

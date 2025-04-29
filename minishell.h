@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 17:49:42 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:50:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,7 @@ t_env *init_env(char **envp);
 int env_set(t_env **env , const char *name, const char *value);
 int env_unset(t_env **env, const char *name);
 char *ft_getenv(t_env *env_list, const char *name);
-void free_env(t_env *env_list);
 void update_shell_level(t_env **env);
-void free_cmd_list(t_cmd *cmd_list);
 
 // parsing
 t_token	*ft_tokenize(const char	*input);
