@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/28 13:03:57 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:48:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int ft_echo(t_cmd *cmd, t_env **env)
 		printf("\n");
 	return (0);
 }
-
 int ft_cd(t_cmd *cmd, t_env **env)
 {
     t_token *tok = cmd->args->next;
@@ -68,7 +67,6 @@ int ft_cd(t_cmd *cmd, t_env **env)
     free(cwd);
     return 0;
 }
-
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
 	char *cwd;
@@ -81,99 +79,6 @@ int ft_pwd(t_cmd *cmd, t_env **env)
     free(cwd);
 	return (0);
 }
-
-int ft_export(t_cmd *cmd, t_env **env) // need opt and split
-{
-    t_token *tok = cmd->args->next;
-    int      status = 0;
-    if (tok == NULL)
-    {
-        size_t n;
-		size_t i;
-        t_env **arr = env_to_array(*env, &n);
-		
-        if (!arr)
-			return 1;
-        sort_env_array(arr, n); 
-        i = 0;
-        while (i < n)
-        {
-            char *name  = arr[i]->name;
-            char *value = arr[i]->value;
-
-            if (value && *value)
-                printf("declare -x %s=\"%s\"\n", name, value);
-            else
-                printf("declare -x %s\n", name);
-
-            i++;
-        }
-        free(arr);     
-        return 0;
-    }            
-    while (tok)
-    {
-        char *pluseq = ft_strstr(tok->value, "+=");
-        char *eq     = NULL;
-        char *name;
-        char *value;
-        char *old;
-        if (pluseq)
-        {
-            *pluseq = '\0';
-            name   = tok->value;
-            value  = pluseq + 2;
-			
-            if (!is_valid_id(name))
-            {
-				print_export_error(name);
-                status = 1;
-            }
-            else
-            {
-                old = ft_getenv(*env, name);
-                if (!old)
-                    old = "";
-                char *new = ft_strjoin(old, value);
-                env_set(env, name, new);
-                free(new);
-            }
-            *pluseq = '+';
-        }
-        else
-        {
-            eq = ft_strchr(tok->value, '=');
-            if (eq)
-            {
-                *eq = '\0';
-                name  = tok->value;
-                value = eq + 1;
-                if (!is_valid_id(name))
-                {
-					print_export_error(name);
-                    status = 1;
-                }
-                else
-                    env_set(env, name, value);
-                *eq = '=';
-            }
-            else
-            {
-                name = tok->value;
-                if (!is_valid_id(name))
-                {
-					print_export_error(name);
-                    status = 1;
-                }
-                else if (ft_getenv(*env, name) == NULL)
-					env_set(env, name, ""); 
-            }
-        }
-        tok = tok->next;
-    }
-    return status;
-}
-
 int ft_unset(t_cmd *cmd, t_env **env)
 {
 	t_token *token = cmd->args->next;
@@ -196,7 +101,6 @@ int ft_env(t_cmd *cmd, t_env **env)
 	}
 	return (0);
 }
-
 int	ft_exit(t_cmd *cmd, t_env **env) // need opt
 {
 	t_token	*arg = cmd->args->next;

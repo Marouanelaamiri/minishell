@@ -6,12 +6,12 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/28 13:05:30 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:47:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+ // need deep understanding 
 t_env *init_env(char **envp)
 {
 	t_env *head = NULL;

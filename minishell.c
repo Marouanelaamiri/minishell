@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/28 13:05:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:23:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,34 @@ int main(int ac, char **av, char **envp)
         t_cmd *cmd = ft_process_input(line, env);
         free(line);
 		
-		if (cmd->next == NULL && !cmd->redir && is_builtin(cmd))
-		 {
-			int status = handle_builtins(cmd, &env);
-			ft_update_exit_status(status);
-			} 
-			else
-			{
-				int status = execute_cmds(cmd, env);
-				ft_update_exit_status(status);
-				ft_free_cmds(cmd);
-			}
-	}
+        if (cmd && cmd->next == NULL && is_builtin(cmd))
+        {
+            int saved_stdout = -1;
+            if (cmd->redir)
+            {
+                saved_stdout = dup(STDOUT_FILENO);
+                setup_redirections(cmd);
+            }
+
+            int status = handle_builtins(cmd, &env);
+
+            if (cmd->redir && saved_stdout != -1)
+            {
+                dup2(saved_stdout, STDOUT_FILENO);
+                close(saved_stdout);
+            }
+
+            ft_update_exit_status(status);
+            ft_free_cmds(cmd);
+        }
+        else if (cmd)
+        {
+            int status = execute_cmds(cmd, env);
+            ft_update_exit_status(status);
+            ft_free_cmds(cmd);
+        }
+    }
+
     ft_free_env(env);
     return g_exit_status;
 }

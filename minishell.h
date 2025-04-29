@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/27 16:17:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:46:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ extern int g_exit_status;  // global variable to store exit status
 
 # define BUFFER_SIZE 42
 # define MAX_ARGS 100
-# define PATH_MAX 1337 //
+
 
 
 // ENV
@@ -107,20 +107,28 @@ char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 // builtins
-int ft_echo(t_cmd *cmd, t_env **env);
-int ft_cd(t_cmd *cmd, t_env **env);
-int ft_pwd(t_cmd *cmd, t_env **env);
-int ft_export(t_cmd *cmd, t_env **env);
-int ft_unset(t_cmd *cmd, t_env **env);
-int ft_env(t_cmd *cmd, t_env **env);
-int	ft_exit(t_cmd *cmd, t_env **env);
-int is_builtin(t_cmd *cmd);
-int handle_builtins(t_cmd *cmd, t_env **env);
-int is_valid_id(const char *str);
-int  cd_walk_path(const char *path);
-size_t env_count(t_env *env);
-t_env **env_to_array(t_env *env, size_t *out_n);
+int		ft_echo(t_cmd *cmd, t_env **env);
+int		ft_cd(t_cmd *cmd, t_env **env);
+int		ft_pwd(t_cmd *cmd, t_env **env);
+int		ft_export(t_cmd *cmd, t_env **env);
+int		ft_unset(t_cmd *cmd, t_env **env);
+int		ft_env(t_cmd *cmd, t_env **env);
+int		ft_exit(t_cmd *cmd, t_env **env);
+int		is_builtin(t_cmd *cmd);
+int		handle_builtins(t_cmd *cmd, t_env **env);
+int		is_valid_id(const char *str);
+int		cd_walk_path(const char *path);
+void	sort_env_array(t_env **arr, size_t n);
+ 
+// builtin utils
+int print_export_list(t_env *env);
+t_env **build_env_array(t_env *env, size_t *out_n);
 void sort_env_array(t_env **arr, size_t n);
+void print_env_array(t_env **arr, size_t n);
+int handle_one_export(const char *arg, t_env **env);
+int apply_assign(char *copy, t_env **env);
+int apply_append(char *copy, t_env **env);
+// void prepare_heredocs(t_cmd *cmd);
 
 // exe utils
 void setup_redirections(t_cmd *cmd);

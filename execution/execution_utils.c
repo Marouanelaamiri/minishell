@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/26 16:14:21 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:46:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,31 +158,34 @@ char **env_list_to_envp(t_env *env)
     envp[i] = NULL;
     return envp;
 }
-
-int heredoc_pipe(const char *delim)
+int heredoc_pipe(const char *delim) // need opt
 {
-    int fds[2];
-    char *line;
+    int    fds[2];
+    char  *line = NULL;
+    size_t len  = 0;
+    ssize_t nread;
 
     if (pipe(fds) < 0)
         return -1;
+
     while (1)
     {
-        line = readline("> ");
-        if (!line)
+        nread = getline(&line, &len, stdin);
+        if (nread < 0)
             break;
-        if (ft_strcmp(line, delim) == 0)
-        {
-            free(line);
+        if (nread > 0 && line[nread-1] == '\n')
+            line[nread-1] = '\0';
+
+        if (strcmp(line, delim) == 0)
             break;
-        }
         write(fds[1], line, strlen(line));
         write(fds[1], "\n", 1);
-        free(line);
     }
+    free(line);
     close(fds[1]);
     return fds[0];
 }
+
 void	print_export_error(const char *arg)
 {
 	write(2, "minishell: export: `", 20);

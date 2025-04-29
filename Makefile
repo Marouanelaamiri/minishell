@@ -18,6 +18,7 @@ execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
 execution/helpers/ft_strlcat.c \
 execution/builtin.c \
+execution/ft_export.c \
 execution/builtin_utils.c \
 execution/env_utils.c \
 execution/execution_utils.c \
