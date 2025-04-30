@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 17:50:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:15:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int handle_one_export(const char *arg, t_env **env);
 int apply_assign(char *copy, t_env **env);
 int apply_append(char *copy, t_env **env);
 int preprocess_heredocs(t_cmd *cmd_list);
+void	print_error(const char *cmd, const char *msg);
 
 // exe utils
 void setup_redirections(t_cmd *cmd);
@@ -138,7 +139,6 @@ char **token_to_av(t_token *token);
 char **env_list_to_envp(t_env *env);
 char	*ft_strtok(char *str, const char *sep);
 int heredoc_pipe(const char *delim);
-void	print_export_error(const char *arg);
 
 //exe
 int execute_cmds(t_cmd *cmd_list, t_env *env);

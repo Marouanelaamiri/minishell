@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/29 15:48:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:03:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,11 @@ int ft_cd(t_cmd *cmd, t_env **env)
         if (chdir("/") < 0)
 			return (perror("cd"), 1);
 	}
-	
     if (cd_walk_path(path) < 0)
 		 return(perror("cd"), 1);
-		 
     cwd = getcwd(NULL, 0);
-	
     if (!cwd)
 		return (perror("getcwd"), 1);
-	
     env_set(env, "PWD", cwd);
     free(cwd);
     return 0;
@@ -96,7 +92,8 @@ int ft_env(t_cmd *cmd, t_env **env)
 	(void)cmd;
 	while(current)
 	{
-		printf("%s=%s\n", current->name, current->value);
+		if (current->value[0] != '\0')
+			printf("%s=%s\n", current->name, current->value);
 		current = current->next;
 	}
 	return (0);
@@ -117,19 +114,16 @@ int	ft_exit(t_cmd *cmd, t_env **env) // need opt
 		s++;
 	if (!*s || !ft_isnum(arg->value))
 	{
-		write(2, "minishell: ", 12);
-		write(2, "exit: ", 7);
-		write(2, arg->value, ft_strlen(arg->value));
-		write(2, ": numeric argument required\n", 28);
+		print_error("minishell: exit: numeric argument required\n", arg->value);
 		exit(255);
 	}
 	if (arg->next)
 	{
-		write(2, "minishell: exit: too many arguments\n", 37);
+		print_error("minishell: exit: too many arguments\n", arg->value);
 		return (1);
 	}
 	status = ft_atoi(arg->value);
 	status = (status % 256 + 256) % 256;
-	_exit((int)status);
+	exit((int)status);
 }
 

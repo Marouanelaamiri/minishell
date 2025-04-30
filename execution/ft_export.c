@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 15:19:22 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:16:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int apply_assign(char *copy, t_env **env)
         *eq = '\0';
         if (!is_valid_id(copy))
         {
-            print_export_error(copy);
+            print_error(copy, "not a valid identifier");
             err = 1;
         }
         else
@@ -135,7 +135,7 @@ int apply_assign(char *copy, t_env **env)
     {
         if (!is_valid_id(copy))
         {
-            print_export_error(copy);
+            print_error(copy, "not valid identifier");
             err = 1;
         }
         else if (!ft_getenv(*env, copy))
@@ -153,7 +153,7 @@ int apply_append(char *copy, t_env **env)
     *pos = '\0';  // split
     if (!is_valid_id(copy))
     {
-        print_export_error(copy);
+        print_error(copy, "not a valid identifier");
         err = 1;
     }
     else

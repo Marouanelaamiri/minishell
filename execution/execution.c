@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 17:31:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:25:17 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,7 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
         }
         pid_t pid = fork();
         if (pid < 0)
-        {
-            perror("fork");
-            exit(1);
-        }
-
+			 return (perror("fork"), exit(1), 0);
         if (pid == 0)
         {
             if (prev_fd != -1)
@@ -62,9 +58,7 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
                 close(pipefd[0]);
                 close(pipefd[1]);
             }
-
             setup_redirections(cur);
-
             char **argv = token_to_av(cur->args);
             if (!argv || !argv[0] || !argv[0][0])
 			{
@@ -74,10 +68,9 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
             char *path = find_executable(argv[0], env);
             if (!path)
             {
-                write(2, argv[0], ft_strlen(argv[0]));
-                write(2, ": command not found\n", 20);
+				print_error(argv[0], "command not found");
 				free_argv(argv);
-                _exit(127);
+            	exit(127);
             }
 			if (is_builtin(cur)) 
 			{
@@ -100,22 +93,17 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
             perror("execve");
 			free_argv(argv);
 			free(path);
-            _exit(126);
+            exit(126);
         }
         if (prev_fd != -1)
-        {
-            close(prev_fd);
-        }
+			close(prev_fd);
         if (cur->next)
         {
             close(pipefd[1]);
             prev_fd = pipefd[0];
         }
         else
-        {
-            prev_fd = -1;
-        }
-
+			prev_fd = -1;
         created++;
         cur = cur->next;
     }
@@ -133,6 +121,5 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
         e++;
     }
     free(envp);
-
     return WEXITSTATUS(status);
 }

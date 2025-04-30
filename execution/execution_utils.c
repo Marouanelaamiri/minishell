@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/29 17:51:06 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:15:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,10 +191,4 @@ int preprocess_heredocs(t_cmd *cmd_list)
 		cmd = cmd->next;
 	}
 	return 0;
-}
-void	print_export_error(const char *arg)
-{
-	write(2, "minishell: export: `", 20);
-	write(2, arg,                ft_strlen(arg));
-	write(2, "': not a valid identifier\n", 27);
 }
