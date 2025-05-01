@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/30 22:55:52 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 20:57:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 int is_builtin(t_cmd *cmd)
 {
+	if (!cmd || !cmd->args)
+        return 0;
+    if (cmd->args->type != WORD || !cmd->args->value)
+        return 0;
+
 	if (cmd->args->type == WORD)
 	{
 		if (ft_strcmp(cmd->args->value, "echo") == 0)

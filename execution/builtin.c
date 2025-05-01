@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 11:36:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 20:39:02 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int ft_env(t_cmd *cmd, t_env **env)
 	(void)cmd;
 	while(current)
 	{
-		if (current->value[0] != '\0')
+		if (current->value)
 			printf("%s=%s\n", current->name, current->value);
 		current = current->next;
 	}
@@ -105,20 +105,15 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 
 	(void)env;
 	write(1, "exit\n", 5);
-
 	if (!arg)
 		exit(g_exit_status);
-	
 	if (!ft_isnum(arg->value))
 	{
 		print_error("minishell: exit: numeric argument required\n", arg->value);
 		exit(2);
 	}
 	if (arg->next)
-	{
-		print_error("minishell: exit: too many arguments\n", arg->value);
-		return (1);
-	}
+		return (print_error("minishell: exit: too many arguments\n", arg->value), 1);
 	status = ft_atoi(arg->value);
 	status = (status % 256 + 256) % 256;
 	exit(status);

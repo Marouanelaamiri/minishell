@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/30 18:25:17 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 21:06:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 			{
 				if (is_fork_builtin(cur)) 
 				{
-				// forked builtin: run like an external command
 				int status = handle_builtins(cur, &env);
 				free_argv(argv);
 				ft_update_exit_status(status);
@@ -84,7 +83,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 				} 
 				else
 				{
-				// Should never reach here in child, just in case
 				free_argv(argv);
 				exit(0);
 				}
