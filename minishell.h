@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 12:36:14 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:02:56 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,16 @@ typedef struct s_cmd
 }			t_cmd;
 
 // debug
-void print_tokens(t_token *token);
-void ft_print_cmds(t_cmd *cmd);
+void	print_tokens(t_token *token);
+void	ft_print_cmds(t_cmd *cmd);
 
 // memory management
 
-void ft_free_tokens(t_token *tokens);
-void ft_free_redirs(t_redir *redir);
-void ft_free_cmds(t_cmd *cmd);
-void ft_free_env(t_env *env);
-void free_argv(char **av);
+void	ft_free_tokens(t_token *tokens);
+void	ft_free_redirs(t_redir *redir);
+void	ft_free_cmds(t_cmd *cmd);
+void	ft_free_env(t_env *env);
+void	free_argv(char **av);
 
 // helpers
 int		ft_atoi(const char *str);
@@ -122,42 +122,42 @@ int		cd_walk_path(const char *path);
 void	sort_env_array(t_env **arr);
  
 // builtin utils
-int print_export_list(t_env *env);
-t_env **build_env_array(t_env *env);
-void print_env_array(t_env **arr);
-int handle_one_export(const char *arg, t_env **env);
-int apply_assign(char *copy, t_env **env);
-int apply_append(char *copy, t_env **env);
-int preprocess_heredocs(t_cmd *cmd_list);
+int		print_export_list(t_env *env);
+t_env	**build_env_array(t_env *env);
+void	print_env_array(t_env **arr);
+int		handle_one_export(const char *arg, t_env **env);
+int		apply_assign(char *copy, t_env **env);
+int		apply_append(char *copy, t_env **env);
+int		preprocess_heredocs(t_cmd *cmd_list);
 void	print_error(const char *cmd, const char *msg);
 
 // exe utils
-void setup_redirections(t_cmd *cmd);
-char *find_executable(char *cmd, t_env *env);
-char **token_to_av(t_token *token);
-char **env_list_to_envp(t_env *env);
+void	setup_redirections(t_cmd *cmd);
+char	*find_executable(char *cmd, t_env *env);
+char	**token_to_av(t_token *token);
+char	**env_list_to_envp(t_env *env);
 char	*ft_strtok(char *str, const char *sep);
-int heredoc_pipe(const char *delim);
+int		heredoc_pipe(const char *delim);
 
 //exe
-int execute_cmds(t_cmd *cmd_list, t_env *env);
+int	execute_cmds(t_cmd *cmd_list, t_env *env);
 
 // env_utils
-t_env *init_env(char **envp);
-int env_set(t_env **env , const char *name, const char *value);
-int env_unset(t_env **env, const char *name);
-char *ft_getenv(t_env *env_list, const char *name);
-void update_shell_level(t_env **env);
+t_env	*init_env(char **envp);
+int		env_set(t_env **env , const char *name, const char *value);
+int		env_unset(t_env **env, const char *name);
+char	*ft_getenv(t_env *env_list, const char *name);
+void	update_shell_level(t_env **env);
 
 // parsing
 t_token	*ft_tokenize(const char	*input);
-int	ft_syntax_check(t_token *tokens);
-int ft_check_quotes(const char *input);
+int		ft_syntax_check(t_token *tokens);
+int		ft_check_quotes(const char *input);
 t_cmd	*ft_parse_commands(t_token *tokens);
-void ft_signal_handler(void);
+void	ft_signal_handler(void);
 
 // expansion
-void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
+void	ft_expand_cmds(t_cmd *cmd_list, t_env *env);
 
 
 # endif
