@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/30 20:03:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:36:02 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,24 +98,21 @@ int ft_env(t_cmd *cmd, t_env **env)
 	}
 	return (0);
 }
-int	ft_exit(t_cmd *cmd, t_env **env) // need opt
+int	ft_exit(t_cmd *cmd, t_env **env)
 {
 	t_token	*arg = cmd->args->next;
-	long	status;
-	char *s; 
+	int		status; 
 
 	(void)env;
-	printf("exit\n");
+	write(1, "exit\n", 5);
 
 	if (!arg)
-		exit(0);
-	s = arg->value;
-	if (*s == '-' || *s == '+')
-		s++;
-	if (!*s || !ft_isnum(arg->value))
+		exit(g_exit_status);
+	
+	if (!ft_isnum(arg->value))
 	{
 		print_error("minishell: exit: numeric argument required\n", arg->value);
-		exit(255);
+		exit(2);
 	}
 	if (arg->next)
 	{
@@ -124,6 +121,6 @@ int	ft_exit(t_cmd *cmd, t_env **env) // need opt
 	}
 	status = ft_atoi(arg->value);
 	status = (status % 256 + 256) % 256;
-	exit((int)status);
+	exit(status);
 }
 

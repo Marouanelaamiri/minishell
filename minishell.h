@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/04/30 18:15:42 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:36:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,12 @@ int		is_builtin(t_cmd *cmd);
 int		handle_builtins(t_cmd *cmd, t_env **env);
 int		is_valid_id(const char *str);
 int		cd_walk_path(const char *path);
-void	sort_env_array(t_env **arr, size_t n);
+void	sort_env_array(t_env **arr);
  
 // builtin utils
 int print_export_list(t_env *env);
-t_env **build_env_array(t_env *env, size_t *out_n);
-void sort_env_array(t_env **arr, size_t n);
-void print_env_array(t_env **arr, size_t n);
+t_env **build_env_array(t_env *env);
+void print_env_array(t_env **arr);
 int handle_one_export(const char *arg, t_env **env);
 int apply_assign(char *copy, t_env **env);
 int apply_append(char *copy, t_env **env);
