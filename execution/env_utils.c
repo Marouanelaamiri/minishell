@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 11:39:04 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:39:08 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ int env_set(t_env **env , const char *name, const char *value)
 		if (ft_strcmp(current->name, name) == 0)
 		{
 			free(current->value);
-			current->value = ft_strdup(value);
+			if (value)
+				current->value = ft_strdup(value);
+			else
+				current->value = NULL;
 			return (0);
 		}
 		current = current->next;
@@ -60,7 +63,10 @@ int env_set(t_env **env , const char *name, const char *value)
 	if (!node)
 		return (1);
 	node->name = ft_strdup(name);
-	node->value = ft_strdup(value);
+	if(value)
+		node->value = ft_strdup(value);
+	else
+		node->value = NULL;
 	node->next = *env;
 	*env = node;
 	return (0);
@@ -91,6 +97,9 @@ int env_unset(t_env **env, const char *name)
 }
 char *ft_getenv(t_env *env_list, const char *name)
 {
+	if (!name || !*name)
+		return (NULL);
+	
 	while (env_list)
 	{
 		if (ft_strcmp(env_list->name, name) == 0)

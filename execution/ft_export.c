@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 12:35:09 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:20:54 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,54 +114,74 @@ int handle_one_export(const char *arg, t_env **env)
 }
 int apply_assign(char *copy, t_env **env)
 {
-    char *eq  = ft_strchr(copy, '=');
-    int   err = 0;
+	char *eq = ft_strchr(copy, '=');
+	char *name = NULL;
+	char *value = NULL;
 
-    if (eq)
-    {
-        *eq = '\0';
-        if (!is_valid_id(copy))
-        {
-            print_error(copy, "not a valid identifier");
-            err = 1;
-        }
-        else
-            env_set(env, copy, eq + 1);
-        *eq = '=';
-    }
-    else
-    {
-        if (!is_valid_id(copy))
-        {
-            print_error(copy, "not valid identifier");
-            err = 1;
-        }
-        else if (!ft_getenv(*env, copy))
-            env_set(env, copy, "");
-    }
-    return err;
+	if (eq)
+	{
+		name = ft_strndup(copy, eq - copy);
+		value = ft_strdup(eq + 1);
+		if (!name || !value)
+			return (free(name), free(value), 1);
+		if (!is_valid_id(name))
+		{
+			print_error(name, "not a valid identifier");
+			return (free(name), free(value), 1);
+		}
+		env_set(env, name, value);
+		return (free(name), free(value), 0);
+	}
+	else
+	{
+		name = ft_strdup(copy);
+		if (!name)
+			return 1;
+		if (!is_valid_id(name))
+		{
+			print_error(name, "not a valid identifier");
+			return (free(name), 1);
+		}
+		if (!ft_getenv(*env, name))
+			env_set(env, name, NULL);
+		return (free(name), 0);
+	}
 }
 int apply_append(char *copy, t_env **env)
 {
-    char *pos   = ft_strstr(copy, "+=");
-    char *oldv;
-    char *newv;
-    int   err   = 0;
+	char *plus_eq = ft_strstr(copy, "+=");
+	char *name = NULL;
+	char *value = NULL;
+	char *old = NULL;
+	char *new_value = NULL;
 
-    *pos = '\0';
-    if (!is_valid_id(copy))
-    {
-        print_error(copy, "not a valid identifier");
-        err = 1;
-    }
-    else
-    {
-        oldv = ft_getenv(*env, copy);
-        if (!oldv) oldv = "";
-        newv = ft_strjoin(oldv, pos + 2);
-        env_set(env, copy, newv);
-        free(newv);
-    }
-    *pos = '+';
-    return err;
+	if (!plus_eq)
+		return 1;
+
+	*plus_eq = '\0';
+
+	name = ft_strdup(copy);
+	value = ft_strdup(plus_eq + 2);
+	if (!name || !value)
+		return (free(name), free(value), 1);
+
+	if (!is_valid_id(name))
+	{
+		print_error(name, "not a valid identifier");
+		return (free(name), free(value), 1);
+	}
+
+	old = ft_getenv(*env, name);
+	if (!old)
+		old = "";
+	new_value = ft_strjoin(old, value);
+	if (!new_value)
+        return (free(name), free(value), 1);
+	env_set(env, name, new_value);
+	free(name);
+	free(value);
+	free(new_value);
+
+	*plus_eq = '+';
+	return 0;
 }
