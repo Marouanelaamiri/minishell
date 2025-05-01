@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 14:20:54 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:55:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,39 +149,32 @@ int apply_assign(char *copy, t_env **env)
 }
 int apply_append(char *copy, t_env **env)
 {
-	char *plus_eq = ft_strstr(copy, "+=");
-	char *name = NULL;
-	char *value = NULL;
-	char *old = NULL;
-	char *new_value = NULL;
+    char *pos = ft_strstr(copy, "+=");
+    char *name;
+    char *value;
+    char *old;
+    char *combined;
 
-	if (!plus_eq)
-		return 1;
-
-	*plus_eq = '\0';
-
-	name = ft_strdup(copy);
-	value = ft_strdup(plus_eq + 2);
-	if (!name || !value)
-		return (free(name), free(value), 1);
-
-	if (!is_valid_id(name))
-	{
-		print_error(name, "not a valid identifier");
-		return (free(name), free(value), 1);
-	}
-
-	old = ft_getenv(*env, name);
-	if (!old)
-		old = "";
-	new_value = ft_strjoin(old, value);
-	if (!new_value)
+    if (!pos)
+        return 1;
+    name = ft_strndup(copy, pos - copy); 
+    value = ft_strdup(pos + 2);
+    if (!name || !value)
         return (free(name), free(value), 1);
-	env_set(env, name, new_value);
-	free(name);
-	free(value);
-	free(new_value);
-
-	*plus_eq = '+';
-	return 0;
+    if (!is_valid_id(name))
+    {
+        print_error(name, "not a valid identifier");
+        return (free(name), free(value), 1);
+    }
+    old = ft_getenv(*env, name);
+    if (!old)
+        old = "";
+    combined = ft_strjoin(old, value);
+    if (!combined)
+        return (free(name), free(value), 1);
+    env_set(env, name, combined);
+    free(name);
+    free(value);
+    free(combined);
+    return 0;
 }
