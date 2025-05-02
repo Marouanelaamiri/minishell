@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 21:06:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:17:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int handle_one_export(const char *arg, t_env **env)
     free(copy);
     return err;
 }
-int apply_assign(char *copy, t_env **env)// need understanding
+int apply_assign(char *copy, t_env **env)
 {
 	char *eq = ft_strchr(copy, '=');
 	char *name = NULL;
@@ -147,7 +147,7 @@ int apply_assign(char *copy, t_env **env)// need understanding
 		return (free(name), 0);
 	}
 }
-int apply_append(char *copy, t_env **env)// need understanding 
+int apply_append(char *copy, t_env **env)
 {
     char *pos = ft_strstr(copy, "+=");
     char *name;

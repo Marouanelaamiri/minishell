@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 20:57:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:14:25 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int is_builtin(t_cmd *cmd)
     if (cmd->args->type != WORD || !cmd->args->value)
         return 0;
 
-	if (cmd->args->type == WORD)
+	else if (cmd->args->type == WORD)
 	{
 		if (ft_strcmp(cmd->args->value, "echo") == 0)
 			return (1);

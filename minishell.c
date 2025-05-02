@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/30 22:57:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:55:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     return cmd_list;
 }
 
-// static void on_exit(void)
+// static void on_exit1(void)
 // {
 //     char cmd[128];
 //     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
@@ -51,6 +51,7 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 
 int main(int ac, char **av, char **envp)
 {
+	// atexit(on_exit1);
 	(void)ac;
 	(void)av;
 	t_env *env = init_env(envp);
