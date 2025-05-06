@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 20:46:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:11:08 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,70 +79,51 @@ int is_valid_id(const char *str)
 	}
 	return (1);
 }
-char	*ft_strtok(char *str, const char *sep)
+int	cd_walk_path(const char *path)
 {
-    static char *next;
-    char *start;
+	char	**segments;
+	int		i;
+	int		ret;
+	char	*cwd;
 
-    if (str)
-        next = str;
-    if (!next)
-        return NULL;
-    while (*next && ft_strchr(sep, *next))
-        next++;
-    if (*next == '\0')
+	if (!path || path[0] == '\0')
+		return (0);
+	segments = ft_split(path, '/');
+	if (!segments)
+		return (-1);
+	ret = 0;
+	i = 0;
+	while (segments[i])
 	{
-        next = NULL;
-        return NULL;
-    }
-    start = next;
-    while (*next && !ft_strchr(sep, *next))
-        next++;
-    if (*next) 
-	{
-        *next = '\0';
-        next++;
-    } 
-	else 
-        next = NULL;
-    
-    return start;
+		if (ft_strcmp(segments[i], "..") == 0)
+		{
+			if (chdir("..") < 0)
+			{
+				cwd = getcwd(NULL, 0);
+				if (cwd && ft_strcmp(cwd, "/") == 0)
+				{
+					free(cwd);
+					i++;
+					continue;
+				}
+				free(cwd);
+				ret = -1;
+				break;
+			}
+		}
+		else if (segments[i][0] != '\0' && ft_strcmp(segments[i], ".") != 0)
+		{
+			if (chdir(segments[i]) < 0)
+			{
+				ret = -1;
+				break;
+			}
+		}
+		i++;
+	}
+	free_split(segments);
+	return (ret);
 }
-
-int  cd_walk_path(const char *path)
-{
-    char *dup = ft_strdup(path);
-    char *seg;
-    int   ret = 0;
-
-    if (!dup)
-        return -1;
-    seg = ft_strtok(dup, "/");
-    while (seg)
-    {
-        if (ft_strcmp(seg, "..") == 0)
-        {
-            if (chdir("..") < 0)
-            {
-                ret = -1;
-                break;
-            }
-        }
-        else if (seg[0] != '\0' && ft_strcmp(seg, ".") != 0)
-        {
-            if (chdir(seg) < 0)
-            {
-                ret = -1;
-                break;
-            }
-        }
-        seg = ft_strtok(NULL, "/");
-    }
-
-    free(dup);
-    return ret;
-}
-
 void	print_error(const char *cmd, const char *msg)
 {
 	write(2, "minishell: ", 11);

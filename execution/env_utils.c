@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 19:36:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:05:22 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void update_shell_level(t_env **env)
 	char *new_lvl = NULL;
 
 	if (lvl_str)
-		lvl = atoi(lvl_str);
+		lvl = ft_atoi(lvl_str);
 	lvl++;
 	if (lvl < 0)
 		lvl = 0;
