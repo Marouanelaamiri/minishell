@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/02 14:14:25 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:01:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int handle_builtins(t_cmd *cmd, t_env **env)
 	int status = 0;
 
     if (!cmd || !cmd->args || cmd->args->type)
-        return -1;
+        return 0;
     
     if (ft_strcmp(cmd->args->value, "echo") == 0)
 		status = ft_echo(cmd, env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 21:06:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:07:51 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ int heredoc_pipe(const char *delim)
 {
 	int fds[2];
 	char *line;
+	int eof = 0;
 
 	if (pipe(fds) < 0)
 	{
@@ -174,17 +175,24 @@ int heredoc_pipe(const char *delim)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, delim) == 0)
+		if (!line)
+		{
+			eof = 1;
+			break ;
+		}
+		if (ft_strcmp(line, delim) == 0)
 		{
 			free(line);
 			break;
 		}
-		write(fds[1], line, ft_strlen(line));
+		write(fds[1], line, ft_strlen(line)); // write the line to the pipe 
 		write(fds[1], "\n", 1);
 		free(line);
 	}
-	close(fds[1]);
-	return (fds[0]);
+	if (eof)
+		write (2, "minishell: warning: here-document delimited by end-of-file\n", 60);
+	close(fds[1]); // close the write end of the pipe stdout
+	return (fds[0]); // return the read end of the pipe stdin
 }
 int preprocess_heredocs(t_cmd *cmd_list)
 {
