@@ -44,12 +44,16 @@ typedef struct l_env
 // TOKEN & COMMAND
 typedef enum e_type
 {
-	WORD,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	HEREDOC,
-	APPEND,
+	SQUOTE, // string between single quotes
+	SPCE, // space
+	DQUOTE, // string between double quotes
+	VAR, // variable
+	WORD, // word
+	PIPE, // pipe
+	REDIR_IN, // redirection input
+	REDIR_OUT, // redirection output
+	HEREDOC, // heredoc
+	APPEND, // append
 }			t_type;
 
 typedef struct s_token
@@ -57,6 +61,7 @@ typedef struct s_token
 	t_type		type;
 	char			*value;
 	struct s_token	*next;
+	struct s_token	*prev;
 }			t_token;
 
 typedef struct s_redir
@@ -69,10 +74,18 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	t_token *args; 
-	t_redir *redir; 
-	struct s_cmd *next; 
+	t_token *args;
+	t_redir *redir;
+	struct s_cmd *next;
 }			t_cmd;
+
+typedef struct s_data
+{
+	t_token		*token;
+	t_token		*last_token;
+	int			i;
+	int			error;
+}			t_data;
 
 // debug
 void	print_tokens(t_token *token);
@@ -85,6 +98,11 @@ void	ft_free_redirs(t_redir *redir);
 void	ft_free_cmds(t_cmd *cmd);
 void	ft_free_env(t_env *env);
 void	free_argv(char **av);
+
+// string manipulation
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
+
 
 // helpers
 int		ft_atoi(const char *str);
@@ -106,6 +124,7 @@ void 	ft_update_exit_status(int status);
 int		ft_get_exit_status(void);
 char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+int ft_isspace(char c);
 
 // builtins
 int		ft_echo(t_cmd *cmd, t_env **env);
@@ -149,15 +168,31 @@ int		env_unset(t_env **env, const char *name);
 char	*ft_getenv(t_env *env_list, const char *name);
 void	update_shell_level(t_env **env);
 
-// parsing
-t_token	*ft_tokenize(const char	*input);
-int		ft_syntax_check(t_token *tokens);
-int		ft_check_quotes(const char *input);
-t_cmd	*ft_parse_commands(t_token *tokens);
-void	ft_signal_handler(void);
+// token
+t_token	*lst_new_token(t_type type, char *value);
+t_token *ft_tokeniz(char *input);
+void	lst_add_back_token(t_data *data, t_token *new);
+int		ft_handle_quotes(t_data *data, char *input);
+int	ft_handle_space(t_data *data, char *input);
+int	ft_handle_var(t_data *data, char *input);
+int	ft_handle_word(t_data *data, char *input);
+int	ft_handle_pipe(t_data *data);
+int	ft_handle_redir(t_data *data, char *input);
 
 // expansion
-void	ft_expand_cmds(t_cmd *cmd_list, t_env *env);
+void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
+void	escape_from_dollars(t_token *t);
+void	starboy_expansion(t_token *t, t_env *env);
+
+// signale
+void ft_signal_handler(void);
+
+// parsing
+
+int ft_syntax_check(t_token *tokens);
+int ft_check_quotes(char *input);
+int ft_valid_var(t_token *t);
+t_cmd *ft_parse_commands(t_token *tokens);
 
 
 # endif

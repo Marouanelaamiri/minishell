@@ -6,13 +6,13 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:46:06 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/21 18:05:38 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:14:03 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static t_cmd *ft_create_cmd(void)
+static t_cmd	*ft_create_cmd(void)
 {
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -23,13 +23,14 @@ static t_cmd *ft_create_cmd(void)
 	return (cmd);
 }
 
-
+// Adds a redirection to the command's redir list
 static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value)
 {
 	t_redir *new = malloc(sizeof(t_redir));
-	if (!new)
+	if (!new || !value)
 		return;
 	new->type = type;
+	new->fd = -1;
 	new->value = value;
 	new->next = NULL;
 
@@ -44,7 +45,7 @@ static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value)
 	}
 }
 
-
+// Adds an argument (token) to the command's args list
 static void	ft_add_arg_to_cmd(t_cmd *cmd, t_token *arg)
 {
 	if (!cmd->args)
@@ -55,10 +56,11 @@ static void	ft_add_arg_to_cmd(t_cmd *cmd, t_token *arg)
 		while (curr->next)
 			curr = curr->next;
 		curr->next = arg;
+		arg->prev = curr;
 	}
 }
 
-
+// Main command parser: converts token list into linked list of t_cmd
 t_cmd	*ft_parse_commands(t_token *tokens)
 {
 	t_cmd *head = NULL;
@@ -67,9 +69,12 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 
 	while (tokens)
 	{
+		// Start a new command if needed
 		if (!current)
 		{
 			current = ft_create_cmd();
+			if (!current)
+				return (NULL);
 			if (!head)
 				head = current;
 			else
@@ -83,28 +88,44 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 			tokens = tokens->next;
 			continue;
 		}
-		else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
+
+		// Handle redirection
+		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
 			|| tokens->type == HEREDOC || tokens->type == APPEND)
 		{
 			t_type redir_type = tokens->type;
 			tokens = tokens->next;
-			if (!tokens || tokens->type != WORD)
-				return (NULL);
+
+			while (tokens && tokens->type == SPCE)
+				tokens = tokens->next;
+
+			if (!tokens || !tokens->value)
+				return (NULL); // invalid syntax
+
 			char *file = ft_strdup(tokens->value);
+			if (!file)
+				return (NULL);
 			ft_add_redir_to_cmd(current, redir_type, file);
 			tokens = tokens->next;
+			continue;
 		}
-		else if (tokens->type == WORD)
+
+		// Accept these token types as arguments
+		if (tokens->type == WORD || tokens->type == VAR ||
+			tokens->type == SQUOTE || tokens->type == DQUOTE)
 		{
 			t_token *arg = malloc(sizeof(t_token));
+			if (!arg)
+				return (NULL);
 			arg->type = tokens->type;
 			arg->value = ft_strdup(tokens->value);
 			arg->next = NULL;
+			arg->prev = NULL;
 			ft_add_arg_to_cmd(current, arg);
-			tokens = tokens->next;
 		}
-		else
-			tokens = tokens->next;
+
+		tokens = tokens->next;
 	}
-	return (head);
+
+	return head;
 }

@@ -6,83 +6,111 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:21:02 by sojammal          #+#    #+#             */
-/*   Updated: 2025/04/23 22:00:47 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:21:49 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// -- debug functions --
+#include <stdio.h>
+
 static const char *get_token_type_name(t_type type)
 {
 	if (type == WORD) return "WORD";
+	if (type == DQUOTE) return "DQUOTE";
+	if (type == SQUOTE) return "SQUOTE";
+	if (type == VAR) return "VAR";
+	if (type == SPCE) return "SPCE";
 	if (type == PIPE) return "PIPE";
-	if (type == REDIR_IN) return "REDIR_IN";
-	if (type == REDIR_OUT) return "REDIR_OUT";
-	if (type == HEREDOC) return "HEREDOC";
-	if (type == APPEND) return "APPEND";
+	if (type == REDIR_IN) return "REDIR_IN (<)";
+	if (type == REDIR_OUT) return "REDIR_OUT (>)";
+	if (type == HEREDOC) return "HEREDOC (<<)";
+	if (type == APPEND) return "APPEND (>>)";
 	return "UNKNOWN";
-}
-void print_tokens(t_token *token)
-{
-	printf("---- Tokens ----\n");
-	while (token)
-	{
-		printf("[%s] \"%s\"\n", get_token_type_name(token->type), token->value);
-		token = token->next;
-	}
-	printf("----------------\n");
-}
-static void print_redir(t_redir *redir)
-{
-    while (redir)
-    {
-        if (redir->type == REDIR_IN)
-            printf("REDIR_IN: %s ", redir->value);
-        else if (redir->type == REDIR_OUT)
-            printf("REDIR_OUT: %s ", redir->value);
-        else if (redir->type == HEREDOC)
-            printf("HEREDOC: %s ", redir->value);
-        else if (redir->type == APPEND)
-            printf("APPEND: %s ", redir->value);
-        redir = redir->next;
-    }
 }
 
 static void print_args(t_token *args)
 {
-    while (args)
-    {
-        printf("%s ", args->value);
-        args = args->next;
-    }
+	t_token *current = args;
+	int i = 0;
+
+	while (current)
+	{
+		printf("    [Arg %d]\n", i++);
+		printf("      Type:   %-12s\n", get_token_type_name(current->type));
+		printf("      Value:  \"%s\"\n", current->value);
+		current = current->next;
+	}
+	if (i == 0)
+		printf("    (No arguments)\n");
 }
 
-void ft_print_cmds(t_cmd *cmd)
+static void print_redirs(t_redir *redir)
 {
-    int cmd_number = 1;
+	t_redir *current = redir;
+	int i = 0;
 
-    while (cmd)
-    {
-        printf("[t_cmd %d]\n", cmd_number++);
-        
-        // Print args
-        printf("  args: ");
-        if (cmd->args)
-            print_args(cmd->args);
-        else
-            printf("(no args)");
-        
-        // Print redir
-        printf("\n  redir: ");
-        if (cmd->redir)
-            print_redir(cmd->redir);
-        else
-            printf("(no redirection)");
-        
-        printf("\n\n");
-        
-        cmd = cmd->next;
-    }
+	while (current)
+	{
+		printf("    [Redir %d]\n", i++);
+		printf("      Type:   %-12s\n", get_token_type_name(current->type));
+		printf("      Target: \"%s\"\n", current->value);
+		current = current->next;
+	}
+	if (i == 0)
+		printf("    (No redirections)\n");
 }
-// // -- end debug functions --
+
+void ft_print_cmds(t_cmd *cmds)
+{
+	int i = 0;
+
+	printf("\n========== 🧵 Command List ==========\n");
+
+	while (cmds)
+	{
+		printf("\n🔹 Command #%d\n", i++);
+		printf("  ↪ Arguments:\n");
+		print_args(cmds->args);
+
+		printf("  ↪ Redirections:\n");
+		print_redirs(cmds->redir);
+
+		if (cmds->next)
+			printf("  │\n  ▼\n");
+		cmds = cmds->next;
+	}
+	printf("\n========== ✅ End of Commands ==========\n\n");
+}
+
+
+
+// void	print_tokens(t_token *current)
+// {
+// 	const char *types[] = {
+// 		[WORD] = "WORD",
+// 		[PIPE] = "PIPE",
+// 		[REDIR_IN] = "REDIR_IN",
+// 		[REDIR_OUT] = "REDIR_OUT",
+// 		[HEREDOC] = "HEREDOC",
+// 		[APPEND] = "APPEND",
+// 		[SPCE] = "SPCE",
+// 		[VAR] = "VAR",
+// 		[SQUOTE] = "SQUOTE",
+// 		[DQUOTE] = "DQUOTE"
+// 	};
+
+// 	int index = 0;
+// 	while (current)
+// 	{
+// 		printf("Index: %d\n", index);
+// 		// if (current->type >= 0 && current->type <= DQUOTE)
+// 		printf("  Type:   %s\n", types[current->type]);
+// 		// else
+// 		// 	printf("  Type:   UNKNOWN (%d)\n", current->type);
+// 		printf("  Value:  %s\n", current->value);
+// 		current = current->next;
+// 		index++;
+// 	}
+// }
+

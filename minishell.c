@@ -14,6 +14,49 @@
 
 int g_exit_status = 0;
 
+static void ft_blinding_lights(char *input)
+{
+    int        n;
+    char    temp;
+    char    *res;
+
+    res = input;
+    n = 0;
+    while (res[n])
+    {
+        if (res[n] == '"' || res[n] == '\'')
+        {
+            temp = res[n];
+            n++;
+            if (res[n] == '\0')
+                break ;
+            while (res[n])
+            {
+                if (res[n] == temp)
+                    break ;
+                res[n] *= -1;
+                n++;
+            }
+        }
+        if (res[n])
+            n++;
+    }
+}
+
+static void ft_after_hours(t_token *t)
+{
+    t_token *current = t;
+    while (current)
+    {
+        if (current->type == DQUOTE || current->type == SQUOTE)
+        {
+			if (current->value)
+				ft_blinding_lights(current->value);
+        }
+        current = current->next;
+    }
+}
+
 static t_cmd *ft_process_input(char *input, t_env *env)
 {
     if (!ft_check_quotes(input))
@@ -21,26 +64,28 @@ static t_cmd *ft_process_input(char *input, t_env *env)
         ft_update_exit_status(258);
         return NULL;
     }
-
-    t_token *tokens = ft_tokenize(input);
+	ft_blinding_lights(input);
+    t_token *tokens = ft_tokeniz(input);
     if (!tokens)
     {
-        ft_update_exit_status(1);
+		ft_update_exit_status(258);
         return NULL;
     }
-
+	ft_after_hours(tokens);
     if (!ft_syntax_check(tokens))
     {
         ft_update_exit_status(258);
         ft_free_tokens(tokens);
         return NULL;
     }
-
+	escape_from_dollars(tokens);
+	starboy_expansion(tokens, env);
+	// print_tokens(tokens);
     t_cmd *cmd_list = ft_parse_commands(tokens);
     ft_free_tokens(tokens);
-    ft_expand_cmds(cmd_list, env);
     return cmd_list;
 }
+
 
 // static void on_exit1(void)
 // {
@@ -72,6 +117,7 @@ int main(int ac, char **av, char **envp)
 			add_history(line);
 
 		t_cmd *cmd = ft_process_input(line, env);
+		// ft_print_cmds(cmd);
 		free(line);
 
 		if (!cmd)

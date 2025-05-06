@@ -26,10 +26,22 @@ execution/env_utils.c \
 execution/execution_utils.c \
 execution/execution.c \
 parsing/tokenizing/ft_tokenize.c \
-parsing/syntax_check/ft_syntax_check.c\
+parsing/tokenizing/ft_token_word.c \
+parsing/tokenizing/ft_token_var.c \
+parsing/tokenizing/ft_token_utils.c \
+parsing/tokenizing/ft_token_space.c \
+parsing/tokenizing/ft_token_redir.c \
+parsing/tokenizing/ft_token_quotes.c \
+parsing/tokenizing/ft_token_pipe.c \
+parsing/tokenizing/ft_string_utils.c \
+parsing/quotes_check/ft_check_quotes.c \
 parsing/parse_cmd/ft_parse_commands.c\
+parsing/syntax_checker/ft_syntax_check.c \
+parsing/syntax_checker/ft_valid_var.c \
 parsing/sig_handler/ft_signal_handler.c \
 parsing/expansion/ft_expand_cmds.c \
+parsing/expansion/escape_from_dollars.c \
+parsing/expansion/starboy_expand.c \
 parsing/debug_func/ft_debug.c \
 parsing/parsing_utils/ft_status.c \
 parsing/memory_management/ft_free.c \
