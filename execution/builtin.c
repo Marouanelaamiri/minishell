@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 19:45:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:46:40 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int ft_cd(t_cmd *cmd, t_env **env)
     env_set(env, "PWD",    newcwd);
     return (free(oldcwd), free(newcwd), 0);
 }
-
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
 	char *cwd;

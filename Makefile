@@ -1,5 +1,3 @@
-#05-02#
-
 #------------------------------ Source Files ------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
@@ -19,7 +17,7 @@ execution/helpers/ft_isalpha.c \
 execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
 execution/helpers/ft_strlcat.c \
-execution/helpers/ft_strncmp.c \
+execution/helpers/ft_split.c \
 execution/builtin.c \
 execution/ft_export.c \
 execution/builtin_utils.c \

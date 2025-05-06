@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 19:39:30 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:48:00 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ static void ft_after_hours(t_token *t)
     t_token *current = t;
     while (current)
     {
-        if (current->type == DQUOTE || current->type == SQUOTE)
+        if (current->type == DQUOTE || current->type == SQUOTE || current->type == WORD)
         {
-			if (current->value)
-				ft_blinding_lights(current->value);
+            if (current->value)
+                ft_blinding_lights(current->value);
         }
         current = current->next;
     }

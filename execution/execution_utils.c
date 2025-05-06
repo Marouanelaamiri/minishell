@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 21:06:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:29:00 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,33 +55,51 @@ void setup_redirections(t_cmd *cmd)
 		redir = redir->next;
 	}
 }
-char *find_executable(char *cmd, t_env *env)
+char	*ft_strjoin_path(const char *dir, const char *cmd)
 {
+	char	*tmp;
+	char	*result;
+
+	tmp = ft_strjoin(dir, "/");
+	if (!tmp)
+		return (NULL);
+	result = ft_strjoin(tmp, cmd);
+	free(tmp);
+	return (result);
+}
+char	*find_executable(char *cmd, t_env *env)
+{
+	char	**paths;
+	char	*env_path;
+	char	*full_path;
+	int		i;
+
 	if (!cmd || !*cmd)
 		return (NULL);
-	if (ft_strchr(cmd , '/'))
+	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
-	char *path = ft_getenv(env, "PATH");
-	if (!path)
+	env_path = ft_getenv(env, "PATH");
+	if (!env_path)
 		return (NULL);
-	char *dup_path = ft_strdup(path);
-	char *token = ft_strtok(dup_path, ":");
-	while(token)
+	paths = ft_split(env_path, ':');
+	if (!paths)
+		return (NULL);
+	i = 0;
+	while (paths[i])
 	{
-		char *full_path = ft_strjoin(token, "/");
-		char *executable = ft_strjoin(full_path, cmd);
-		free(full_path);
-		if (access(executable, X_OK) == 0)
+		full_path = ft_strjoin_path(paths[i], cmd);
+		if (!full_path)
+			break ;
+		if (access(full_path, X_OK) == 0)
 		{
-			free(dup_path);
-			return (executable);
+			free_split(paths);
+			return (full_path);
 		}
-		free(executable);
-		token = ft_strtok(NULL, ":");
+		free(full_path);
+		i++;
 	}
-	free(dup_path);
+	free_split(paths);
 	return (NULL);
-	
 }
 char **token_to_av(t_token *token)
 {

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 19:30:22 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:27:02 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	ft_free_redirs(t_redir *redir);
 void	ft_free_cmds(t_cmd *cmd);
 void	ft_free_env(t_env *env);
 void	free_argv(char **av);
+void	free_split(char **arr);
 
 // string manipulation
 void	ft_putchar_fd(char c, int fd);
@@ -110,6 +111,7 @@ char	*ft_strchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
+char	**ft_split(char const *s, char c);
 char	*ft_strndup(const char *src, size_t n);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
@@ -117,15 +119,14 @@ int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int 	ft_isdigit(int c);
 int 	ft_isnum(const char *str);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(const char *s1, const char *s2);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
 void 	ft_update_exit_status(int status);
 int		ft_get_exit_status(void);
 char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-int ft_strncmp(const char *s1, const char *s2, size_t n);
-int ft_isspace(char c);
+int		ft_isspace(char c);
 
 // builtins
 int		ft_echo(t_cmd *cmd, t_env **env);
@@ -156,7 +157,6 @@ void	setup_redirections(t_cmd *cmd);
 char	*find_executable(char *cmd, t_env *env);
 char	**token_to_av(t_token *token);
 char	**env_list_to_envp(t_env *env);
-char	*ft_strtok(char *str, const char *sep);
 int		heredoc_pipe(const char *delim);
 
 //exe

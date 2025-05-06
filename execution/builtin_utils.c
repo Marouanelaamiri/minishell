@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/02 14:14:25 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:46:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int is_valid_id(const char *str)
 	}
 	return (1);
 }
-char	*ft_strtok(char *str, const char *sep) // need opt
+char	*ft_strtok(char *str, const char *sep)
 {
     static char *next;
     char *start;
@@ -109,7 +109,7 @@ char	*ft_strtok(char *str, const char *sep) // need opt
     return start;
 }
 
-int  cd_walk_path(const char *path) // need opt
+int  cd_walk_path(const char *path)
 {
     char *dup = ft_strdup(path);
     char *seg;
