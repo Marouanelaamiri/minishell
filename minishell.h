@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 15:02:56 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:30:22 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void 	ft_update_exit_status(int status);
 int		ft_get_exit_status(void);
 char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+int ft_strncmp(const char *s1, const char *s2, size_t n);
 int ft_isspace(char c);
 
 // builtins

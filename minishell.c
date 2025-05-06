@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/02 14:55:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:39:30 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_env *env = init_env(envp);
+	env_unset(&env, "OLDPWD");
 	update_shell_level(&env);
 	ft_signal_handler();
 

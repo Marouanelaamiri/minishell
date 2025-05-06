@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 20:39:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:45:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,32 @@ int ft_echo(t_cmd *cmd, t_env **env)
 }
 int ft_cd(t_cmd *cmd, t_env **env)
 {
-    t_token *tok = cmd->args->next;
+    t_token *tok;
     char    *path;
-    char    *cwd;
-	
+    char    *oldcwd;
+    char    *newcwd;
+
+    oldcwd = getcwd(NULL, 0);
+	tok = cmd->args->next;
+    if (!oldcwd)
+        return (perror("getcwd"), 1);
+
     if (tok && tok->type == WORD)
         path = tok->value;
     else
         path = ft_getenv(*env, "HOME");
-
     if (!path)
-		return (write(2, "cd: HOME not set\n", 17), 1);
-	if (path[0] == '/')
-    {
-        if (chdir("/") < 0)
-			return (perror("cd"), 1);
-	}
-    if (cd_walk_path(path) < 0)
-		 return(perror("cd"), 1);
-    cwd = getcwd(NULL, 0);
-    if (!cwd)
-		return (perror("getcwd"), 1);
-    env_set(env, "PWD", cwd);
-    free(cwd);
-    return 0;
+        return (free(oldcwd), write(2, "cd: HOME not set\n", 17), 1);
+    if (chdir(path) < 0)
+        return (perror("cd"), free(oldcwd), 1);
+    newcwd = getcwd(NULL, 0);
+    if (!newcwd)
+        return (perror("getcwd"), free(oldcwd), 1);
+    env_set(env, "OLDPWD", oldcwd);
+    env_set(env, "PWD",    newcwd);
+    return (free(oldcwd), free(newcwd), 0);
 }
+
 int ft_pwd(t_cmd *cmd, t_env **env)
 {
 	char *cwd;

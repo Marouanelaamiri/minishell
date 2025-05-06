@@ -19,6 +19,7 @@ execution/helpers/ft_isalpha.c \
 execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
 execution/helpers/ft_strlcat.c \
+execution/helpers/ft_strncmp.c \
 execution/builtin.c \
 execution/ft_export.c \
 execution/builtin_utils.c \
