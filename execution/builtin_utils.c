@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 21:11:08 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:14:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int is_valid_id(const char *str)
 	}
 	return (1);
 }
-int	cd_walk_path(const char *path)
+int	cd_walk_path(const char *path) // need undrstaing and split
 {
 	char	**segments;
 	int		i;
@@ -121,8 +121,7 @@ int	cd_walk_path(const char *path)
 		}
 		i++;
 	}
-	free_split(segments);
-	return (ret);
+	return (free_split(segments), ret);
 }
 void	print_error(const char *cmd, const char *msg)
 {

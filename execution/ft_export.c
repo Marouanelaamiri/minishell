@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 20:00:15 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:17:01 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,5 @@ int apply_append(char *copy, t_env **env)
     if (!combined)
         return (free(name), free(value), 1);
     env_set(env, name, combined);
-    free(name);
-    free(value);
-    free(combined);
-    return 0;
+    return (free(name), free(value), free(combined), 0);
 }
