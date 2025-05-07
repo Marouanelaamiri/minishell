@@ -6,16 +6,16 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/01 21:06:14 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:25:06 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int is_fork_builtin(t_cmd *cmd)
-{
-	return (cmd->next || cmd->redir);
-}
+// int is_fork_builtin(t_cmd *cmd)
+// {
+// 	return (cmd->next || cmd->redir);
+// }
 int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 {
     char **envp = env_list_to_envp(env);
@@ -74,18 +74,18 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
             }
 			if (is_builtin(cur)) 
 			{
-				if (is_fork_builtin(cur)) 
-				{
+				// if (is_fork_builtin(cur)) 
+				// {
 				int status = handle_builtins(cur, &env);
 				free_argv(argv);
 				ft_update_exit_status(status);
 				exit(status);
-				} 
-				else
-				{
-				free_argv(argv);
-				exit(0);
-				}
+				// } 
+				// else
+				// {
+				// free_argv(argv);
+				// exit(0);
+				// }
 			}
             execve(path, argv, envp);
             perror("execve");

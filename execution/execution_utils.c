@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 20:29:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:18:12 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,23 +204,52 @@ int heredoc_pipe(const char *delim)
 	close(fds[1]);
 	return (fds[0]);
 }
+static int count_heredocs(t_cmd *cmd_list)
+{
+    int       count = 0;
+    t_redir  *r;
+
+    while (cmd_list)
+    {
+        r = cmd_list->redir;
+        while (r)
+        {
+            if (r->type == HEREDOC)
+            {
+                count++;
+                if (count > 16)
+                    return (-1);
+            }
+            r = r->next;
+        }
+        cmd_list = cmd_list->next;
+    }
+    return (count);
+}
+
 int preprocess_heredocs(t_cmd *cmd_list)
 {
-	t_cmd *cmd = cmd_list;
-	while (cmd)
-	{
-		t_redir *redir = cmd->redir;
-		while (redir)
-		{
-			if (redir->type == HEREDOC)
-			{
-				redir->fd = heredoc_pipe(redir->value);
-				if (redir->fd < 0)
-					return -1;
-			}
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-	return 0;
+    t_redir *r;
+
+    if (count_heredocs(cmd_list) < 0)
+    {
+		print_error ("heredoc","minishell: maximum here-document count exceeded" );
+        exit(2);
+    }
+    while (cmd_list)
+    {
+        r = cmd_list->redir;
+        while (r)
+        {
+            if (r->type == HEREDOC)
+            {
+                r->fd = heredoc_pipe(r->value);
+                if (r->fd < 0)
+                    return (-1);
+            }
+            r = r->next;
+        }
+        cmd_list = cmd_list->next;
+    }
+    return (0);
 }

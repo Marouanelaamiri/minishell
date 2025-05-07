@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 20:27:02 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:28:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ extern int g_exit_status;  // global variable to store exit status
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-
-# define BUFFER_SIZE 42
-# define MAX_ARGS 100
-
 
 
 // ENV
