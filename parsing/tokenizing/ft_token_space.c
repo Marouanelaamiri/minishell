@@ -14,17 +14,9 @@
 
 int	ft_handle_space(t_data *data, char *input)
 {
-	char	*space;
-	int		count = 0;
-	
+	int count = 0;
+
 	while (ft_isspace(input[data->i + count]))
 		count++;
-	space = ft_strdup(" ");
-	if (!space)
-	{
-		data->error = 1;
-		return (0);
-	}
-	lst_add_back_token(data, lst_new_token(SPCE, space));
 	return (count);
 }

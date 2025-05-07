@@ -86,6 +86,8 @@ void	starboy_expansion(t_token *t, t_env *env)
 			else if (hmstr->value[1] != '\0')
 				expand_env_dollar(hmstr, env);
 		}
+		if (hmstr->type == VAR || hmstr->type == DQUOTE || hmstr->type == SQUOTE)
+			hmstr->type = WORD;
 		// else if (hmstr->type == DQUOTE)
 		// 	starboy_quote_expansion(hmstr, env);
 		// implement the expansion double quotes

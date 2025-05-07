@@ -24,10 +24,27 @@ int	ft_handle_word(t_data *data, char *input)
 {
 	int		start;
 	char	*value;
-	
+
 	start = data->i;
 	while (input[data->i] && like_that(input[data->i]))
+	{
+		// If we encounter an '=', we check for a quoted value
+		if (input[data->i] == '=')
+		{
+			data->i++;
+			if (input[data->i] == '\'' || input[data->i] == '\"')
+			{
+				char quote = input[data->i];
+				data->i++;
+				while (input[data->i] && input[data->i] != quote)
+					data->i++;
+				if (input[data->i] == quote)
+					data->i++;
+			}
+			continue;
+		}
 		data->i++;
+	}
 	if (start == data->i)
 	{
 		data->error = 1;
@@ -42,3 +59,7 @@ int	ft_handle_word(t_data *data, char *input)
 	lst_add_back_token(data, lst_new_token(WORD, value));
 	return (0);
 }
+
+
+
+

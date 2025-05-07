@@ -26,17 +26,7 @@ static int	ft_valid_pipe(t_token *t)
 		return (0);
 	}
 
-	// Skip space backward
-	t_token *prev = t->prev;
-	while (prev && prev->type == SPCE)
-		prev = prev->prev;
-
-	// Skip space forward
-	t_token *next = t->next;
-	while (next && next->type == SPCE)
-		next = next->next;
-
-	if (!prev || !next || prev->type == PIPE || next->type == PIPE)
+	if (!t->prev || !t->next || t->prev->type == PIPE || t->next->type == PIPE)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return (0);
@@ -48,8 +38,6 @@ static int	ft_valid_redir(t_token *t)
 {
 	// Redirection must be followed by a word-type token (non-null)
 	t_token *next = t->next;
-	while (next && next->type == SPCE)
-		next = next->next;
 
 	if (!next || next->type == PIPE || ft_is_redir(next->type))
 	{

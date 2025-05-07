@@ -96,9 +96,6 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 			t_type redir_type = tokens->type;
 			tokens = tokens->next;
 
-			while (tokens && tokens->type == SPCE)
-				tokens = tokens->next;
-
 			if (!tokens || !tokens->value)
 				return (NULL); // invalid syntax
 
@@ -111,8 +108,7 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 		}
 
 		// Accept these token types as arguments
-		if (tokens->type == WORD || tokens->type == VAR ||
-			tokens->type == SQUOTE || tokens->type == DQUOTE)
+		if (tokens->type == WORD)
 		{
 			t_token *arg = malloc(sizeof(t_token));
 			if (!arg)

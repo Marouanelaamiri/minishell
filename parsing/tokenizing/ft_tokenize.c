@@ -31,8 +31,11 @@ t_token *ft_tokeniz(char *input)
 	while (input[data.i])
 	{
 		if (ft_isspace(input[data.i]))
-			data.i += ft_handle_space(&data, input);
-		else if (input[data.i] == '|')
+		{
+			while (input[data.i] && ft_isspace(input[data.i]))
+				data.i++;
+		}
+		if (input[data.i] == '|')
 			data.i += ft_handle_pipe(&data);
 		else if (input[data.i] == '>' || input[data.i] == '<')
 			data.i += ft_handle_redir(&data, input);
