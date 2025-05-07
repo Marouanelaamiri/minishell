@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/06 21:05:22 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:44:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ t_env *init_env(char **envp)
 		equal_sign = ft_strchr(envp[i], '=');
 		if (equal_sign)
 		{
-			new_node = malloc(sizeof *(new_node));
-			if (!new_node)
+			if (!(new_node = malloc(sizeof *(new_node))))
 				return (NULL);
 			new_node->name = ft_strndup(envp[i], equal_sign - envp[i]);
 			new_node->value = ft_strdup(equal_sign + 1);

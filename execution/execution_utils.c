@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/07 15:18:12 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:04:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void setup_redirections(t_cmd *cmd)
 			redir = redir->next;
 			continue;
 		}
-
 		if (fd < 0)
 		{
+			write(2, "minishell ", 10);
 			perror(redir->value);
 			exit(1);
 		}
@@ -76,8 +76,13 @@ char	*find_executable(char *cmd, t_env *env)
 
 	if (!cmd || !*cmd)
 		return (NULL);
-	if (ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
+	  if (ft_strchr(cmd, '/'))
+    {
+        if (access(cmd, X_OK) == 0) // need to handle whitespaces .
+            return ft_strdup(cmd);
+		else
+        	return NULL;
+    }
 	env_path = ft_getenv(env, "PATH");
 	if (!env_path)
 		return (NULL);
@@ -207,29 +212,28 @@ int heredoc_pipe(const char *delim)
 static int count_heredocs(t_cmd *cmd_list)
 {
     int       count = 0;
-    t_redir  *r;
+    t_redir  *redir;
 
     while (cmd_list)
     {
-        r = cmd_list->redir;
-        while (r)
+        redir = cmd_list->redir;
+        while (redir)
         {
-            if (r->type == HEREDOC)
+            if (redir->type == HEREDOC)
             {
                 count++;
                 if (count > 16)
                     return (-1);
             }
-            r = r->next;
+            redir = redir->next;
         }
         cmd_list = cmd_list->next;
     }
     return (count);
 }
-
 int preprocess_heredocs(t_cmd *cmd_list)
 {
-    t_redir *r;
+    t_redir *redir;
 
     if (count_heredocs(cmd_list) < 0)
     {
@@ -238,16 +242,16 @@ int preprocess_heredocs(t_cmd *cmd_list)
     }
     while (cmd_list)
     {
-        r = cmd_list->redir;
-        while (r)
+        redir = cmd_list->redir;
+        while (redir)
         {
-            if (r->type == HEREDOC)
+            if (redir->type == HEREDOC)
             {
-                r->fd = heredoc_pipe(r->value);
-                if (r->fd < 0)
+                redir->fd = heredoc_pipe(redir->value);
+                if (redir->fd < 0)
                     return (-1);
             }
-            r = r->next;
+            redir = redir->next;
         }
         cmd_list = cmd_list->next;
     }
