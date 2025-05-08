@@ -6,16 +6,12 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/07 15:25:06 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:39:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// int is_fork_builtin(t_cmd *cmd)
-// {
-// 	return (cmd->next || cmd->redir);
-// }
 int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 {
     char **envp = env_list_to_envp(env);
@@ -65,6 +61,13 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 				free_argv(argv);
                 exit(0);
 			}
+			if (is_builtin(cur)) 
+			{
+				int status = handle_builtins(cur, &env);
+				free_argv(argv);
+				ft_update_exit_status(status);
+				exit(status);
+			}
             char *path = find_executable(argv[0], env);
             if (!path)
             {
@@ -72,21 +75,6 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 				free_argv(argv);
             	exit(127);
             }
-			if (is_builtin(cur)) 
-			{
-				// if (is_fork_builtin(cur)) 
-				// {
-				int status = handle_builtins(cur, &env);
-				free_argv(argv);
-				ft_update_exit_status(status);
-				exit(status);
-				// } 
-				// else
-				// {
-				// free_argv(argv);
-				// exit(0);
-				// }
-			}
             execve(path, argv, envp);
             perror("execve");
 			free_argv(argv);

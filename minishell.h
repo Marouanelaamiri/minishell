@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/07 21:03:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:03:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ extern int g_exit_status;  // global variable to store exit status
 # include <readline/readline.h>
 # include <readline/history.h>
 
-#define malloc(x) NULL
+
 // ENV
 typedef struct l_env
 {

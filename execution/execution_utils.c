@@ -6,12 +6,12 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/07 19:04:59 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:51:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-// need understanding 
+
 void setup_redirections(t_cmd *cmd)
 {
 	t_redir *redir = cmd->redir;
