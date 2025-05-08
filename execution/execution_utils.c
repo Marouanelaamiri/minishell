@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/08 12:51:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:54:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*find_executable(char *cmd, t_env *env)
 		return (NULL);
 	  if (ft_strchr(cmd, '/'))
     {
-        if (access(cmd, X_OK) == 0) // need to handle whitespaces .
+        if (access(cmd, X_OK) == 0)
             return ft_strdup(cmd);
 		else
         	return NULL;
@@ -142,32 +142,29 @@ char **token_to_av(t_token *token)
 }
 char **env_list_to_envp(t_env *env)
 {
-    size_t count = 0;
-    t_env  *cur   = env;
-    char  **envp;
-    size_t i;
-    const char *val;
-
+    size_t  count = 0;
+    t_env   *cur;
+    char   **envp;
+    size_t  i;
+    cur = env;
     while (cur)
     {
-        count++;
+        if (cur->value != NULL)
+            count++;
         cur = cur->next;
     }
     envp = malloc((count + 1) * sizeof *envp);
-    if (!envp)
+    if (envp == NULL)
         return NULL;
     cur = env;
     i   = 0;
     while (cur)
     {
         if (cur->value != NULL)
-            val = cur->value;
-        else
-            val = "";
         {
-            size_t len = ft_strlen(cur->name) + 1 + ft_strlen(val) + 1;
+            size_t len = ft_strlen(cur->name)+ 1 + ft_strlen(cur->value)+ 1;
             envp[i] = malloc(len);
-            if (!envp[i])
+            if (envp[i] == NULL)
             {
                 while (i-- > 0)
                     free(envp[i]);
@@ -175,16 +172,16 @@ char **env_list_to_envp(t_env *env)
                 return NULL;
             }
             ft_strlcpy(envp[i], cur->name, len);
-            ft_strlcat(envp[i], "=",           len);
-            ft_strlcat(envp[i], val,           len);
+            ft_strlcat(envp[i], "=",          len);
+            ft_strlcat(envp[i], cur->value,  len);
+            i++;
         }
-        i++;
         cur = cur->next;
     }
     envp[i] = NULL;
     return envp;
 }
-int heredoc_pipe(const char *delim)
+int	heredoc_pipe(const char *delim)
 {
 	int fds[2];
 	char *line;
