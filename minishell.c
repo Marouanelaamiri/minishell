@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/08 15:39:16 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 21:29:27 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void ft_blinding_lights(char *input)
             n++;
     }
 }
-
 static void ft_after_hours(t_token *t)
 {
     t_token *current = t;

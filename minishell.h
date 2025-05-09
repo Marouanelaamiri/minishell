@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/09 18:11:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 21:29:30 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ extern int g_exit_status;  // global variable to store exit status
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
 
 // ENV
 typedef struct l_env
