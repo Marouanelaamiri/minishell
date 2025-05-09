@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 19:46:40 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 21:23:34 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,31 @@ int ft_pwd(t_cmd *cmd, t_env **env)
     free(cwd);
 	return (0);
 }
-int ft_unset(t_cmd *cmd, t_env **env)
+int	ft_unset(t_cmd *cmd, t_env **env)
 {
-	t_token *token = cmd->args->next;
+	t_token	*token = cmd->args->next;
+	int		status = 0;
+
 	while (token)
 	{
 		if (token->type == WORD)
-			env_unset(env, token->value);
+		{
+			if (!is_valid_id(token->value))
+			{
+				write(2, "minishell: ", 12);
+				write(2, "unset :`", 9);
+				write (2, token->value , ft_strlen(token->value));
+				write(2, "': not a valid identifier\n", 27);
+				status = 1;
+			}
+			else
+				env_unset(env, token->value);
+		}
 		token = token->next;
 	}
-	return (0);
+	return (status);
 }
+
 int ft_env(t_cmd *cmd, t_env **env)
 {
 	t_env *current = *env;

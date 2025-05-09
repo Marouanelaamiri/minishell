@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/08 12:03:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:11:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ extern int g_exit_status;  // global variable to store exit status
 # include <ctype.h>
 # include <stdbool.h>
 # include <sys/types.h>
+# include <dirent.h>
 # include <sys/wait.h>
 # include <signal.h>
 # include <readline/readline.h>

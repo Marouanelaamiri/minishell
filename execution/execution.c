@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/08 14:39:15 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:19:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ int execute_cmds(t_cmd *cmd_list, t_env *env) // need opt and split
 				free_argv(argv);
             	exit(127);
             }
+			if (opendir(path) != NULL)
+			{
+				///mnt/homes/malaamir/.brew/bin/.: is a directory
+				print_error(path, "is a directory");
+				exit(126);
+			}
             execve(path, argv, envp);
             perror("execve");
 			free_argv(argv);

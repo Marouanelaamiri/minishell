@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/08 15:54:52 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:40:46 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void setup_redirections(t_cmd *cmd)
 {
 	t_redir *redir = cmd->redir;
 	int fd;
-
+	
 	while (redir)
 	{
-		fd = -1;
-
+		bool process_redir = true;
 		if (redir->type == REDIR_IN)
 			fd = open(redir->value, O_RDONLY);
 		else if (redir->type == REDIR_OUT)
@@ -28,31 +27,25 @@ void setup_redirections(t_cmd *cmd)
 		else if (redir->type == APPEND)
 			fd = open(redir->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else if (redir->type == HEREDOC)
-		{
 			fd = redir->fd;
+		else
+			process_redir = false;
+			
+		if (process_redir)
+		{
 			if (fd < 0)
 			{
-				perror("heredoc fd");
+				write(2, "minishell ", 10);
+				perror(redir->value);
 				exit(1);
 			}
+			if (redir->type == REDIR_IN || redir->type == HEREDOC)
+				dup2(fd, STDIN_FILENO);
+			else
+				dup2(fd, STDOUT_FILENO);
+			close(fd);
 		}
-		else
-		{
-			redir = redir->next;
-			continue;
-		}
-		if (fd < 0)
-		{
-			write(2, "minishell ", 10);
-			perror(redir->value);
-			exit(1);
-		}
-		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			dup2(fd, STDIN_FILENO);
-		else
-			dup2(fd, STDOUT_FILENO);
-		close(fd);
-		redir = redir->next;
+	redir = redir->next;
 	}
 }
 char	*ft_strjoin_path(const char *dir, const char *cmd)
