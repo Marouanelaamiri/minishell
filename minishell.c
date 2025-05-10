@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/09 21:29:27 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/10 12:56:50 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 int g_exit_status = 0;
 
+// static void on_exit1(void)
+// {
+//     char cmd[128];
+//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+//     system(cmd);
+// }
 static void ft_blinding_lights(char *input)
 {
     int        n;
@@ -55,7 +61,6 @@ static void ft_after_hours(t_token *t)
         current = current->next;
     }
 }
-
 static t_cmd *ft_process_input(char *input, t_env *env)
 {
     if (!ft_check_quotes(input))
@@ -84,74 +89,64 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     ft_free_tokens(tokens);
     return cmd_list;
 }
-
-
-// static void on_exit1(void)
-// {
-//     char cmd[128];
-//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-//     system(cmd);
-// }
-
-int main(int ac, char **av, char **envp)
+static void   handle_single_builtin(t_cmd *cmd, t_env **env)
 {
-	// atexit(on_exit1);
-	(void)ac;
-	(void)av;
-	t_env *env = init_env(envp);
-	env_unset(&env, "OLDPWD");
-	update_shell_level(&env);
-	ft_signal_handler();
+    int saved_stdout;
+    int status;
 
-	while (1)
-	{
-		char *line = readline("minishell$ ");
-		if (!line)
-		{
-			ft_update_exit_status(0);
-			printf("exit\n");
-			clear_history();
-			break;
-		}
-		if (*line)
-			add_history(line);
+    saved_stdout = -1;
+    if (cmd->redir)
+    {
+        saved_stdout = dup(STDOUT_FILENO);
+        setup_redirections(cmd);
+    }
+    status = handle_builtins(cmd, env);
+    if (cmd->redir && saved_stdout != -1)
+    {
+        dup2(saved_stdout, STDOUT_FILENO);
+        close(saved_stdout);
+    }
+    ft_update_exit_status(status);
+}
+static int  handle_one_line(t_env **env)
+{
+    char  *line;
+    t_cmd *cmd;
 
-		t_cmd *cmd = ft_process_input(line, env);
-		// ft_print_cmds(cmd);
-		free(line);
+    line = readline("minishell$ ");
+    if (!line)
+    {
+        ft_update_exit_status(0);
+        printf("exit\n");
+        clear_history();
+        return (0);
+    }
+    if (*line)
+        add_history(line);
+    cmd = ft_process_input(line, *env);
+    free(line);
+    if (!cmd)
+        return (1);
+    if (preprocess_heredocs(cmd) != 0)
+        return ((ft_free_cmds(cmd)), 1);
+    if (!cmd->next && is_builtin(cmd))
+        handle_single_builtin(cmd, env);
+    else
+        ft_update_exit_status(execute_cmds(cmd, *env));
+   return ((ft_free_cmds(cmd)), 1);
+}
+int  main(int argc, char **argv, char **envp)
+{
+    t_env *env;
 
-		if (!cmd)
-			continue;
-
-		if (preprocess_heredocs(cmd) != 0) //
-		{
-			ft_free_cmds(cmd);
-			continue;
-		}
-
-		if (cmd->next == NULL && is_builtin(cmd))
-		{
-			int saved_stdout = -1;
-			if (cmd->redir)
-			{
-				saved_stdout = dup(STDOUT_FILENO);
-				setup_redirections(cmd);
-			}
-			int status = handle_builtins(cmd, &env);
-			if (cmd->redir && saved_stdout != -1)
-			{
-				dup2(saved_stdout, STDOUT_FILENO);
-				close(saved_stdout);
-			}
-			ft_update_exit_status(status);
-		}
-		else
-		{
-			int status = execute_cmds(cmd, env);
-			ft_update_exit_status(status);
-		}
-		ft_free_cmds(cmd);
-	}
-	ft_free_env(env);
-	return g_exit_status;
+    (void)argc;
+    (void)argv;
+    env = init_env(envp);
+    env_unset(&env, "OLDPWD");
+    update_shell_level(&env);
+    ft_signal_handler();
+    while (handle_one_line(&env))
+        ;
+    ft_free_env(env);
+    return (g_exit_status);
 }

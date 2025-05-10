@@ -20,10 +20,12 @@ execution/helpers/ft_strlcat.c \
 execution/helpers/ft_split.c \
 execution/builtin.c \
 execution/ft_export.c \
+execution/ft_export_utils.c \
 execution/builtin_utils.c \
 execution/env_utils.c \
 execution/execution_utils.c \
 execution/execution.c \
+execution/heredoc.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/tokenizing/ft_token_word.c \
 parsing/tokenizing/ft_token_var.c \

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/09 21:23:34 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/10 12:40:20 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	ft_unset(t_cmd *cmd, t_env **env)
 	}
 	return (status);
 }
-
 int ft_env(t_cmd *cmd, t_env **env)
 {
 	t_env *current = *env;

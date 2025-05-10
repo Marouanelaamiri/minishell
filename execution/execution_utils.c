@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/09 18:40:46 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/10 12:38:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ void setup_redirections(t_cmd *cmd)
 {
 	t_redir *redir = cmd->redir;
 	int fd;
+	bool process_redir;
 	
 	while (redir)
 	{
-		bool process_redir = true;
+		process_redir = true;
 		if (redir->type == REDIR_IN)
 			fd = open(redir->value, O_RDONLY);
 		else if (redir->type == REDIR_OUT)
@@ -30,7 +31,6 @@ void setup_redirections(t_cmd *cmd)
 			fd = redir->fd;
 		else
 			process_redir = false;
-			
 		if (process_redir)
 		{
 			if (fd < 0)
@@ -89,15 +89,11 @@ char	*find_executable(char *cmd, t_env *env)
 		if (!full_path)
 			break ;
 		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return (full_path);
-		}
+			return (free_split(paths), full_path);
 		free(full_path);
 		i++;
 	}
-	free_split(paths);
-	return (NULL);
+	return (free_split(paths), NULL);
 }
 char **token_to_av(t_token *token)
 {
@@ -106,7 +102,6 @@ char **token_to_av(t_token *token)
 	
 	if (!token)
 		return (NULL);
-
 	while (tmp)
 	{
 		count++;
@@ -124,14 +119,12 @@ char **token_to_av(t_token *token)
 		{
 			while (i > 0)
 				free(av[--i]);
-			free(av);
-			return (NULL);
+			return (free(av), NULL);
 		}
 		i++;
 		tmp = tmp->next;
 	}
-	av[i] = NULL;
-	return (av);
+	return ((av[i] = NULL) , av);
 }
 char **env_list_to_envp(t_env *env)
 {
@@ -161,8 +154,7 @@ char **env_list_to_envp(t_env *env)
             {
                 while (i-- > 0)
                     free(envp[i]);
-                free(envp);
-                return NULL;
+                return (free(envp), NULL);
             }
             ft_strlcpy(envp[i], cur->name, len);
             ft_strlcat(envp[i], "=",          len);
@@ -171,79 +163,5 @@ char **env_list_to_envp(t_env *env)
         }
         cur = cur->next;
     }
-    envp[i] = NULL;
-    return envp;
-}
-int	heredoc_pipe(const char *delim)
-{
-	int fds[2];
-	char *line;
-
-	if (pipe(fds) < 0)
-	{
-		perror("pipe");
-		return (-1);
-	}
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delim) == 0)
-		{
-			free(line);
-			break;
-		}
-		write(fds[1], line, ft_strlen(line));
-		write(fds[1], "\n", 1);
-		free(line);
-	}
-	close(fds[1]);
-	return (fds[0]);
-}
-static int count_heredocs(t_cmd *cmd_list)
-{
-    int       count = 0;
-    t_redir  *redir;
-
-    while (cmd_list)
-    {
-        redir = cmd_list->redir;
-        while (redir)
-        {
-            if (redir->type == HEREDOC)
-            {
-                count++;
-                if (count > 16)
-                    return (-1);
-            }
-            redir = redir->next;
-        }
-        cmd_list = cmd_list->next;
-    }
-    return (count);
-}
-int preprocess_heredocs(t_cmd *cmd_list)
-{
-    t_redir *redir;
-
-    if (count_heredocs(cmd_list) < 0)
-    {
-		print_error ("heredoc","minishell: maximum here-document count exceeded" );
-        exit(2);
-    }
-    while (cmd_list)
-    {
-        redir = cmd_list->redir;
-        while (redir)
-        {
-            if (redir->type == HEREDOC)
-            {
-                redir->fd = heredoc_pipe(redir->value);
-                if (redir->fd < 0)
-                    return (-1);
-            }
-            redir = redir->next;
-        }
-        cmd_list = cmd_list->next;
-    }
-    return (0);
+    return((envp[i] = NULL), envp);
 }
