@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/09 21:29:30 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:43:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	ft_free_cmds(t_cmd *cmd);
 void	ft_free_env(t_env *env);
 void	free_argv(char **av);
 void	free_split(char **arr);
+void    free_envp(char **envp);
 
 // string manipulation
 void	ft_putchar_fd(char c, int fd);

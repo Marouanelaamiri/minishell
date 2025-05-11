@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:26:23 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 20:17:45 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:43:04 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,20 @@ void	ft_free_env(t_env *env)
 		free(tmp->value);
 		free(tmp);
 	}
+}
+void    free_envp(char **envp)
+{
+    int i;
+
+    if (!envp)
+        return ;
+    i = 0;
+    while (envp[i])
+    {
+        free(envp[i]);
+        i++;
+    }
+    free(envp);
 }
 void free_argv(char **av)
 {

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:03:47 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/10 12:40:20 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:05:54 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int ft_cd(t_cmd *cmd, t_env **env)
         path = ft_getenv(*env, "HOME");
     if (!path)
         return (free(oldcwd), write(2, "cd: HOME not set\n", 17), 1);
-    if (chdir(path) < 0)
+    if (cd_walk_path(path) < 0)
         return (perror("cd"), free(oldcwd), 1);
     newcwd = getcwd(NULL, 0);
     if (!newcwd)

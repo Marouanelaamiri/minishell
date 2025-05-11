@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/10 12:56:50 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:46:05 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int g_exit_status = 0;
 
-// static void on_exit1(void)
-// {
-//     char cmd[128];
-//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-//     system(cmd);
-// }
+static void on_exit1(void)
+{
+    char cmd[128];
+    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+    system(cmd);
+}
 static void ft_blinding_lights(char *input)
 {
     int        n;
@@ -89,10 +89,10 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     ft_free_tokens(tokens);
     return cmd_list;
 }
-static void   handle_single_builtin(t_cmd *cmd, t_env **env)
+static void   handle_single_builtin(t_cmd *cmd, t_env **env) //
 {
     int saved_stdout;
-    int status;
+    int status = 0;
 
     saved_stdout = -1;
     if (cmd->redir)
@@ -137,6 +137,7 @@ static int  handle_one_line(t_env **env)
 }
 int  main(int argc, char **argv, char **envp)
 {
+	atexit(on_exit1);
     t_env *env;
 
     (void)argc;
