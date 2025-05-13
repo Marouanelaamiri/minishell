@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/13 20:44:09 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:45:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static int  handle_one_line(t_env **env)
 }
 int  main(int argc, char **argv, char **envp)
 {
-	// atexit(on_exit1);
+    // atexit(on_exit1);
     t_env *env;
 
     (void)argc;
