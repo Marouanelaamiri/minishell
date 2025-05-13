@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 17:59:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/11 16:28:13 by malaamir         ###   ########.fr       */
+/*   Created: 2025/05/13 19:20:41 by malaamir          #+#    #+#             */
+/*   Updated: 2025/05/13 19:58:00 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int is_builtin(t_cmd *cmd)
+int	is_builtin(t_cmd *cmd)
 {
 	if (!cmd || !cmd->args)
-        return 0;
-    if (cmd->args->type != WORD || !cmd->args->value)
-        return 0;
-
+		return (0);
+	if (cmd->args->type != WORD || !cmd->args->value)
+		return (0);
 	else if (cmd->args->type == WORD)
 	{
 		if (ft_strcmp(cmd->args->value, "echo") == 0)
@@ -37,15 +36,14 @@ int is_builtin(t_cmd *cmd)
 			return (1);
 	}
 	return (0);
-
 }
 int handle_builtins(t_cmd *cmd, t_env **env)
 {
-	int status = 0;
+	int status;
+	status = 0;
 
     if (!cmd || !cmd->args || !cmd->args->value)
         return -1;
-    
     if (ft_strcmp(cmd->args->value, "echo") == 0)
 		status = ft_echo(cmd, env);
     else if (ft_strcmp(cmd->args->value, "cd") == 0)
@@ -78,50 +76,6 @@ int is_valid_id(const char *str)
 		str++;
 	}
 	return (1);
-}
-int	cd_walk_path(const char *path)
-{
-	char	**segments;
-	int		i;
-	int		ret;
-	char	*cwd;
-
-	if (!path || path[0] == '\0')
-		return (0);
-	segments = ft_split(path, '/');
-	if (!segments)
-		return (-1);
-	ret = 0;
-	i = 0;
-	while (segments[i])
-	{
-		if (ft_strcmp(segments[i], "..") == 0)
-		{
-			if (chdir("..") < 0)
-			{
-				cwd = getcwd(NULL, 0);
-				if (cwd && ft_strcmp(cwd, "/") == 0)
-				{
-					free(cwd);
-					i++;
-					continue;
-				}
-				free(cwd);
-				ret = -1;
-				break;
-			}
-		}
-		else if (segments[i][0] != '\0' && ft_strcmp(segments[i], ".") != 0)
-		{
-			if (chdir(segments[i]) < 0)
-			{
-				ret = -1;
-				break;
-			}
-		}
-		i++;
-	}
-	return (free_split(segments), ret);
 }
 void	print_error(const char *cmd, const char *msg)
 {

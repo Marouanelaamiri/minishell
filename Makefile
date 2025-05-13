@@ -18,12 +18,21 @@ execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
 execution/helpers/ft_strlcat.c \
 execution/helpers/ft_split.c \
-execution/builtin.c \
 execution/ft_export.c \
-execution/ft_export_utils.c \
+execution/ft_cd.c \
+execution/ft_echo.c \
+execution/ft_env.c \
+execution/ft_exit.c \
+execution/ft_pwd.c \
+execution/ft_unset.c \
 execution/builtin_utils.c \
-execution/env_utils.c \
+execution/builtin_utils2.c \
 execution/execution_utils.c \
+execution/execution_utils2.c \
+execution/execution_utils3.c \
+execution/execution_utils4.c \
+execution/ft_export_utils.c \
+execution/env_utils.c \
 execution/execution.c \
 execution/heredoc.c \
 parsing/tokenizing/ft_tokenize.c \
@@ -51,12 +60,11 @@ parsing/memory_management/ft_free.c \
 OBJ = $(SRC:.c=.o)
 
 #------------------------------ Readline Paths ----------------------------------#
-READLINE_INCLUDE = $(shell brew --prefix readline)/include
-READLINE_LIB = $(shell brew --prefix readline)/lib
-LDLIB = -L$(READLINE_LIB) -lreadline
+# Use system-installed readline
+LDLIB = -lreadline -lhistory
 
 #------------------------------ Compiler and Flags ------------------------------#
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 #------------------------------ Executable --------------------------------------#
@@ -79,7 +87,7 @@ $(NAME): $(OBJ)
 	@echo "\033[0m"
 
 %.o: %.c minishell.h
-	@$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "\033[1;34m🔹 Compiling: $< -> $@\033[0m"
 
 #------------------------------ Cleaning ----------------------------------------#

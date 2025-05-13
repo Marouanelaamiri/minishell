@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/11 18:46:05 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:44:09 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int g_exit_status = 0;
 
-static void on_exit1(void)
-{
-    char cmd[128];
-    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-    system(cmd);
-}
+// static void on_exit1(void)
+// {
+//     char cmd[128];
+//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+//     system(cmd);
+// }
 static void ft_blinding_lights(char *input)
 {
     int        n;
@@ -132,12 +132,12 @@ static int  handle_one_line(t_env **env)
     if (!cmd->next && is_builtin(cmd))
         handle_single_builtin(cmd, env);
     else
-        ft_update_exit_status(execute_cmds(cmd, *env));
+        ft_update_exit_status(execute_commands(cmd, *env));
    return ((ft_free_cmds(cmd)), 1);
 }
 int  main(int argc, char **argv, char **envp)
 {
-	atexit(on_exit1);
+	// atexit(on_exit1);
     t_env *env;
 
     (void)argc;

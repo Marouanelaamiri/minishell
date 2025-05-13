@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   starboy_expand2.c                                  :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:48:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/13 13:41:20 by malaamir         ###   ########.fr       */
+/*   Created: 2025/05/13 19:58:23 by malaamir          #+#    #+#             */
+/*   Updated: 2025/05/13 20:00:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-void	starboy_quote_expansion(t_token *t, t_env *env)
+int ft_echo(t_cmd *cmd, t_env **env)
 {
-	int		x;
+	t_token *token = cmd->args->next;
+	int newline = 1;
 
-	while (t->value[x])
+	(void)env;
+	if (token && token->type == WORD 
+			&& ft_strcmp(token->value, "-n") == 0)
 	{
-		x++;
+		newline = 0;
+		token = token->next;
 	}
+	while (token)
+	{
+		if (token->type == WORD)
+			printf("%s", token->value);
+		token = token->next;
+		if (token)
+			printf(" ");
+	}
+	if (newline)
+		printf("\n");
+	return (0);
 }

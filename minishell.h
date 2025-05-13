@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/11 18:43:14 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:42:24 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-extern int g_exit_status;  // global variable to store exit status
+extern int g_exit_status;
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -35,6 +36,16 @@ typedef struct l_env
 	char			*name; // "/usr/bin:/bin"
 	struct l_env	*next;
 }			t_env;
+// Exexute cmds
+typedef struct s_cmd_exec
+{
+	int		index;
+	int		read_end;
+	int		cmd_count;
+	int		pipe_fds[2];
+	pid_t	last_pid;
+	pid_t	*pids;
+}	t_cmd_exec;
 
 // TOKEN & COMMAND
 typedef enum e_type
@@ -156,7 +167,8 @@ char	**env_list_to_envp(t_env *env);
 int		heredoc_pipe(const char *delim);
 
 //exe
-int	execute_cmds(t_cmd *cmd_list, t_env *env);
+int	execute_commands(t_cmd *cmd_list, t_env *env);
+int	count_cmds(t_cmd *cmd_list);
 
 // env_utils
 t_env	*init_env(char **envp);
