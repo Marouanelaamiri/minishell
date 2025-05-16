@@ -6,12 +6,20 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/13 20:43:52 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:15:17 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static void    check_args(char **argv)
+{
+    if (!argv || !argv[0] || !argv[0][0])
+    {
+        free_argv(argv);
+        exit(0);
+    }
+}
 static void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
 {
 	int	i;
@@ -37,11 +45,7 @@ static pid_t	run_child_process(t_cmd *cmd, int input_fd, int *pipe_fds,
 		close(pipe_fds[0]), close(pipe_fds[1]);
 	setup_redirections(cmd);
 	argv = token_to_av(cmd->args);
-	if (!argv || !argv[0][0])
-	{
-		free_argv(argv);
-    	exit(0);
-	}
+	check_args(argv);
 	if (is_builtin(cmd))
 		exit(handle_builtins(cmd, env));
 	path = find_executable(argv[0], *env);

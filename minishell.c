@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/13 20:45:52 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:59:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int g_exit_status = 0;
 //     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
 //     system(cmd);
 // }
+
 static void ft_blinding_lights(char *input)
 {
     int        n;
@@ -108,6 +109,7 @@ static void   handle_single_builtin(t_cmd *cmd, t_env **env) //
     }
     ft_update_exit_status(status);
 }
+
 static int  handle_one_line(t_env **env)
 {
     char  *line;
@@ -118,8 +120,7 @@ static int  handle_one_line(t_env **env)
     {
         ft_update_exit_status(0);
         printf("exit\n");
-        clear_history();
-        return (0);
+        return (clear_history(),0);
     }
     if (*line)
         add_history(line);

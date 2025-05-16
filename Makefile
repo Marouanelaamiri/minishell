@@ -35,6 +35,7 @@ execution/ft_export_utils.c \
 execution/env_utils.c \
 execution/execution.c \
 execution/heredoc.c \
+execution/heredoc_utils.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/tokenizing/ft_token_word.c \
 parsing/tokenizing/ft_token_var.c \
