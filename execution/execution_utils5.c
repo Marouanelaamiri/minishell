@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 12:00:49 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:05:35 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ pid_t	run_child_process(t_child_args *args)
 	execve(path, argv, args->envp);
 	perror("execve");
 	free_argv (argv);
-	exit ((free(path),126));
+	exit ((free(path), 126));
 }
 
 int	start_command(t_cmd *cmd, t_cmd_exec *exec,
