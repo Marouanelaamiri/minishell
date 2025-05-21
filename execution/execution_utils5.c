@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 12:05:35 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:18:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@ void	check_args(char **argv)
 	}
 }
 
+static int	spawn_child_process(t_cmd *cmd, t_cmd_exec *exec,
+	char **envp, t_env **env)
+{
+	t_child_args	args;
+
+	args.cmd = cmd;
+	args.input_fd = exec->read_end;
+	args.pipe_fds = exec->pipe_fds;
+	args.envp = envp;
+	args.env = env;
+	run_child_process(&args);
+	return (0);
+}
+
 void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
 {
 	int	i;
@@ -31,21 +45,6 @@ void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
 		if (pids[i] != last_pid)
 			waitpid(pids[i], NULL, 0);
 		i++;
-	}
-}
-
-void	handle_exec_errors(char **argv, char *path)
-{
-	if (!path)
-	{
-		print_error(argv[0], "command not found");
-		free_argv(argv);
-		exit(127);
-	}
-	if (opendir(path))
-	{
-		print_error(path, "is a directory");
-		exit(126);
 	}
 }
 
@@ -81,22 +80,13 @@ pid_t	run_child_process(t_child_args *args)
 int	start_command(t_cmd *cmd, t_cmd_exec *exec,
 	char **envp, t_env **env)
 {
-	t_child_args	args;
-
 	if (cmd->next && pipe(exec->pipe_fds) < 0)
 		return (perror("pipe"), 1);
 	exec->pids[exec->index] = fork();
 	if (exec->pids[exec->index] < 0)
 		return (perror("fork"), 1);
 	if (exec->pids[exec->index] == 0)
-	{
-		args.cmd = cmd;
-		args.input_fd = exec->read_end;
-		args.pipe_fds = exec->pipe_fds;
-		args.envp = envp;
-		args.env = env;
-		run_child_process(&args);
-	}
+		spawn_child_process(cmd, exec, envp, env);
 	if (exec->read_end != -1)
 		close(exec->read_end);
 	if (cmd->next)

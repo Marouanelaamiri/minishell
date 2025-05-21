@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:03 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 15:50:42 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:25:06 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,34 +32,40 @@ static int	cd_to_absolute_root(char *path)
 	return (0);
 }
 
+static void	update_path(char **newcwd, char *component)
+{
+	char	*slash;
+	char	*temp;
+
+	if (ft_strcmp(component, "..") == 0)
+	{
+		slash = ft_strrchr(*newcwd, '/');
+		if (slash && slash != *newcwd)
+			*slash = '\0';
+		else
+			(*newcwd)[1] = '\0';
+	}
+	else if (ft_strcmp(component, ".") != 0)
+	{
+		temp = ft_strjoin(*newcwd, "/");
+		free(*newcwd);
+		*newcwd = ft_strjoin(temp, component);
+		free(temp);
+	}
+}
+
 static char	*build_path(char *oldcwd, char *path)
 {
 	char	*newcwd;
-	char	*temp;
 	char	**components;
 	int		i;
-	char	*slash;
 
 	newcwd = ft_strdup(oldcwd);
 	components = ft_split(path, '/');
 	i = 0;
 	while (components && components[i])
 	{
-		if (ft_strcmp(components[i], "..") == 0)
-		{
-			slash = ft_strrchr(newcwd, '/');
-			if (slash && slash != newcwd)
-				*slash = '\0';
-			else
-				newcwd[1] = '\0';
-		}
-		else if (ft_strcmp(components[i], ".") != 0)
-		{
-			temp = ft_strjoin(newcwd, "/");
-			free(newcwd);
-			newcwd = ft_strjoin(temp, components[i]);
-			free(temp);
-		}
+		update_path(&newcwd, components[i]);
 		i++;
 	}
 	return (free_split(components), newcwd);

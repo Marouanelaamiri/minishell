@@ -6,11 +6,26 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:30:03 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:18:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	handle_exec_errors(char **argv, char *path)
+{
+	if (!path)
+	{
+		print_error(argv[0], "command not found");
+		free_argv(argv);
+		exit(127);
+	}
+	if (opendir(path))
+	{
+		print_error(path, "is a directory");
+		exit(126);
+	}
+}
 
 static size_t	count_env_vars(t_env *env)
 {

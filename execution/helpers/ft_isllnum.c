@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:37:15 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:15:45 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:31:01 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	is_within_llimit(const char *start, int len, int sign)
 	if (sign == 1)
 		limit = LLONG_MAX;
 	else
-		limit = -(unsigned long long)LLONG_MIN;
+		limit = -LLONG_MIN;
 	value = 0;
 	i = 0;
 	while (i < len)

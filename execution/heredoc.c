@@ -6,49 +6,60 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:54:55 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:42:55 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static int	handle_heredoc_line(int *fds, t_heredoc *heredoc,
+	struct sigaction *sa_old)
+{
+	char	*line;
+
+	line = readline("> ");
+	if (g_exit_status == 130)
+	{
+		free(line);
+		close(fds[0]);
+		close(fds[1]);
+		sigaction(SIGINT, sa_old, NULL);
+		return (-2);
+	}
+	if (!line)
+		return (print_eof_warning(heredoc->delim), 1);
+	if (ft_strcmp(line, heredoc->delim) == 0)
+		return (free(line), 1);
+	if (!heredoc->quoted)
+		starboy_expand_heredoc(&line, heredoc->env);
+	write(fds[1], line, ft_strlen(line));
+	write(fds[1], "\n", 1);
+	free(line);
+	return (0);
+}
+
 int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 {
 	int					fds[2];
-	char				*line;
+	int					status;
 	struct sigaction	sa_old;
+	t_heredoc			heredoc;
 
+	heredoc.delim = delim;
+	heredoc.env = env;
+	heredoc.quoted = quoted;
 	g_exit_status = 0;
 	if (pipe(fds) < 0)
 		return (perror("pipe"), 1);
 	setup_signal(&sa_old);
 	while (1)
 	{
-		line = readline("> ");
-		if (g_exit_status == 130)
-		{
-			free(line);
-			close(fds[0]);
-			close(fds[1]);
-			sigaction(SIGINT, &sa_old, NULL);
-			return (-2);
-		}
-		if (!line)
-		{
-			print_eof_warning(delim);
+		status = handle_heredoc_line(fds, &heredoc, &sa_old);
+		if (status != 0)
 			break ;
-		}
-		if (ft_strcmp(line, delim) == 0)
-		{
-			free(line);
-			break ;
-		}
-		if (!quoted)
-			starboy_expand_heredoc(&line, env);
-		write(fds[1], line, ft_strlen(line));
-		write(fds[1], "\n", 1);
-		free(line);
 	}
+	if (status == -2)
+		return (-2);
 	close(fds[1]);
 	sigaction(SIGINT, &sa_old, NULL);
 	return (fds[0]);

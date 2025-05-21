@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 16:54:28 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:38:55 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,13 @@ typedef struct s_child_args
 	char		**envp;
 	t_env		**env;
 }	t_child_args;
+
+typedef struct s_heredoc
+{
+	const char		*delim;
+	t_env			*env;
+	int				quoted;
+}	t_heredoc;
 
 // debug
 void	print_tokens(t_token *token);
