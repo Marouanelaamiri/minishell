@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 15:34:45 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:54:23 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	write(1, "exit\n", 5);
 	if (!arg)
 		exit(g_exit_status);
-	if (!ft_isnum(arg->value))
+	if (!ft_isllnum(arg->value))
 	{
 		print_error("minishell: exit: numeric argument required\n", arg->value);
 		exit(255);

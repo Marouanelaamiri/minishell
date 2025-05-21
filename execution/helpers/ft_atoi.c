@@ -6,13 +6,13 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:04:07 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 14:33:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:12:46 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static int	ft_whitespaces(int c)
+int	ft_whitespaces(int c)
 {
 	if (c == '\t' || c == '\n' || c == '\v'
 		|| c == '\f' || c == '\r' || c == ' ')

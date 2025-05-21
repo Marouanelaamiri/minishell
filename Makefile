@@ -10,7 +10,7 @@ execution/helpers/ft_strdup.c \
 execution/helpers/ft_strlen.c \
 execution/helpers/ft_strlcpy.c \
 execution/helpers/ft_isalnum.c \
-execution/helpers/ft_isnum.c \
+execution/helpers/ft_isllnum.c \
 execution/helpers/ft_strjoin.c \
 execution/helpers/ft_calloc.c \
 execution/helpers/ft_isalpha.c \

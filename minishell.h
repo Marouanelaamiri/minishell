@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 15:48:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:54:28 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int 	ft_isdigit(int c);
-int 	ft_isnum(const char *str);
+int 	ft_isllnum(const char *str);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_strrchr(const char *s, int c);
 void	*ft_calloc(size_t count, size_t size);
