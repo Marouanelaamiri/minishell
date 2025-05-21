@@ -6,11 +6,64 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:03 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:31:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:50:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static char	*get_target_path(t_token *tok, t_env **env)
+{
+	if (tok && tok->type == WORD)
+		return (tok->value);
+	return (ft_getenv(*env, "HOME"));
+}
+
+static int	cd_to_absolute_root(char *path)
+{
+	if (path[0] == '/')
+	{
+		if (chdir("/") < 0)
+		{
+			perror("cd");
+			return (-1);
+		}
+	}
+	return (0);
+}
+
+static char	*build_path(char *oldcwd, char *path)
+{
+	char	*newcwd;
+	char	*temp;
+	char	**components;
+	int		i;
+	char	*slash;
+
+	newcwd = ft_strdup(oldcwd);
+	components = ft_split(path, '/');
+	i = 0;
+	while (components && components[i])
+	{
+		if (ft_strcmp(components[i], "..") == 0)
+		{
+			slash = ft_strrchr(newcwd, '/');
+			if (slash && slash != newcwd)
+				*slash = '\0';
+			else
+				newcwd[1] = '\0';
+		}
+		else if (ft_strcmp(components[i], ".") != 0)
+		{
+			temp = ft_strjoin(newcwd, "/");
+			free(newcwd);
+			newcwd = ft_strjoin(temp, components[i]);
+			free(temp);
+		}
+		i++;
+	}
+	return (free_split(components), newcwd);
+}
 
 int	ft_cd(t_cmd *cmd, t_env **env)
 {
@@ -19,22 +72,23 @@ int	ft_cd(t_cmd *cmd, t_env **env)
 	char	*oldcwd;
 	char	*newcwd;
 
-	oldcwd = getcwd(NULL, 0);
 	tok = cmd->args->next;
-	if (!oldcwd)
-		return (perror("getcwd"), 1);
-	if (tok && tok->type == WORD)
-		path = tok->value;
-	else
-		path = ft_getenv(*env, "HOME");
+	oldcwd = getcwd(NULL, 0);
+	path = get_target_path(tok, env);
 	if (!path)
-		return (free(oldcwd), write(2, "cd: HOME not set\n", 17), 1);
-	if (cd_walk_path(path) < 0)
-		return (perror("cd"), free(oldcwd), 1);
+		return (free(oldcwd),
+			write(2, "cd: HOME not set\n", 17), 1);
+	if (cd_to_absolute_root(path) < 0
+		|| cd_walk_path(path) < 0)
+		return (free(oldcwd), perror("cd"), 1);
 	newcwd = getcwd(NULL, 0);
-	if (!newcwd)
-		return (perror("getcwd"), free(oldcwd), 1);
+	if (!newcwd && oldcwd)
+		newcwd = build_path(oldcwd, path);
+	else if (!newcwd)
+		return (free(oldcwd), perror("getcwd"), 1);
 	env_set(env, "OLDPWD", oldcwd);
 	env_set(env, "PWD", newcwd);
-	return (free(oldcwd), free(newcwd), 0);
+	free(oldcwd);
+	free(newcwd);
+	return (0);
 }

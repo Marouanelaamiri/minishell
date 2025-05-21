@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:35:31 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:34:45 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_exit(t_cmd *cmd, t_env **env)
 {
-	t_token	*arg;
-	int		status;
+	t_token		*arg;
+	long long	status;
 
 	(void)env;
 	arg = cmd->args->next;
@@ -25,12 +25,12 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	if (!ft_isnum(arg->value))
 	{
 		print_error("minishell: exit: numeric argument required\n", arg->value);
-		exit(2);
+		exit(255);
 	}
 	if (arg->next)
 		return (print_error("minishell: exit: too many arguments\n",
 				arg->value), 1);
-	status = ft_atoi(arg->value);
-	status = (status % 256 + 256) % 256;
-	exit(status);
+	status = ft_atoll(arg->value);
+	status = (status % 256);
+	exit((unsigned char)status);
 }

@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 19:59:15 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 14:24:43 by malaamir         ###   ########.fr       */
+/*   Created: 2025/05/21 15:09:14 by malaamir          #+#    #+#             */
+/*   Updated: 2025/05/21 15:58:39 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-int	ft_pwd(t_cmd *cmd, t_env **env)
+char	*ft_strrchr(const char *s, int c)
 {
-	char	*cwd;
+	size_t	i;
+	char	ch;
+	char	*ret;
 
-	(void)cmd;
-	(void)env;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (perror("getcwd"), 1);
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
+	ch = (char) c;
+	i = 0;
+	ret = NULL;
+	while (s[i])
+	{
+		if (s[i] == ch)
+			ret = (char *) &s[i];
+		i++;
+	}
+	if (ch == '\0')
+		return ((char *) &s[i]);
+	else
+		return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:16:45 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:48:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ extern int g_exit_status;
 # include <dirent.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -139,12 +140,14 @@ int		ft_isalpha(int c);
 int 	ft_isdigit(int c);
 int 	ft_isnum(const char *str);
 char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strrchr(const char *s, int c);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
 int 	ft_update_exit_status(int status, int x);
 char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_isspace(char c);
+long long	ft_atoll(const char *str);
 
 // builtins
 int		ft_echo(t_cmd *cmd, t_env **env);
@@ -183,7 +186,7 @@ void	check_args(char **argv);
 void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid);
 void	handle_exec_errors(char **argv, char *path);
 pid_t	run_child_process(t_child_args *args);
-int	start_command(t_cmd *cmd, t_cmd_exec *exec, char **envp, t_env **env);
+int		start_command(t_cmd *cmd, t_cmd_exec *exec, char **envp, t_env **env);
 
 //exe
 int	execute_commands(t_cmd *cmd_list, t_env *env);
@@ -195,6 +198,7 @@ int		env_set(t_env **env , const char *name, const char *value);
 int		env_unset(t_env **env, const char *name);
 char	*ft_getenv(t_env *env_list, const char *name);
 void	update_shell_level(t_env **env);
+t_env	*handel_null_env(t_env	*head);
 
 // token
 t_token	*lst_new_token(t_type type, char *value);
@@ -208,7 +212,6 @@ int	ft_handle_pipe(t_data *data);
 int	ft_handle_redir(t_data *data, char *input);
 
 // expansion
-void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
 void	escape_from_dollars(t_token *t);
 void	starboy_expansion(t_token *t, t_env *env);
 void	starboy_quote_expansion(t_token *t, t_env *env);
@@ -218,18 +221,15 @@ void	starboy_expand_heredoc(char **line, t_env *env);
 void ft_signal_handler(void);
 
 // parsing
-
+void	nodes_join(t_token *tokens);
 int ft_syntax_check(t_token *tokens);
 int ft_check_quotes(char *input);
 int ft_valid_var(t_token *t);
 t_cmd *ft_parse_commands(t_token *tokens);
-char	*remove_quotes(char *str);
 char	*remove_squotes(char *str);
 void	remove_empty_tokens(t_token **tokens);
 void	clean_hidden_dollars(t_token *tokens);
 int	ambiguous_redirection(t_token *tokens);
 void field_split_tokens(t_token **tokens);
-void fix_heredoc_delimiters(t_token *tokens);
-
 
 # endif

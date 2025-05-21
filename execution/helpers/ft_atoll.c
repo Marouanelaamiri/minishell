@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 19:59:15 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 14:24:43 by malaamir         ###   ########.fr       */
+/*   Created: 2025/05/21 15:31:36 by malaamir          #+#    #+#             */
+/*   Updated: 2025/05/21 15:54:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-int	ft_pwd(t_cmd *cmd, t_env **env)
+long long	ft_atoll(const char *str)
 {
-	char	*cwd;
+	long long	result;
+	int			sign;
 
-	(void)cmd;
-	(void)env;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (perror("getcwd"), 1);
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
+	result = 0;
+	sign = 0;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '+' || *str == '-')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+		result = result * 10 + (*str++ - '0');
+	return (result * sign);
 }

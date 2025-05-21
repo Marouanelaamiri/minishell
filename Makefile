@@ -18,6 +18,8 @@ execution/helpers/ft_itoa.c \
 execution/helpers/ft_strstr.c \
 execution/helpers/ft_strlcat.c \
 execution/helpers/ft_split.c \
+execution/helpers/ft_strrchr.c \
+execution/helpers/ft_atoll.c \
 execution/ft_export.c \
 execution/ft_cd.c \
 execution/ft_echo.c \
@@ -34,6 +36,7 @@ execution/execution_utils4.c \
 execution/execution_utils5.c \
 execution/ft_export_utils.c \
 execution/env_utils.c \
+execution/env_utils2.c \
 execution/execution.c \
 execution/heredoc.c \
 execution/heredoc_utils.c \
