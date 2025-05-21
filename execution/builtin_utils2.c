@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:51:48 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/13 19:52:43 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:35:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	cd_handle_segment(char *segment, int *ret)
 		{
 			cwd = getcwd(NULL, 0);
 			if (cwd && ft_strcmp(cwd, "/") == 0)
-				return(free(cwd), 1);
+				return (free(cwd), 1);
 			free(cwd);
 			*ret = -1;
 			return (0);
@@ -38,6 +38,7 @@ static int	cd_handle_segment(char *segment, int *ret)
 	}
 	return (1);
 }
+
 int	cd_walk_path(const char *path)
 {
 	char	**segments;

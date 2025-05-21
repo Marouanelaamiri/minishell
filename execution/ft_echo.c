@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:58:23 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/13 20:00:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:33:20 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_echo(t_cmd *cmd, t_env **env)
+int	ft_echo(t_cmd *cmd, t_env **env)
 {
-	t_token *token = cmd->args->next;
-	int newline = 1;
+	t_token	*token;
+	int		newline;
 
+	token = cmd->args->next;
+	newline = 1;
 	(void)env;
-	if (token && token->type == WORD 
-			&& ft_strcmp(token->value, "-n") == 0)
+	if (token && token->type == WORD
+		&& ft_strcmp(token->value, "-n") == 0)
 	{
 		newline = 0;
 		token = token->next;

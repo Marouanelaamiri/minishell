@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:06:23 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/16 21:07:55 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:27:37 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	open_redirection(t_redir *redir, bool *process)
 	}
 	return (fd);
 }
+
 static void	apply_redirection(t_redir *redir, int fd)
 {
 	if (fd < 0)
@@ -46,6 +47,7 @@ static void	apply_redirection(t_redir *redir, int fd)
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
+
 void	setup_redirections(t_cmd *cmd)
 {
 	t_redir	*redir;
@@ -61,15 +63,16 @@ void	setup_redirections(t_cmd *cmd)
 		redir = redir->next;
 	}
 }
-int  count_cmds(t_cmd *cmd_list)
-{
-    int  n;
 
-    n = 0;
-    while (cmd_list)
-    {
-        n++;
-        cmd_list = cmd_list->next;
-    }
-    return (n);
+int	count_cmds(t_cmd *cmd_list)
+{
+	int	n;
+
+	n = 0;
+	while (cmd_list)
+	{
+		n++;
+		cmd_list = cmd_list->next;
+	}
+	return (n);
 }

@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 00:52:27 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 20:29:04 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/17 23:49:07 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	ft_process_quote(t_data *data, char *input, char quote)
 	int		start;
 	t_type	type;
 	char	*value;
+	t_token	*token;
 	
 	start = data->i;
 	data->i++;
@@ -37,7 +38,9 @@ static int	ft_process_quote(t_data *data, char *input, char quote)
 	else
 		type = DQUOTE;
 	value = ft_substr(input, start, data->i - start + 1);
-	lst_add_back_token(data, lst_new_token(type, value));
+	token = lst_new_token(type, value);
+	token->quoted = 1;
+	lst_add_back_token(data, token);
 	return (1);
 }
 

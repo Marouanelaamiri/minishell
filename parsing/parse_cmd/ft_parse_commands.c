@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:46:06 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/03 20:14:03 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/17 23:09:10 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_cmd	*ft_create_cmd(void)
 }
 
 // Adds a redirection to the command's redir list
-static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value)
+static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value, int quoted)
 {
 	t_redir *new = malloc(sizeof(t_redir));
 	if (!new || !value)
@@ -32,6 +32,7 @@ static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value)
 	new->type = type;
 	new->fd = -1;
 	new->value = value;
+	new->quoted = quoted;
 	new->next = NULL;
 
 	if (!cmd->redir)
@@ -69,7 +70,6 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 
 	while (tokens)
 	{
-		// Start a new command if needed
 		if (!current)
 		{
 			current = ft_create_cmd();
@@ -93,16 +93,19 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
 			|| tokens->type == HEREDOC || tokens->type == APPEND)
 		{
+			// print_tokens(tokens);
 			t_type redir_type = tokens->type;
 			tokens = tokens->next;
-
 			if (!tokens || !tokens->value)
 				return (NULL); // invalid syntax
-
+			if (tokens->type == SPCE) // skip spaces
+				tokens = tokens->next;
+			if (!tokens || !tokens->value)
+        		return NULL;
 			char *file = ft_strdup(tokens->value);
 			if (!file)
 				return (NULL);
-			ft_add_redir_to_cmd(current, redir_type, file);
+			ft_add_redir_to_cmd(current, redir_type, file, tokens->quoted);
 			tokens = tokens->next;
 			continue;
 		}
@@ -110,6 +113,11 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 		// Accept these token types as arguments
 		if (tokens->type == WORD)
 		{
+			if (!tokens->value)
+			{
+				tokens = tokens->next;
+				continue;
+			}
 			t_token *arg = malloc(sizeof(t_token));
 			if (!arg)
 				return (NULL);

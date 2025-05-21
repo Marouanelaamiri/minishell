@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/16 21:59:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:20:45 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,20 @@ static t_cmd *ft_process_input(char *input, t_env *env)
 {
     if (!ft_check_quotes(input))
     {
-        ft_update_exit_status(258);
+        ft_update_exit_status(258, 63);
         return NULL;
     }
 	ft_blinding_lights(input);
     t_token *tokens = ft_tokeniz(input);
     if (!tokens)
     {
-		ft_update_exit_status(258);
+		ft_update_exit_status(258, 63);
         return NULL;
     }
 	ft_after_hours(tokens);
     if (!ft_syntax_check(tokens))
     {
-        ft_update_exit_status(258);
+        ft_update_exit_status(258, 63);
         ft_free_tokens(tokens);
         return NULL;
     }
@@ -107,7 +107,7 @@ static void   handle_single_builtin(t_cmd *cmd, t_env **env) //
         dup2(saved_stdout, STDOUT_FILENO);
         close(saved_stdout);
     }
-    ft_update_exit_status(status);
+    ft_update_exit_status(status, 63);
 }
 
 static int  handle_one_line(t_env **env)
@@ -118,7 +118,7 @@ static int  handle_one_line(t_env **env)
     line = readline("minishell$ ");
     if (!line)
     {
-        ft_update_exit_status(0);
+        ft_update_exit_status(0, 63);
         printf("exit\n");
         return (clear_history(),0);
     }
@@ -128,12 +128,12 @@ static int  handle_one_line(t_env **env)
     free(line);
     if (!cmd)
         return (1);
-    if (preprocess_heredocs(cmd) != 0)
+    if (preprocess_heredocs(cmd, *env) != 0)
         return ((ft_free_cmds(cmd)), 1);
     if (!cmd->next && is_builtin(cmd))
         handle_single_builtin(cmd, env);
     else
-        ft_update_exit_status(execute_commands(cmd, *env));
+        ft_update_exit_status(execute_commands(cmd, *env), 63);
    return ((ft_free_cmds(cmd)), 1);
 }
 int  main(int argc, char **argv, char **envp)

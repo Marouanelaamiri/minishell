@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:53:17 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/03 15:54:55 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:43:00 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ t_token *ft_tokeniz(char *input)
 		return (NULL);
 	while (input[data.i])
 	{
-		while (input[data.i] && ft_isspace(input[data.i]))
-				data.i++;
+		if (input[data.i] == ' ' || input[data.i] == '\t')
+			data.i += ft_handle_space(&data, input);
 		if (input[data.i] == '|')
 			data.i += ft_handle_pipe(&data);
 		else if (input[data.i] == '>' || input[data.i] == '<')

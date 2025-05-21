@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 22:42:56 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/03 19:52:31 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/17 23:52:55 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static void	convert_exit_code(t_token *t)
 	if (!t->value[2])
 	{
 		free(t->value);
-		t->value = ft_itoa(ft_get_exit_status());
+		t->value = ft_itoa(ft_update_exit_status(0, 0));
 		return ;
 	}
 	else
 	{
-		exit_code = ft_itoa(ft_get_exit_status());
+		exit_code = ft_itoa(ft_update_exit_status(0, 0));
 		temp = ft_strdup(t->value + 2);
 		new_value = ft_strjoin(exit_code, temp);
 		free(exit_code);
@@ -79,6 +79,15 @@ void	starboy_expansion(t_token *t, t_env *env)
 	{
 		if (hmstr->type == VAR && hmstr->value && hmstr->value[0] == '$')
 		{
+			t_token *prev = hmstr->prev;
+			while (prev && prev->type == SPCE)
+				prev = prev->prev;
+		
+			if (prev && prev->type == HEREDOC)
+			{
+				hmstr = hmstr->next;
+				continue;
+			}
 			if (hmstr->value[1] == '?')
 				convert_exit_code(hmstr);
 			else if (ft_isdigit(hmstr->value[1]))
@@ -86,11 +95,13 @@ void	starboy_expansion(t_token *t, t_env *env)
 			else if (hmstr->value[1] != '\0')
 				expand_env_dollar(hmstr, env);
 		}
-		if (hmstr->type == VAR || hmstr->type == DQUOTE || hmstr->type == SQUOTE)
+		else if (hmstr->type == DQUOTE)
+			starboy_quote_expansion(hmstr, env);
+		else if (hmstr->type == SQUOTE)
+		{
 			hmstr->type = WORD;
-		// else if (hmstr->type == DQUOTE)
-		// 	starboy_quote_expansion(hmstr, env);
-		// implement the expansion double quotes
+			hmstr->value = remove_squotes(hmstr->value);
+		}
 		hmstr = hmstr->next;
 	}
 }

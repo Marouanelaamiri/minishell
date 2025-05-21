@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 22:23:19 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/06 20:23:09 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:23:28 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	str[j] = '\0';
 	return (str);
 }
-

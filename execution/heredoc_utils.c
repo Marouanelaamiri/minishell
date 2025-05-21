@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/16 22:12:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:32:01 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void heredoc_sigint_handler(int sig)
+void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
 	g_exit_status = 130;

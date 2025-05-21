@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/13 20:11:50 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:26:27 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ char	*ft_strjoin_path(const char *dir, const char *cmd)
 	free(tmp);
 	return (result);
 }
+
 static char	*check_direct_path(char *cmd)
 {
 	if (access(cmd, X_OK) == 0)

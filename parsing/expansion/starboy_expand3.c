@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   starboy_expand2.c                                  :+:      :+:    :+:   */
+/*   starboy_expand3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 17:48:29 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/17 23:54:55 by sojammal         ###   ########.fr       */
+/*   Created: 2025/05/16 19:02:56 by sojammal          #+#    #+#             */
+/*   Updated: 2025/05/17 22:09:26 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static int	find_question(char *str)
+static int	find_question_heredoc(char *str)
 {
 	int i = 0;
 	while (str && str[i])
@@ -23,8 +23,7 @@ static int	find_question(char *str)
 	}
 	return (-1);
 }
-
-static char	*replace_question(char *str, int index)
+static char	*replace_question_heredoc(char *str, int index)
 {
 	char	*new_str;
 	char	*exit_code;
@@ -45,8 +44,7 @@ static char	*replace_question(char *str, int index)
 	free(exit_code);
 	return (new_str);
 }
-
-static int	find_number(char *str)
+static int	find_number_heredoc(char *str)
 {
 	int i = 0;
 	while (str && str[i])
@@ -58,7 +56,7 @@ static int	find_number(char *str)
 	return (-1);
 }
 
-static char	*replace_number(char *str, int index)
+static char	*replace_number_heredoc(char *str, int index)
 {
 	char	*new_str;
 	char	*prefix;
@@ -74,7 +72,7 @@ static char	*replace_number(char *str, int index)
 	return (new_str); 
 }
 
-static	int	find_dollar(char *str)
+static	int	find_dollar_heredoc(char *str)
 {
 	int i = 0;
 	while (str && str[i])
@@ -86,7 +84,7 @@ static	int	find_dollar(char *str)
 	return (-1);
 }
 
-static char *get_variable(char *str, int index)
+static char *get_variable_heredoc(char *str, int index)
 {
 	int	h = index + 1;
 	int	m = 0;
@@ -96,7 +94,7 @@ static char *get_variable(char *str, int index)
 	return (ft_substr(str, h, m));
 }
 
-static char *get_value(t_env *env, char *key_val)
+static char *get_value_heredoc(t_env *env, char *key_val)
 {
 	while (env)
 	{
@@ -107,7 +105,7 @@ static char *get_value(t_env *env, char *key_val)
 	return (NULL);
 }
 
-static char	*replace_dollar(char *str, int index, t_env *env)
+static char	*replace_dollar_heredoc(char *str, int index, t_env *env)
 {
 	char	*new_str;
 	char	*prefix;
@@ -117,12 +115,12 @@ static char	*replace_dollar(char *str, int index, t_env *env)
 	char	*temp;
 	int		len;
 
-	key_val = get_variable(str, index);
+	key_val = get_variable_heredoc(str, index);
 	len = ft_strlen(key_val);
 
 	prefix = ft_substr(str, 0, index);
 	suffix = ft_strdup(&str[index + len + 1]);
-	val = get_value(env, key_val);
+	val = get_value_heredoc(env, key_val);
 	if (!val)
 		val = ft_strdup("");
 	else
@@ -136,83 +134,29 @@ static char	*replace_dollar(char *str, int index, t_env *env)
 	return (new_str);
 }
 
-static int	is_quote(char c)
-{
-	return (c == '"');
-}
-
-static int	count_non_quotes(const char *str)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (!is_quote(str[i]))
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-char	*remove_dquotes(char *str, int quoted)
-{
-	char	*new_str;
-	int		i;
-	int		j;
-	int		size;
-
-	if (!str)
-		return (NULL);
-	size = count_non_quotes(str);
-	new_str = malloc(size + 1);
-	if (!new_str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (!is_quote(str[i]))
-		{
-			new_str[j] = str[i];
-			j++;
-		}
-		i++;
-	}
-	new_str[j] = '\0';
-	quoted = 0;
-	return (new_str);
-}
-
-void	starboy_quote_expansion(t_token *t, t_env *env)
+void	starboy_expand_heredoc(char **line, t_env *env)
 {
 	int		x;
-	char *new_value;
-	
-	(void)env;
-	if (!t || !t->value)
+	char	*new_line;
+
+	if (!line || !*line)
 		return ;
-	while ((x = find_question(t->value)) != -1)
+	while ((x = find_question_heredoc(*line)) != -1)
 	{
-		new_value = replace_question(t->value, x);
-		free(t->value);
-		t->value = new_value;
+		new_line = replace_question_heredoc(*line, x);
+		free(*line);
+		*line = new_line;
 	}
-	while ((x = find_number(t->value)) != -1)
+		while ((x = find_number_heredoc(*line)) != -1)
 	{
-		new_value = replace_number(t->value, x);
-		free(t->value);
-		t->value = new_value;
+		new_line = replace_number_heredoc(*line, x);
+		free(*line);
+		*line = new_line;
 	}
-	while ((x = find_dollar(t->value)) != -1)
+	while ((x = find_dollar_heredoc(*line)) != -1)
 	{
-		new_value = replace_dollar(t->value, x, env);
-		free(t->value);
-		t->value = new_value;
+		new_line = replace_dollar_heredoc(*line, x, env);
+		free(*line);
+		*line = new_line;
 	}
-	t->value = remove_dquotes(t->value, t->quoted);
-	t->quoted = 1;
-	t->type = WORD;
 }

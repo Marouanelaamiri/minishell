@@ -6,13 +6,13 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:40:50 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 15:26:21 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/17 18:47:50 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static int	like_that(char c)
+int	like_that(char c)
 {
 	if (c == '<' || c == '>' || c == '|' || c == '\'' || c == '\"' || c == '$' || c == 32 || (c >= 9 && c <= 13) || c == '\n' || c == '\0')
 		return (0);
@@ -24,26 +24,10 @@ int	ft_handle_word(t_data *data, char *input)
 {
 	int		start;
 	char	*value;
-	char	quote;
-
+	
 	start = data->i;
 	while (input[data->i] && like_that(input[data->i]))
-	{
-		// If we encounter an '=', and next char is a quote, include the whole quoted string
-		if (input[data->i] == '=' &&
-			(input[data->i + 1] == '\'' || input[data->i + 1] == '\"'))
-		{
-			data->i++; // move past '='
-			quote = input[data->i]; // store quote char
-			data->i++; // move past quote
-			while (input[data->i] && input[data->i] != quote)
-				data->i++;
-			if (input[data->i] == quote)
-				data->i++; // move past closing quote
-			continue;
-		}
 		data->i++;
-	}
 
 	if (start == data->i)
 		return (0);
@@ -57,49 +41,3 @@ int	ft_handle_word(t_data *data, char *input)
 	lst_add_back_token(data, lst_new_token(WORD, value));
 	return (0);
 }
-
-
-// int	ft_handle_word(t_data *data, char *input)
-// {
-// 	int		start;
-// 	char	*value;
-
-// 	start = data->i;
-// 	printf("hana\n");
-// 	while (input[data->i] && like_that(input[data->i]))
-// 	{
-// 		// If we encounter an '=', we check for a quoted value
-// 		if (input[data->i] == '=')
-// 		{
-// 			data->i++;
-// 			if (input[data->i] == '\'' || input[data->i] == '\"')
-// 			{
-// 				char quote = input[data->i];
-// 				data->i++;
-// 				while (input[data->i] && input[data->i] != quote)
-// 					data->i++;
-// 				if (input[data->i] == quote)
-// 					data->i++;
-// 			}
-// 			continue;
-// 		}
-// 		data->i++;
-// 	}
-// 	// if (start == data->i)
-// 	// {
-// 	// 	data->error = 1;
-// 	// 	return (0);
-// 	// }
-// 	value = ft_substr(input, start, data->i - start);
-// 	if (!value)
-// 	{
-// 		data->error = 1;
-// 		return (0);
-// 	}
-// 	lst_add_back_token(data, lst_new_token(WORD, value));
-// 	return (0);
-// }
-
-
-
-

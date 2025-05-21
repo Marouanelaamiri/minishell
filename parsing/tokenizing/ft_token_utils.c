@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 00:36:01 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 18:19:28 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:42:08 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_token	*lst_new_token(t_type type, char *value)
 	
 	token->type = type;
 	token->value = value;
+	token->quoted = 0;
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);

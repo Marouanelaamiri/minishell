@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/16 22:05:06 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:16:45 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ extern int g_exit_status;
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
 
 // ENV
 typedef struct l_env
@@ -66,17 +67,19 @@ typedef struct s_token
 {
 	t_type		type;
 	char			*value;
+	int			quoted;
 	struct s_token	*next;
 	struct s_token	*prev;
 }			t_token;
 
 typedef struct s_redir
 {
-	t_type		type;
-	int			fd;
-	char			*value;
-	struct s_redir	*next;
-}			t_redir;
+    t_type        type; // REDIR_IN, REDIR_OUT, HEREDOC, APPEND
+    int            fd;
+    char            *value; // file name or delimiter
+    int            quoted;
+    struct s_redir    *next;
+}            t_redir;
 
 typedef struct s_cmd
 {
@@ -89,13 +92,23 @@ typedef struct s_data
 {
 	t_token		*token;
 	t_token		*last_token;
+	t_env		*env;
 	int			i;
 	int			error;
+	int			exit_status;
 }			t_data;
+
+typedef struct s_child_args
+{
+	t_cmd		*cmd;
+	int			input_fd;
+	int			*pipe_fds;
+	char		**envp;
+	t_env		**env;
+}	t_child_args;
 
 // debug
 void	print_tokens(t_token *token);
-void	ft_print_cmds(t_cmd *cmd);
 
 // memory management
 
@@ -110,7 +123,6 @@ void    free_envp(char **envp);
 // string manipulation
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
-
 
 // helpers
 int		ft_atoi(const char *str);
@@ -129,8 +141,7 @@ int 	ft_isnum(const char *str);
 char	*ft_strjoin(const char *s1, const char *s2);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_itoa(int n);
-void 	ft_update_exit_status(int status);
-int		ft_get_exit_status(void);
+int 	ft_update_exit_status(int status, int x);
 char	*ft_strstr(const char *haystack, const char *needle);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_isspace(char c);
@@ -156,7 +167,7 @@ void	print_env_array(t_env **arr);
 int		handle_one_export(const char *arg, t_env **env);
 int		apply_assign(char *copy, t_env **env);
 int		apply_append(char *copy, t_env **env);
-int		preprocess_heredocs(t_cmd *cmd_list);
+int		preprocess_heredocs(t_cmd *cmd_list, t_env *env);
 void	print_error(const char *cmd, const char *msg);
 
 // exe utils
@@ -164,10 +175,15 @@ void	setup_redirections(t_cmd *cmd);
 char	*find_executable(char *cmd, t_env *env);
 char	**token_to_av(t_token *token);
 char	**env_list_to_envp(t_env *env);
-int		heredoc_pipe(const char *delim);
+int		heredoc_pipe(const char *delim, t_env *env, int quoted);
 void	setup_signal(struct sigaction *sa_old);
 void	print_eof_warning(const char *delim);
-int	handle_line(char *line, const char *delim, int write_fd);
+int		handle_line(char *line, const char *delim, int write_fd);
+void	check_args(char **argv);
+void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid);
+void	handle_exec_errors(char **argv, char *path);
+pid_t	run_child_process(t_child_args *args);
+int	start_command(t_cmd *cmd, t_cmd_exec *exec, char **envp, t_env **env);
 
 //exe
 int	execute_commands(t_cmd *cmd_list, t_env *env);
@@ -195,6 +211,8 @@ int	ft_handle_redir(t_data *data, char *input);
 void ft_expand_cmds(t_cmd *cmd_list, t_env *env);
 void	escape_from_dollars(t_token *t);
 void	starboy_expansion(t_token *t, t_env *env);
+void	starboy_quote_expansion(t_token *t, t_env *env);
+void	starboy_expand_heredoc(char **line, t_env *env);
 
 // signale
 void ft_signal_handler(void);
@@ -205,6 +223,13 @@ int ft_syntax_check(t_token *tokens);
 int ft_check_quotes(char *input);
 int ft_valid_var(t_token *t);
 t_cmd *ft_parse_commands(t_token *tokens);
+char	*remove_quotes(char *str);
+char	*remove_squotes(char *str);
+void	remove_empty_tokens(t_token **tokens);
+void	clean_hidden_dollars(t_token *tokens);
+int	ambiguous_redirection(t_token *tokens);
+void field_split_tokens(t_token **tokens);
+void fix_heredoc_delimiters(t_token *tokens);
 
 
 # endif

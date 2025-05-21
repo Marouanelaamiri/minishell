@@ -6,26 +6,30 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/07 20:44:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:57:55 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_env *init_env(char **envp)
+t_env	*init_env(char **envp)
 {
-	t_env *head = NULL;
-	t_env *tail = NULL;
-	t_env *new_node;
-	int i = 0;
-	char *equal_sign;
+	t_env	*head;
+	t_env	*tail;
+	t_env	*new_node;
+	int		i;
+	char	*equal_sign;
 
+	head = NULL;
+	tail = NULL;
+	i = 0;
 	while (envp[i])
 	{
 		equal_sign = ft_strchr(envp[i], '=');
 		if (equal_sign)
 		{
-			if (!(new_node = malloc(sizeof *(new_node))))
+			new_node = malloc(sizeof *(new_node));
+			if (!new_node)
 				return (NULL);
 			new_node->name = ft_strndup(envp[i], equal_sign - envp[i]);
 			new_node->value = ft_strdup(equal_sign + 1);
@@ -40,11 +44,13 @@ t_env *init_env(char **envp)
 	}
 	return (head);
 }
-int env_set(t_env **env , const char *name, const char *value)
-{
-	t_env *current = *env;
-	t_env *node;
 
+int	env_set(t_env **env, const char *name, const char *value)
+{
+	t_env	*current;
+	t_env	*node;
+
+	current = *env;
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
@@ -62,7 +68,7 @@ int env_set(t_env **env , const char *name, const char *value)
 	if (!node)
 		return (1);
 	node->name = ft_strdup(name);
-	if(value)
+	if (value)
 		node->value = ft_strdup(value);
 	else
 		node->value = NULL;
@@ -70,11 +76,14 @@ int env_set(t_env **env , const char *name, const char *value)
 	*env = node;
 	return (0);
 }
-int env_unset(t_env **env, const char *name)
-{
-	t_env *current = *env;
-	t_env *prev = NULL;
 
+int	env_unset(t_env **env, const char *name)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	current = *env;
+	prev = NULL;
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
@@ -83,7 +92,6 @@ int env_unset(t_env **env, const char *name)
 				*env = current->next;
 			else
 				prev->next = current->next;
-
 			free(current->name);
 			free(current->value);
 			free(current);
@@ -94,11 +102,11 @@ int env_unset(t_env **env, const char *name)
 	}
 	return (1);
 }
-char *ft_getenv(t_env *env_list, const char *name)
+
+char	*ft_getenv(t_env *env_list, const char *name)
 {
 	if (!name || !*name)
 		return (NULL);
-	
 	while (env_list)
 	{
 		if (ft_strcmp(env_list->name, name) == 0)
@@ -107,12 +115,16 @@ char *ft_getenv(t_env *env_list, const char *name)
 	}
 	return (NULL);
 }
-void update_shell_level(t_env **env)
-{
-	char *lvl_str = ft_getenv(*env, "SHLVL");
-	int lvl = 0;
-	char *new_lvl = NULL;
 
+void	update_shell_level(t_env **env)
+{
+	char	*lvl_str;
+	int		lvl;
+	char	*new_lvl;
+
+	lvl_str = ft_getenv(*env, "SHLVL");
+	lvl = 0;
+	new_lvl = NULL;
 	if (lvl_str)
 		lvl = ft_atoi(lvl_str);
 	lvl++;
@@ -120,7 +132,6 @@ void update_shell_level(t_env **env)
 		lvl = 0;
 	else if (lvl > 999)
 		lvl = 1;
-
 	new_lvl = ft_itoa(lvl);
 	if (new_lvl)
 	{

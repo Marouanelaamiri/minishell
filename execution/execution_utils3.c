@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/16 21:07:50 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:30:03 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**env_list_to_envp(t_env *env)
 	size_t	i;
 
 	count = count_env_vars(env);
-	envp = malloc((count + 1) * sizeof *envp);
+	envp = malloc((count + 1) * (sizeof (*envp)));
 	if (!envp)
 		return (NULL);
 	i = 0;

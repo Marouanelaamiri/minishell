@@ -31,6 +31,7 @@ execution/execution_utils.c \
 execution/execution_utils2.c \
 execution/execution_utils3.c \
 execution/execution_utils4.c \
+execution/execution_utils5.c \
 execution/ft_export_utils.c \
 execution/env_utils.c \
 execution/execution.c \
@@ -50,23 +51,27 @@ parsing/parse_cmd/ft_parse_commands.c\
 parsing/syntax_checker/ft_syntax_check.c \
 parsing/syntax_checker/ft_valid_var.c \
 parsing/sig_handler/ft_signal_handler.c \
-parsing/expansion/ft_expand_cmds.c \
 parsing/expansion/escape_from_dollars.c \
 parsing/expansion/starboy_expand.c \
+parsing/expansion/starboy_expand2.c \
+parsing/expansion/starboy_expand3.c \
 parsing/debug_func/ft_debug.c \
 parsing/parsing_utils/ft_status.c \
+parsing/parsing_utils/ft_ambiguous.c \
+parsing/parsing_utils/filed.c \
 parsing/memory_management/ft_free.c \
 
 #------------------------------ Object Files ------------------------------------#
 OBJ = $(SRC:.c=.o)
 
 #------------------------------ Readline Paths ----------------------------------#
-# Use system-installed readline
-LDLIB = -lreadline -lhistory
+READLINE_INCLUDE = $(shell brew --prefix readline)/include
+READLINE_LIB = $(shell brew --prefix readline)/lib
+LDLIB = -L$(READLINE_LIB) -lreadline
 
 #------------------------------ Compiler and Flags ------------------------------#
-CC = cc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 #------------------------------ Executable --------------------------------------#
 NAME = minishell
@@ -88,7 +93,7 @@ $(NAME): $(OBJ)
 	@echo "\033[0m"
 
 %.o: %.c minishell.h
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
 	@echo "\033[1;34m🔹 Compiling: $< -> $@\033[0m"
 
 #------------------------------ Cleaning ----------------------------------------#

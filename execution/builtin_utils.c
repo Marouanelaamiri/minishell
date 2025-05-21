@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:20:41 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/13 19:58:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:44:17 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,33 +37,35 @@ int	is_builtin(t_cmd *cmd)
 	}
 	return (0);
 }
-int handle_builtins(t_cmd *cmd, t_env **env)
-{
-	int status;
-	status = 0;
 
-    if (!cmd || !cmd->args || !cmd->args->value)
-        return -1;
-    if (ft_strcmp(cmd->args->value, "echo") == 0)
+int	handle_builtins(t_cmd *cmd, t_env **env)
+{
+	int	status;
+
+	status = 0;
+	if (!cmd || !cmd->args || !cmd->args->value)
+		return (-1);
+	if (ft_strcmp(cmd->args->value, "echo") == 0)
 		status = ft_echo(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "cd") == 0)
+	else if (ft_strcmp(cmd->args->value, "cd") == 0)
 		status = ft_cd(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "pwd") == 0)
+	else if (ft_strcmp(cmd->args->value, "pwd") == 0)
 		status = ft_pwd(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "env") == 0)
+	else if (ft_strcmp(cmd->args->value, "env") == 0)
 		status = ft_env(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "export") == 0)
+	else if (ft_strcmp(cmd->args->value, "export") == 0)
 		status = ft_export(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "unset") == 0)
+	else if (ft_strcmp(cmd->args->value, "unset") == 0)
 		status = ft_unset(cmd, env);
-    else if (ft_strcmp(cmd->args->value, "exit") == 0)
+	else if (ft_strcmp(cmd->args->value, "exit") == 0)
 		status = ft_exit(cmd, env);
-	else	
-    	return -1;
-	ft_update_exit_status(status);
+	else
+		return (-1);
+	ft_update_exit_status(status, 63);
 	return (status);
 }
-int is_valid_id(const char *str)
+
+int	is_valid_id(const char *str)
 {
 	if (!str || !*str)
 		return (0);
@@ -77,6 +79,7 @@ int is_valid_id(const char *str)
 	}
 	return (1);
 }
+
 void	print_error(const char *cmd, const char *msg)
 {
 	write(2, "minishell: ", 11);

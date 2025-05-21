@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:24:43 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/02 17:13:49 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:39:09 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,23 @@ static int	ft_is_redir(t_type type)
 
 static int	ft_valid_pipe(t_token *t)
 {
-	// Invalid if pipe is at start or end
+	// pipe at beginning or end
 	if (!t->prev || !t->next)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return (0);
 	}
 
-	if (!t->prev || !t->next || t->prev->type == PIPE || t->next->type == PIPE)
+	// skip space before and after
+	t_token *prev = t->prev;
+	while (prev && prev->type == SPCE)
+		prev = prev->prev;
+
+	t_token *next = t->next;
+	while (next && next->type == SPCE)
+		next = next->next;
+
+	if (!prev || !next || prev->type == PIPE || ft_is_redir(prev->type) || next->type == PIPE)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return (0);
@@ -36,13 +45,17 @@ static int	ft_valid_pipe(t_token *t)
 
 static int	ft_valid_redir(t_token *t)
 {
-	// Redirection must be followed by a word-type token (non-null)
 	t_token *next = t->next;
+	while (next && next->type == SPCE)
+		next = next->next;
 
 	if (!next || next->type == PIPE || ft_is_redir(next->type))
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-		ft_putstr_fd(t->value, 2);
+		if (next && next->value)
+			ft_putstr_fd(next->value, 2);
+		else
+			ft_putstr_fd("newline", 2);
 		ft_putstr_fd("'\n", 2);
 		return (0);
 	}
@@ -51,6 +64,8 @@ static int	ft_valid_redir(t_token *t)
 
 static int	ft_valid_word(char *value)
 {
+	if (!value)
+		return (1);
 	while (*value)
 	{
 		if (*value == '&' || *value == '(' || *value == ')')
@@ -67,8 +82,7 @@ static int	ft_valid_word(char *value)
 
 int	ft_syntax_check(t_token *tokens)
 {
-	t_token	*curr = tokens;
-
+	t_token *curr = tokens;
 	while (curr)
 	{
 		if (curr->type == PIPE && !ft_valid_pipe(curr))
@@ -111,7 +125,9 @@ int	ft_syntax_check(t_token *tokens)
 // 		|| (t->next->type == SPCE && ft_is_redir(t->next->next->type))
 // 		|| (t->next->type == SPCE && t->next->next != NULL && t->next->next->type == PIPE))
 // 	{
-// 		ft_putstr_fd("minishell: syntax error near unexpected token `'\n", 2);
+// 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+// 		ft_putstr_fd(t->value, 2);
+// 		ft_putstr_fd("'\n", 2);
 // 		return (0);
 // 	}
 // 	return (1);
