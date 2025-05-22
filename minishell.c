@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/21 13:59:08 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:10:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void ft_blinding_lights(char *input)
             n++;
     }
 }
+
 static void ft_after_hours(t_token *t)
 {
     t_token *current = t;
@@ -101,22 +102,25 @@ void	nodes_join_part2(t_token *tokens)
 	}
 }
 
-void delim_of_heredoc(t_token *tokens)
+void	delim_of_heredoc(t_token *tokens)
 {
-    t_token *current = tokens;
+	t_token	*current;
 
-    while (current)
-    {
-        if (current->type == VAR && current->value && current->value[1] == '\0'
-            && current->next && (current->next->type == DQUOTE || current->next->type == SQUOTE))
-        {
-            free(current->value);
-            current->value = ft_strdup("");
-            if (!current->value)
-                return;
-        }
-        current = current->next;
-    }
+	current = token;
+	while (current)
+	{
+		if (current->type == VAR && current->value &&
+			current->value[1] == '\0' && current->next &&
+			(current->next->type == DQUOTE ||
+			current->next->type == SQUOTE))
+		{
+			free(current->value);
+			current->value = ft_strdup("");
+			if (!current->value)
+				return ;
+		}
+		current = current->next;
+	}
 }
 
 static t_cmd *ft_process_input(char *input, t_env *env)
@@ -164,24 +168,26 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     ft_free_tokens(tokens);
     return cmd_list;
 }
-static void   handle_single_builtin(t_cmd *cmd, t_env **env) //
-{
-    int saved_stdout;
-    int status = 0;
 
-    saved_stdout = -1;
-    if (cmd->redir)
-    {
-        saved_stdout = dup(STDOUT_FILENO);
-        setup_redirections(cmd);
-    }
-    status = handle_builtins(cmd, env);
-    if (cmd->redir && saved_stdout != -1)
-    {
-        dup2(saved_stdout, STDOUT_FILENO);
-        close(saved_stdout);
-    }
-    ft_update_exit_status(status, 63);
+static void	handle_single_builtin(t_cmd *cmd, t_env **env)
+{
+	int	saved_stdout;
+	int	status;
+
+	status = 0;
+	saved_stdout = -1;
+	if (cmd->redir)
+	{
+		saved_stdout = dup(STDOUT_FILENO);
+		setup_redirections(cmd);
+	}
+	status = handle_builtins(cmd, env);
+	if (cmd->redir && saved_stdout != -1)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+	ft_update_exit_status(status, 63);
 }
 
 static int  handle_one_line(t_env **env)
