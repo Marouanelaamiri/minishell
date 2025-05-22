@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 10:21:23 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:40:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ extern int g_exit_status;
 // ENV
 typedef struct l_env
 {
-	char			*value; // "PATH"
-	char			*name; // "/usr/bin:/bin"
+	char			*value;
+	char			*name;
 	struct l_env	*next;
 }			t_env;
+
 // Exexute cmds
 typedef struct s_cmd_exec
 {
@@ -73,22 +74,6 @@ typedef struct s_token
 	struct s_token	*prev;
 }			t_token;
 
-typedef struct s_redir
-{
-    t_type        type; // REDIR_IN, REDIR_OUT, HEREDOC, APPEND
-    int            fd;
-    char            *value; // file name or delimiter
-    int            quoted;
-    struct s_redir    *next;
-}            t_redir;
-
-typedef struct s_cmd
-{
-	t_token *args;
-	t_redir *redir;
-	struct s_cmd *next;
-}			t_cmd;
-
 typedef struct s_data
 {
 	t_token		*token;
@@ -99,6 +84,28 @@ typedef struct s_data
 	int			exit_status;
 }			t_data;
 
+// REDIRECTIONS
+
+typedef struct s_redir
+{
+    t_type			type;
+    int				fd;
+    char			*value;
+    int				quoted;
+    struct s_redir	*next;
+}            t_redir;
+
+// COMMANDS
+
+typedef struct s_cmd
+{
+	t_token			*args;
+	t_redir			*redir;
+	struct s_cmd	*next;
+}			t_cmd;
+
+// PROCESS
+
 typedef struct s_child_args
 {
 	t_cmd		*cmd;
@@ -106,17 +113,42 @@ typedef struct s_child_args
 	int			*pipe_fds;
 	char		**envp;
 	t_env		**env;
-}	t_child_args;
+}			t_child_args;
+
+// HEREDOC
 
 typedef struct s_heredoc
 {
 	const char		*delim;
 	t_env			*env;
 	int				quoted;
-}	t_heredoc;
+}			t_heredoc;
 
-// debug
-void	print_tokens(t_token *token);
+// SHARED // 
+
+// helpers
+int			ft_atoi(const char *str);
+char		*ft_strchr(const char *s, int c);
+int			ft_strcmp(const char *s1, const char *s2);
+char		*ft_strdup(const char *s1);
+size_t		ft_strlen(const char *s);
+char		**ft_split(char const *s, char c);
+char		*ft_strndup(const char *src, size_t n);
+char		*ft_substr(const char *s, unsigned int start, size_t len);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
+int			ft_isalnum(int c);
+int			ft_isalpha(int c);
+int 		ft_isdigit(int c);
+int 		ft_isllnum(const char *str);
+char		*ft_strjoin(const char *s1, const char *s2);
+char		*ft_strrchr(const char *s, int c);
+void		*ft_calloc(size_t count, size_t size);
+char		*ft_itoa(int n);
+int 		ft_update_exit_status(int status, int x);
+char		*ft_strstr(const char *haystack, const char *needle);
+size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
+int			ft_isspace(char c);
+long long	ft_atoll(const char *str);
 
 // memory management
 
@@ -128,33 +160,7 @@ void	free_argv(char **av);
 void	free_split(char **arr);
 void    free_envp(char **envp);
 
-// string manipulation
-void	ft_putchar_fd(char c, int fd);
-void	ft_putstr_fd(char *s, int fd);
-
-// helpers
-int		ft_atoi(const char *str);
-char	*ft_strchr(const char *s, int c);
-int		ft_strcmp(const char *s1, const char *s2);
-char	*ft_strdup(const char *s1);
-size_t	ft_strlen(const char *s);
-char	**ft_split(char const *s, char c);
-char	*ft_strndup(const char *src, size_t n);
-char	*ft_substr(const char *s, unsigned int start, size_t len);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-int		ft_isalnum(int c);
-int		ft_isalpha(int c);
-int 	ft_isdigit(int c);
-int 	ft_isllnum(const char *str);
-char	*ft_strjoin(const char *s1, const char *s2);
-char	*ft_strrchr(const char *s, int c);
-void	*ft_calloc(size_t count, size_t size);
-char	*ft_itoa(int n);
-int 	ft_update_exit_status(int status, int x);
-char	*ft_strstr(const char *haystack, const char *needle);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-int		ft_isspace(char c);
-long long	ft_atoll(const char *str);
+// EXECUTION PART //
 
 // builtins
 int		ft_echo(t_cmd *cmd, t_env **env);
@@ -207,9 +213,12 @@ char	*ft_getenv(t_env *env_list, const char *name);
 void	update_shell_level(t_env **env);
 t_env	*handel_null_env(t_env	*head);
 t_env	*append_env_node(t_env *head, t_env **tail, char *env);
-int	update_existing_env(t_env *env, const char *name, const char *value);
+int		update_existing_env(t_env *env, const char *name, const char *value);
+
+// PARSING PART //
 
 // token
+
 t_token	*lst_new_token(t_type type, char *value);
 t_token *ft_tokeniz(char *input);
 void	lst_add_back_token(t_data *data, t_token *new);
@@ -240,5 +249,12 @@ void	remove_empty_tokens(t_token **tokens);
 void	clean_hidden_dollars(t_token *tokens);
 int	ambiguous_redirection(t_token *tokens);
 void field_split_tokens(t_token **tokens);
+
+// debug
+void	print_tokens(t_token *token);
+
+// string manipulation
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
 
 # endif
