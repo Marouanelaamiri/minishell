@@ -1,0 +1,29 @@
+total 552
+drwxr-xr-x  13 malaamir  2024_khouribga     442 May 22 11:24 .
+drwxr-xr-x   8 malaamir  2024_khouribga     272 May 21 17:47 ..
+-rw-r--r--@  1 malaamir  2024_khouribga    6148 May 21 13:43 .DS_Store
+drwxr-xr-x  15 malaamir  2024_khouribga     510 May 22 11:11 .git
+-rw-r--r--   1 malaamir  2024_khouribga      31 May  1 19:37 .gitignore
+drwxr-xr-x   3 malaamir  2024_khouribga     102 May 22 10:53 .vscode
+-rw-r--r--   1 malaamir  2024_khouribga    4691 May 22 11:19 Makefile
+drwxr-xr-x@ 24 malaamir  2024_khouribga     816 May 22 11:23 execution
+-rwxr-xr-x   1 malaamir  2024_khouribga  249664 May 22 11:23 minishell
+-rw-r--r--   1 malaamir  2024_khouribga    3940 May 22 11:18 minishell.c
+-rw-r--r--@  1 malaamir  2024_khouribga    7149 May 22 11:18 minishell.h
+-rw-r--r--   1 malaamir  2024_khouribga       0 May 22 11:24 outfile.txt
+drwxrwxr-x@ 11 malaamir  2024_khouribga     374 May 13 20:46 parsing
+total 560
+drwxr-xr-x  13 malaamir  2024_khouribga     442 May 22 11:24 .
+drwxr-xr-x   8 malaamir  2024_khouribga     272 May 21 17:47 ..
+-rw-r--r--@  1 malaamir  2024_khouribga    6148 May 21 13:43 .DS_Store
+drwxr-xr-x  15 malaamir  2024_khouribga     510 May 22 11:11 .git
+-rw-r--r--   1 malaamir  2024_khouribga      31 May  1 19:37 .gitignore
+drwxr-xr-x   3 malaamir  2024_khouribga     102 May 22 10:53 .vscode
+-rw-r--r--   1 malaamir  2024_khouribga    4691 May 22 11:19 Makefile
+drwxr-xr-x@ 24 malaamir  2024_khouribga     816 May 22 11:23 execution
+-rwxr-xr-x   1 malaamir  2024_khouribga  249664 May 22 11:23 minishell
+-rw-r--r--   1 malaamir  2024_khouribga    3940 May 22 11:18 minishell.c
+-rw-r--r--@  1 malaamir  2024_khouribga    7149 May 22 11:18 minishell.h
+-rw-r--r--   1 malaamir  2024_khouribga     915 May 22 11:24 outfile.txt
+drwxrwxr-x@ 11 malaamir  2024_khouribga     374 May 13 20:46 parsing
+malaamir

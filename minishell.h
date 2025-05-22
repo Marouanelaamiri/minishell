@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 11:03:40 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:18:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,12 @@ t_env		*append_env_node(t_env *head, t_env **tail, char *env);
 int			update_existing_env(t_env *env, const char *name,
 				const char *value);
 
+// main handsling
+
+void		handle_single_builtin(t_cmd *cmd, t_env **env);
+int			handle_one_line(t_env **env);
+void		delim_of_heredoc(t_token *tokens);
+
 // PARSING PART //
 
 // token
@@ -258,7 +264,7 @@ void	remove_empty_tokens(t_token **tokens);
 void	clean_hidden_dollars(t_token *tokens);
 int	ambiguous_redirection(t_token *tokens);
 void field_split_tokens(t_token **tokens);
-
+t_cmd *ft_process_input(char *input, t_env *env);
 // debug
 void	print_tokens(t_token *token);
 

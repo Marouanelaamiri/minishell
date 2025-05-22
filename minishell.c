@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/22 11:10:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:18:40 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,28 +102,7 @@ void	nodes_join_part2(t_token *tokens)
 	}
 }
 
-void	delim_of_heredoc(t_token *tokens)
-{
-	t_token	*current;
-
-	current = token;
-	while (current)
-	{
-		if (current->type == VAR && current->value &&
-			current->value[1] == '\0' && current->next &&
-			(current->next->type == DQUOTE ||
-			current->next->type == SQUOTE))
-		{
-			free(current->value);
-			current->value = ft_strdup("");
-			if (!current->value)
-				return ;
-		}
-		current = current->next;
-	}
-}
-
-static t_cmd *ft_process_input(char *input, t_env *env)
+t_cmd *ft_process_input(char *input, t_env *env)
 {
     if (!ft_check_quotes(input))
     {
@@ -169,53 +148,6 @@ static t_cmd *ft_process_input(char *input, t_env *env)
     return cmd_list;
 }
 
-static void	handle_single_builtin(t_cmd *cmd, t_env **env)
-{
-	int	saved_stdout;
-	int	status;
-
-	status = 0;
-	saved_stdout = -1;
-	if (cmd->redir)
-	{
-		saved_stdout = dup(STDOUT_FILENO);
-		setup_redirections(cmd);
-	}
-	status = handle_builtins(cmd, env);
-	if (cmd->redir && saved_stdout != -1)
-	{
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdout);
-	}
-	ft_update_exit_status(status, 63);
-}
-
-static int  handle_one_line(t_env **env)
-{
-    char  *line;
-    t_cmd *cmd;
-
-    line = readline("minishell$ ");
-    if (!line)
-    {
-        ft_update_exit_status(0, 63);
-        printf("exit\n");
-        return (clear_history(),0);
-    }
-    if (*line)
-        add_history(line);
-    cmd = ft_process_input(line, *env);
-    free(line);
-    if (!cmd)
-        return (1);
-    if (preprocess_heredocs(cmd, *env) != 0)
-        return ((ft_free_cmds(cmd)), 1);
-    if (!cmd->next && is_builtin(cmd))
-        handle_single_builtin(cmd, env);
-    else
-        ft_update_exit_status(execute_commands(cmd, *env), 63);
-   return ((ft_free_cmds(cmd)), 1);
-}
 int  main(int argc, char **argv, char **envp)
 {
     // atexit(on_exit1);

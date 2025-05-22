@@ -40,6 +40,7 @@ execution/env_utils2.c \
 execution/execution.c \
 execution/heredoc.c \
 execution/heredoc_utils.c \
+execution/main_handler.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/tokenizing/ft_token_word.c \
 parsing/tokenizing/ft_token_var.c \
