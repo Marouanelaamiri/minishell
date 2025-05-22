@@ -6,14 +6,11 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:37:15 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 18:07:55 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:31:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-#include <limits.h>
-#include <limits.h>
 
 int	ft_isdigit(int c)
 {
@@ -34,7 +31,7 @@ static int	get_sign(const char **str)
 	return (sign);
 }
 
-static int	is_valid_digit_seq(const char *str, int *length)
+static int	is_valid_digit(const char *str, int *length)
 {
 	int	count;
 
@@ -88,7 +85,7 @@ int	ft_isllnum(const char *str)
 		p++;
 	sign = get_sign(&p);
 	digits_start = p;
-	if (!is_valid_digit_seq(p, &digit_count))
+	if (!is_valid_digit(p, &digit_count))
 		return (0);
 	p += digit_count;
 	if (!is_within_llimit(digits_start, digit_count, sign))
