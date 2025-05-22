@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 11:23:45 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:27:14 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void	handle_single_builtin(t_cmd *cmd, t_env **env)
 
 int	handle_one_line(t_env **env)
 {
-    char	*line;
-    t_cmd	*cmd;
+	char	*line;
+	t_cmd	*cmd;
 
 	line = readline("minishell$ ");
 	if (!line)
 	{
 		ft_update_exit_status(0, 63);
 		printf("exit\n");
-		return (clear_history(),0);
+		return (clear_history(), 0);
 	}
 	if (*line)
 		add_history(line);
@@ -67,10 +67,10 @@ void	delim_of_heredoc(t_token *tokens)
 	current = tokens;
 	while (current)
 	{
-		if (current->type == VAR && current->value &&
-			current->value[1] == '\0' && current->next &&
-			(current->next->type == DQUOTE ||
-			current->next->type == SQUOTE))
+		if (current->type == VAR && current->value
+			&& current->value[1] == '\0' && current->next
+			&& (current->next->type == DQUOTE
+				|| current->next->type == SQUOTE))
 		{
 			free(current->value);
 			current->value = ft_strdup("");
