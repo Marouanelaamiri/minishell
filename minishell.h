@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:38:55 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:21:23 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,8 @@ int		env_unset(t_env **env, const char *name);
 char	*ft_getenv(t_env *env_list, const char *name);
 void	update_shell_level(t_env **env);
 t_env	*handel_null_env(t_env	*head);
+t_env	*append_env_node(t_env *head, t_env **tail, char *env);
+int	update_existing_env(t_env *env, const char *name, const char *value);
 
 // token
 t_token	*lst_new_token(t_type type, char *value);

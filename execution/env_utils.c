@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 15:48:35 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:21:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ t_env	*init_env(char **envp)
 {
 	t_env	*head;
 	t_env	*tail;
-	t_env	*new_node;
 	int		i;
-	char	*equal_sign;
 
 	head = NULL;
 	tail = NULL;
@@ -29,21 +27,9 @@ t_env	*init_env(char **envp)
 	{
 		while (envp[i])
 		{
-			equal_sign = ft_strchr(envp[i], '=');
-			if (equal_sign)
-			{
-				new_node = malloc(sizeof *(new_node));
-				if (!new_node)
-					return (NULL);
-				new_node->name = ft_strndup(envp[i], equal_sign - envp[i]);
-				new_node->value = ft_strdup(equal_sign + 1);
-				new_node->next = NULL;
-				if (!head)
-					head = new_node;
-				else
-					tail->next = new_node;
-				tail = new_node;
-			}
+			head = append_env_node(head, &tail, envp[i]);
+			if (!head)
+				return (NULL);
 			i++;
 		}
 	}
@@ -52,23 +38,10 @@ t_env	*init_env(char **envp)
 
 int	env_set(t_env **env, const char *name, const char *value)
 {
-	t_env	*current;
 	t_env	*node;
 
-	current = *env;
-	while (current)
-	{
-		if (ft_strcmp(current->name, name) == 0)
-		{
-			free(current->value);
-			if (value)
-				current->value = ft_strdup(value);
-			else
-				current->value = NULL;
-			return (0);
-		}
-		current = current->next;
-	}
+	if (update_existing_env(*env, name, value) == 0)
+		return (0);
 	node = malloc(sizeof *(node));
 	if (!node)
 		return (1);

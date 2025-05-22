@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:42:40 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:29:51 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,24 @@ int	handle_one_export(const char *arg, t_env **env)
 	return (err);
 }
 
+static int	process_assignment(char *copy, char *eq, t_env **env)
+{
+	char	*name;
+	char	*value;
+
+	name = ft_strndup(copy, eq - copy);
+	value = ft_strdup(eq + 1);
+	if (!name || !value)
+		return (free(name), free(value), 1);
+	if (!is_valid_id(name))
+	{
+		print_error(name, "not a valid identifier");
+		return (free(name), free(value), 1);
+	}
+	env_set(env, name, value);
+	return (free(name), free(value), 0);
+}
+
 int	apply_assign(char *copy, t_env **env)
 {
 	char	*eq;
@@ -57,19 +75,7 @@ int	apply_assign(char *copy, t_env **env)
 	name = NULL;
 	value = NULL;
 	if (eq)
-	{
-		name = ft_strndup(copy, eq - copy);
-		value = ft_strdup(eq + 1);
-		if (!name || !value)
-			return (free(name), free(value), 1);
-		if (!is_valid_id(name))
-		{
-			print_error(name, "not a valid identifier");
-			return (free(name), free(value), 1);
-		}
-		env_set(env, name, value);
-		return (free(name), free(value), 0);
-	}
+		return (process_assignment(copy, eq, env));
 	else
 	{
 		name = ft_strdup(copy);
@@ -102,10 +108,8 @@ int	apply_append(char *copy, t_env **env)
 	if (!name || !value)
 		return (free(name), free(value), 1);
 	if (!is_valid_id(name))
-	{
-		print_error(name, "not a valid identifier");
-		return (free(name), free(value), 1);
-	}
+		return ((print_error(name, "not a valid identifier"),
+				free(name), free(value), 1));
 	old = ft_getenv(*env, name);
 	if (!old)
 		old = "";
