@@ -6,20 +6,20 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:03 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:25:06 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:18:13 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*get_target_path(t_token *tok, t_env **env)
+static char	*get_path(t_token *tok, t_env **env)
 {
 	if (tok && tok->type == WORD)
 		return (tok->value);
 	return (ft_getenv(*env, "HOME"));
 }
 
-static int	cd_to_absolute_root(char *path)
+static int	cd_to_root(char *path)
 {
 	if (path[0] == '/')
 	{
@@ -34,23 +34,23 @@ static int	cd_to_absolute_root(char *path)
 
 static void	update_path(char **newcwd, char *component)
 {
-	char	*slash;
-	char	*temp;
+	char	*delim;
+	char	*tmp;
 
 	if (ft_strcmp(component, "..") == 0)
 	{
-		slash = ft_strrchr(*newcwd, '/');
-		if (slash && slash != *newcwd)
-			*slash = '\0';
+		delim = ft_strrchr(*newcwd, '/');
+		if (delim && delim != *newcwd)
+			*delim = '\0';
 		else
 			(*newcwd)[1] = '\0';
 	}
 	else if (ft_strcmp(component, ".") != 0)
 	{
-		temp = ft_strjoin(*newcwd, "/");
+		tmp = ft_strjoin(*newcwd, "/");
 		free(*newcwd);
-		*newcwd = ft_strjoin(temp, component);
-		free(temp);
+		*newcwd = ft_strjoin(tmp, component);
+		free(tmp);
 	}
 }
 
@@ -80,11 +80,11 @@ int	ft_cd(t_cmd *cmd, t_env **env)
 
 	tok = cmd->args->next;
 	oldcwd = getcwd(NULL, 0);
-	path = get_target_path(tok, env);
+	path = get_path(tok, env);
 	if (!path)
 		return (free(oldcwd),
 			write(2, "cd: HOME not set\n", 17), 1);
-	if (cd_to_absolute_root(path) < 0
+	if (cd_to_root(path) < 0
 		|| cd_walk_path(path) < 0)
 		return (free(oldcwd), perror("cd"), 1);
 	newcwd = getcwd(NULL, 0);

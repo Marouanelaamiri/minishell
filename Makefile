@@ -1,7 +1,6 @@
 #------------------------------ Source Files ------------------------------------#
 SRC = minishell.c\
 execution/helpers/ft_strcmp.c \
-execution/helpers/is_num.c \
 execution/helpers/ft_substr.c \
 execution/helpers/ft_atoi.c \
 execution/helpers/ft_strchr.c \
