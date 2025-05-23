@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:44:50 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:23:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,10 @@ void	setup_signal(struct sigaction *sa_old)
 	sigaction(SIGINT, &sa_new, sa_old);
 }
 
-void	print_eof_warning(const char *delim)
-{
-	write(2,
-		"minishell: warning: here-document delimited by end-of-file \
-(wanted `", 69);
-	write(2, delim, ft_strlen(delim));
-	write(2, "`)\n", 3);
-}
-
 int	handle_line(char *line, const char *delim, int write_fd)
 {
 	if (!line)
-	{
-		print_eof_warning(delim);
 		return (0);
-	}
 	if (ft_strcmp(line, delim) == 0)
 	{
 		free(line);

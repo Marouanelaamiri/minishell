@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:41:17 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:49:27 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:15:07 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ void	print_env_array(t_env **arr)
 	i = 0;
 	while (arr[i])
 	{
+		if (ft_strcmp(arr[i]->name, "_") == 0)
+		{
+			i++;
+			continue ;
+		}
 		if (arr[i]->value)
 			printf("declare -x %s=\"%s\"\n", arr[i]->name, arr[i]->value);
 		else

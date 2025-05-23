@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:03 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 13:18:13 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:52:34 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	update_path(char **newcwd, char *component)
 	}
 }
 
-static char	*build_path(char *oldcwd, char *path)
+char	*build_path(char *oldcwd, char *path)
 {
 	char	*newcwd;
 	char	**components;
@@ -85,7 +85,7 @@ int	ft_cd(t_cmd *cmd, t_env **env)
 		return (free(oldcwd),
 			write(2, "cd: HOME not set\n", 17), 1);
 	if (cd_to_root(path) < 0
-		|| cd_walk_path(path) < 0)
+		|| cd_walk_path(path, env) < 0)
 		return (free(oldcwd), perror("cd"), 1);
 	newcwd = getcwd(NULL, 0);
 	if (!newcwd && oldcwd)

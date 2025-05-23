@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:18:14 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:57:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	handle_exec_errors(char **argv, char *path)
 {
 	if (!path)
 	{
-		print_error(argv[0], "command not found");
+		write(2, "minishell: ", 12);
+		perror(*argv);
 		free_argv(argv);
 		exit(127);
 	}

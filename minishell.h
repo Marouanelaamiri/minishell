@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 11:18:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:51:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -151,6 +152,7 @@ char		*ft_strstr(const char *haystack, const char *needle);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 int			ft_isspace(char c);
 long long	ft_atoll(const char *str);
+size_t		count_tokens(t_token *token);
 
 // memory management
 
@@ -176,7 +178,7 @@ int			ft_exit(t_cmd *cmd, t_env **env);
 int			is_builtin(t_cmd *cmd);
 int			handle_builtins(t_cmd *cmd, t_env **env);
 int			is_valid_id(const char *str);
-int			cd_walk_path(const char *path);
+int			cd_walk_path(const char *path, t_env **env);
 void		sort_env_array(t_env **arr);
 
 // builtin utils
@@ -220,6 +222,7 @@ int			env_unset(t_env **env, const char *name);
 char		*ft_getenv(t_env *env_list, const char *name);
 void		update_shell_level(t_env **env);
 t_env		*handel_null_env(t_env	*head);
+char		*build_path(char *oldcwd, char *path);
 t_env		*append_env_node(t_env *head, t_env **tail, char *env);
 int			update_existing_env(t_env *env, const char *name,
 				const char *value);

@@ -6,11 +6,48 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:31 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:51:59 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 14:13:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	print_invalid_id_error(const char *value)
+{
+	write(2, "minishell: ", 12);
+	write(2, "unset :`", 9);
+	write(2, value, ft_strlen(value));
+	write(2, "': not a valid identifier\n", 27);
+}
+
+static int	count_words(t_token *token)
+{
+	int		count;
+
+	count = 0;
+	while (token)
+	{
+		if (token->type == WORD)
+			count++;
+		token = token->next;
+	}
+	return (count);
+}
+
+static void	process_unset_token(t_token *token, t_env **env,
+	t_cmd *cmd, int *status)
+{
+	if (ft_strcmp(token->value, "_") == 0
+		&& count_words(cmd->args->next) == 1)
+		return ;
+	if (!is_valid_id(token->value))
+	{
+		print_invalid_id_error(token->value);
+		*status = 1;
+	}
+	else
+		env_unset(env, token->value);
+}
 
 int	ft_unset(t_cmd *cmd, t_env **env)
 {
@@ -22,18 +59,7 @@ int	ft_unset(t_cmd *cmd, t_env **env)
 	while (token)
 	{
 		if (token->type == WORD)
-		{
-			if (!is_valid_id(token->value))
-			{
-				write(2, "minishell: ", 12);
-				write(2, "unset :`", 9);
-				write (2, token->value, ft_strlen(token->value));
-				write(2, "': not a valid identifier\n", 27);
-				status = 1;
-			}
-			else
-				env_unset(env, token->value);
-		}
+			process_unset_token(token, env, cmd, &status);
 		token = token->next;
 	}
 	return (status);

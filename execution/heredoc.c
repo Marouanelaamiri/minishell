@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 17:42:55 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:28:40 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	handle_heredoc_line(int *fds, t_heredoc *heredoc,
 		return (-2);
 	}
 	if (!line)
-		return (print_eof_warning(heredoc->delim), 1);
+		return (1);
 	if (ft_strcmp(line, heredoc->delim) == 0)
 		return (free(line), 1);
 	if (!heredoc->quoted)

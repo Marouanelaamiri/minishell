@@ -6,13 +6,13 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:12:02 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 10:27:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 12:45:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static size_t	count_tokens(t_token *token)
+size_t	count_tokens(t_token *token)
 {
 	size_t	count;
 
