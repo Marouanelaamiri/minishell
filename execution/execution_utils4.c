@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:12:02 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 12:45:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:17:59 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@ size_t	count_tokens(t_token *token)
 	{
 		count++;
 		token = token->next;
+	}
+	return (count);
+}
+
+size_t	count_env_vars(t_env *env)
+{
+	size_t	count;
+
+	count = 0;
+	while (env)
+	{
+		if (env->value != NULL)
+			count++;
+		env = env->next;
 	}
 	return (count);
 }

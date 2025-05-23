@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 13:51:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:18:52 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,12 +200,12 @@ char		**token_to_av(t_token *token);
 char		**env_list_to_envp(t_env *env);
 int			heredoc_pipe(const char *delim, t_env *env, int quoted);
 void		setup_signal(struct sigaction *sa_old);
-void		print_eof_warning(const char *delim);
 int			handle_line(char *line, const char *delim, int write_fd);
 void		check_args(char **argv);
 void		wait_for_all_children(pid_t *pids, int total, pid_t last_pid);
 void		handle_exec_errors(char **argv, char *path);
 pid_t		run_child_process(t_child_args *args);
+size_t		count_env_vars(t_env *env);
 int			start_command(t_cmd *cmd, t_cmd_exec *exec,
 				char **envp, t_env **env);
 

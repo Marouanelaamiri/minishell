@@ -6,43 +6,49 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 10:57:52 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:19:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_exec_errors(char **argv, char *path)
+static void	handle_permission_or_directory(char *target, char **argv)
 {
-	if (!path)
+	if (access(target, X_OK) == -1)
 	{
-		write(2, "minishell: ", 12);
-		perror(*argv);
+		print_error(target, "Permission denied");
 		free_argv(argv);
-		exit(127);
+		exit(126);
 	}
-	if (opendir(path))
+	if (opendir(target))
 	{
-		print_error(path, "is a directory");
+		print_error(target, "is a directory");
+		free_argv(argv);
 		exit(126);
 	}
 }
 
-static size_t	count_env_vars(t_env *env)
+void	handle_exec_errors(char **argv, char *path)
 {
-	size_t	count;
+	char	*target;
 
-	count = 0;
-	while (env)
+	if (path)
+		target = path;
+	else
+		target = argv[0];
+	if (access(target, F_OK) == 0)
 	{
-		if (env->value != NULL)
-			count++;
-		env = env->next;
+		handle_permission_or_directory(target, argv);
 	}
-	return (count);
+	if (!path)
+	{
+		print_error(argv[0], "command not found");
+		free_argv(argv);
+		exit(127);
+	}
 }
 
-static void	free_envp_partial(char **envp, size_t i)
+static void	loop_free_envp(char **envp, size_t i)
 {
 	while (i-- > 0)
 		free(envp[i]);
@@ -81,7 +87,7 @@ char	**env_list_to_envp(t_env *env)
 		{
 			envp[i] = build_env_entry(env);
 			if (!envp[i])
-				return (free_envp_partial(envp, i), NULL);
+				return (loop_free_envp(envp, i), NULL);
 			i++;
 		}
 		env = env->next;
