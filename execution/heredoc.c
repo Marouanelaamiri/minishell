@@ -6,14 +6,13 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 14:28:40 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:28:24 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	handle_heredoc_line(int *fds, t_heredoc *heredoc,
-	struct sigaction *sa_old)
+static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
 {
 	char	*line;
 
@@ -23,7 +22,6 @@ static int	handle_heredoc_line(int *fds, t_heredoc *heredoc,
 		free(line);
 		close(fds[0]);
 		close(fds[1]);
-		sigaction(SIGINT, sa_old, NULL);
 		return (-2);
 	}
 	if (!line)
@@ -42,7 +40,6 @@ int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 {
 	int					fds[2];
 	int					status;
-	struct sigaction	sa_old;
 	t_heredoc			heredoc;
 
 	heredoc.delim = delim;
@@ -51,17 +48,16 @@ int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 	g_exit_status = 0;
 	if (pipe(fds) < 0)
 		return (perror("pipe"), 1);
-	setup_signal(&sa_old);
+	setup_signal();
 	while (1)
 	{
-		status = handle_heredoc_line(fds, &heredoc, &sa_old);
+		status = handle_heredoc_line(fds, &heredoc);
 		if (status != 0)
 			break ;
 	}
 	if (status == -2)
 		return (-2);
 	close(fds[1]);
-	sigaction(SIGINT, &sa_old, NULL);
 	return (fds[0]);
 }
 

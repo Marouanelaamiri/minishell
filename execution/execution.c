@@ -6,18 +6,32 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 11:26:54 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:52:48 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
+{
+	int	status;
+
+	waitpid(exec->last_pid, &status, 0);
+	wait_for_all_children(exec->pids, exec->cmd_count, exec->last_pid);
+	free(exec->pids);
+	free_envp(envp);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}
 
 int	execute_commands(t_cmd *cmd_list, t_env *env)
 {
 	t_cmd_exec	exec;
 	char		**envp;
 	t_cmd		*current;
-	int			status;
 
 	envp = env_list_to_envp(env);
 	if (!envp)
@@ -35,8 +49,5 @@ int	execute_commands(t_cmd *cmd_list, t_env *env)
 			exit(1);
 		current = current->next;
 	}
-	waitpid(exec.last_pid, &status, 0);
-	wait_for_all_children(exec.pids, exec.cmd_count, exec.last_pid);
-	free(exec.pids);
-	return (free_envp(envp), WEXITSTATUS(status));
+	return (wait_and_cleanup(&exec, envp));
 }

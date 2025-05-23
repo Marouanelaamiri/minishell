@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/22 11:18:40 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:08:23 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int g_exit_status = 0;
 
-// static void on_exit1(void)
-// {
-//     char cmd[128];
-//     snprintf(cmd, sizeof cmd, "leaks %d", getpid());
-//     system(cmd);
-// }
+static void on_exit1(void)
+{
+    char cmd[128];
+    snprintf(cmd, sizeof cmd, "leaks %d", getpid());
+    system(cmd);
+}
 
 static void ft_blinding_lights(char *input)
 {
@@ -150,7 +150,7 @@ t_cmd *ft_process_input(char *input, t_env *env)
 
 int  main(int argc, char **argv, char **envp)
 {
-    // atexit(on_exit1);
+    atexit(on_exit1);
     t_env *env;
 
     (void)argc;

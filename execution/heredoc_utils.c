@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 15:23:42 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:25:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	heredoc_sigint_handler(int sig)
 	rl_done = 1;
 }
 
-void	setup_signal(struct sigaction *sa_old)
+void	setup_signal(void)
 {
-	struct sigaction	sa_new;
+	struct sigaction	sa;
 
-	sa_new.sa_handler = heredoc_sigint_handler;
-	sigemptyset(&sa_new.sa_mask);
-	sa_new.sa_flags = 0;
-	sigaction(SIGINT, &sa_new, sa_old);
+	sa.sa_handler = heredoc_sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
 }
 
 int	handle_line(char *line, const char *delim, int write_fd)
