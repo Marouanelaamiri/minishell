@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 16:25:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:52:33 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	setup_signal(void)
 	sigaction(SIGINT, &sa, NULL);
 }
 
-int	handle_line(char *line, const char *delim, int write_fd)
+int	handle_line(char *line, const char *delim, int pipe_fd)
 {
 	if (!line)
 		return (0);
@@ -39,8 +39,8 @@ int	handle_line(char *line, const char *delim, int write_fd)
 		free(line);
 		return (0);
 	}
-	write(write_fd, line, ft_strlen(line));
-	write(write_fd, "\n", 1);
+	write(pipe_fd, line, ft_strlen(line));
+	write(pipe_fd, "\n", 1);
 	free(line);
 	return (1);
 }
