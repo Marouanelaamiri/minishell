@@ -6,20 +6,11 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 14:59:47 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 17:32:38 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	check_args(char **argv)
-{
-	if (!argv || !argv[0] || !argv[0][0])
-	{
-		free_argv(argv);
-		exit(0);
-	}
-}
 
 static int	spawn_child_process(t_cmd *cmd, t_cmd_exec *exec,
 	char **envp, t_env **env)
@@ -48,11 +39,8 @@ void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
 	}
 }
 
-pid_t	run_child_process(t_child_args *args)
+static void	handle_input_pipe(t_child_args *args)
 {
-	char	**argv;
-	char	*path;
-
 	if (args->input_fd != -1)
 	{
 		dup2(args->input_fd, STDIN_FILENO);
@@ -64,6 +52,14 @@ pid_t	run_child_process(t_child_args *args)
 		close(args->pipe_fds[0]);
 		close(args->pipe_fds[1]);
 	}
+}
+
+pid_t	run_child_process(t_child_args *args)
+{
+	char	**argv;
+	char	*path;
+
+	handle_input_pipe(args);
 	setup_redirections(args->cmd);
 	argv = token_to_av(args->cmd->args);
 	check_args(argv);
@@ -71,10 +67,15 @@ pid_t	run_child_process(t_child_args *args)
 		exit(handle_builtins(args->cmd, args->env));
 	path = find_executable(argv[0], *(args->env));
 	handle_exec_errors(argv, path);
-	execve(path, argv, args->envp);
-	perror("execve");
-	free_argv (argv);
-	exit ((free(path), 126));
+	if (execve(path, argv, args->envp) == -1)
+	{
+		free_argv(argv);
+		if (errno == ENOEXEC)
+			exit((free(path), 0));
+		else
+			perror("execve");
+	}
+	exit((free(path), 126));
 }
 
 int	start_command(t_cmd *cmd, t_cmd_exec *exec,

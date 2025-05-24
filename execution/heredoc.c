@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 16:39:49 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 21:45:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
 	char	*line;
 
 	line = readline("> ");
-	if (g_exit_status == 130)
+	if (g_exit_status == 1)
 	{
 		free(line);
 		close(fds[0]);
@@ -98,7 +98,7 @@ static int	handle_heredoc(t_redir *redir, t_env *env)
 				return (-1);
 			if (fd == -2)
 			{
-				g_exit_status = 130;
+				g_exit_status = 1;
 				return (-1);
 			}
 			redir->fd = fd;

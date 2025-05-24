@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 16:52:33 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 21:45:43 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
-	g_exit_status = 130;
+	g_exit_status = 1;
 	write(1, "\n", 1);
 	rl_done = 1;
 }

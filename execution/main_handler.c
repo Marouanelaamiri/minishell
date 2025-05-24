@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 14:15:26 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 17:07:28 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	handle_one_line(t_env **env)
 		return (1);
 	if (preprocess_heredocs(cmd, *env) != 0)
 		return ((ft_free_cmds(cmd)), 1);
+	if (!cmd->next && cmd->args && ft_strcmp(cmd->args->value, "exit") == 0)
+		ft_exit(cmd, env);
 	if (!cmd->next && is_builtin(cmd))
 		handle_single_builtin(cmd, env);
 	else

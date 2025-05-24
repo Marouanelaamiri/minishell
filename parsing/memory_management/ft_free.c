@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 18:26:23 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/11 18:43:04 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 17:32:50 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,3 +102,11 @@ void	free_split(char **arr)
 	free(arr);
 }
 
+void	check_args(char **argv)
+{
+	if (!argv || !argv[0] || !argv[0][0])
+	{
+		free_argv(argv);
+		exit(0);
+	}
+}

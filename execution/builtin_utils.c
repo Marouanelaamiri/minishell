@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:20:41 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 10:44:17 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/24 17:00:54 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int	handle_builtins(t_cmd *cmd, t_env **env)
 		status = ft_export(cmd, env);
 	else if (ft_strcmp(cmd->args->value, "unset") == 0)
 		status = ft_unset(cmd, env);
-	else if (ft_strcmp(cmd->args->value, "exit") == 0)
-		status = ft_exit(cmd, env);
 	else
 		return (-1);
 	ft_update_exit_status(status, 63);
