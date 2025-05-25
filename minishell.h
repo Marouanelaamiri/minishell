@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 17:05:39 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:33:46 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,11 +217,7 @@ int			start_command(t_cmd *cmd, t_cmd_exec *exec,
 				char **envp, t_env **env);
 void		handle_permission_or_directory(char *target, char **argv);
 void		launch_exec(char **argv, t_child_args *args);
-void		close_pipe_ends(int fds[2]);
-void		restore_signals(const struct sigaction *oldint,
-                        const struct sigaction *oldquit);
-void		install_heredoc_signals(struct sigaction *oldint,
-						struct sigaction *oldquit);
+int			handle_child(const char *delim, t_env *env, int *fds, int quoted);
 
 //exe
 

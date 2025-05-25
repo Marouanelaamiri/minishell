@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 17:04:13 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:34:34 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,36 @@ int	handle_line(char *line, const char *delim, int pipe_fd)
 	return (1);
 }
 
-void install_heredoc_signals(struct sigaction *oldint,
-						struct sigaction *oldquit)
+static void	child_heredoc_loop(const char *delim, t_env *env,
+								int fd, int quoted)
 {
-    struct sigaction sa;
+	char	*line;
 
-    sa.sa_handler = heredoc_sigint_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sigaction(SIGINT, &sa, oldint);
-    sa.sa_handler = SIG_IGN;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sigaction(SIGQUIT, &sa, oldquit);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			exit(0);
+		if (g_exit_status == 1)
+			exit(130);
+		if (ft_strcmp(line, delim) == 0)
+		{
+			free(line);
+			exit(0);
+		}
+		if (!quoted)
+			starboy_expand_heredoc(&line, env);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
 }
 
-void restore_signals(const struct sigaction *oldint,
-                        const struct sigaction *oldquit)
+int	handle_child(const char *delim, t_env *env, int *fds, int quoted)
 {
-    sigaction(SIGINT, oldint, NULL);
-    sigaction(SIGQUIT, oldquit, NULL);
-}
-
-void close_pipe_ends(int fds[2])
-{
-    close(fds[0]);
-    close(fds[1]);
+	signal(SIGINT, heredoc_sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+	close(fds[0]);
+	child_heredoc_loop(delim, env, fds[1], quoted);
+	return (0);
 }

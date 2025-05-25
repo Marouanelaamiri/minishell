@@ -6,68 +6,37 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 17:15:24 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:34:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
-{
-	char	*line;
-	char	*l_dup;
-
-	line = readline("> ");
-	if (!line)
-		return (1);
-	if (g_exit_status == 1)
-	{
-		free(line);
-		close(fds[0]);
-		close(fds[1]);
-		return (-2);
-	}
-	l_dup = ft_strdup(line);
-	if (!l_dup)
-		return (free(line), close(fds[0]), close(fds[1]), -1);
-	if (ft_strcmp(l_dup, heredoc->delim) == 0)
-		return (free(line), free(l_dup), 1);
-	if (!heredoc->quoted)
-		starboy_expand_heredoc(&l_dup, heredoc->env);
-	write(fds[1], l_dup, ft_strlen(l_dup));
-	write(fds[1], "\n", 1);
-	free(line);
-	free(l_dup);
-	return (0);
-}
-
 int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 {
-	int					fds[2];
-	int					status;
-	t_heredoc			hd;
-	struct sigaction	oldint;
-	struct sigaction	oldquit;
+	int		fds[2];
+	pid_t	pid;
+	int		wstatus;
 
-	hd.delim = delim;
-	hd.env = env;
-	hd.quoted = quoted;
-	g_exit_status = 0;
 	if (pipe(fds) < 0)
 		return (perror("pipe"), 1);
-	install_heredoc_signals(&oldint, &oldquit);
-	while (1)
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"), close(fds[0]), close(fds[1]), 1);
+	if (pid == 0)
+		handle_child(delim, env, fds, quoted);
+	close(fds[1]);
+	waitpid(pid, &wstatus, 0);
+	if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGINT)
 	{
-		status = handle_heredoc_line(fds, &hd);
-		if (status != 0)
-			break ;
+		close(fds[0]);
+		g_exit_status = 130;
+		return (-2);
 	}
-	restore_signals(&oldint, &oldquit);
-	if (status == -2)
-		return (close_pipe_ends(fds), 2);
-	if (status < 0)
-		return (close_pipe_ends(fds), -1);
-	return (close(fds[1]), fds[0]);
+	if (!WIFEXITED(wstatus) || WEXITSTATUS(wstatus) != 0)
+		return (close (fds[0]), -1);
+	g_exit_status = 0;
+	return (fds[0]);
 }
 
 static int	count_heredocs(t_cmd *cmd_list)
