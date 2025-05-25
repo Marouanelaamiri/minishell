@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 14:24:33 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:15:24 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,29 @@ int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 {
 	int					fds[2];
 	int					status;
-	t_heredoc			heredoc;
+	t_heredoc			hd;
+	struct sigaction	oldint;
+	struct sigaction	oldquit;
 
-	heredoc.delim = delim;
-	heredoc.env = env;
-	heredoc.quoted = quoted;
+	hd.delim = delim;
+	hd.env = env;
+	hd.quoted = quoted;
 	g_exit_status = 0;
 	if (pipe(fds) < 0)
 		return (perror("pipe"), 1);
-	setup_signal();
+	install_heredoc_signals(&oldint, &oldquit);
 	while (1)
 	{
-		status = handle_heredoc_line(fds, &heredoc);
+		status = handle_heredoc_line(fds, &hd);
 		if (status != 0)
 			break ;
 	}
+	restore_signals(&oldint, &oldquit);
 	if (status == -2)
-		return (-2);
-	close(fds[1]);
-	return (fds[0]);
+		return (close_pipe_ends(fds), 2);
+	if (status < 0)
+		return (close_pipe_ends(fds), -1);
+	return (close(fds[1]), fds[0]);
 }
 
 static int	count_heredocs(t_cmd *cmd_list)

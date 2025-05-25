@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:03:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 11:17:23 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:04:13 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ void	setup_signal(void)
 	struct sigaction	sa;
 
 	sa.sa_handler = heredoc_sigint_handler;
-	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
 }
 
 int	handle_line(char *line, const char *delim, int pipe_fd)
@@ -44,4 +42,32 @@ int	handle_line(char *line, const char *delim, int pipe_fd)
 	write(pipe_fd, "\n", 1);
 	free(line);
 	return (1);
+}
+
+void install_heredoc_signals(struct sigaction *oldint,
+						struct sigaction *oldquit)
+{
+    struct sigaction sa;
+
+    sa.sa_handler = heredoc_sigint_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGINT, &sa, oldint);
+    sa.sa_handler = SIG_IGN;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGQUIT, &sa, oldquit);
+}
+
+void restore_signals(const struct sigaction *oldint,
+                        const struct sigaction *oldquit)
+{
+    sigaction(SIGINT, oldint, NULL);
+    sigaction(SIGQUIT, oldquit, NULL);
+}
+
+void close_pipe_ends(int fds[2])
+{
+    close(fds[0]);
+    close(fds[1]);
 }
