@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 15:36:10 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:39:20 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,8 @@ void		delim_of_heredoc(t_token *tokens);
 t_token		*lst_new_token(t_type type, char *value);
 t_token		*ft_tokeniz(char *input);
 void		lst_add_back_token(t_data *data, t_token *new);
-void		lst_insert_before(t_token **head, t_token *node, t_token *new_token);
+void		lst_insert_before(t_token **head, t_token *node,
+				t_token *new_token);
 void		lst_remove_token(t_token **head, t_token *node);
 
 /* Token handlers during lexing */
@@ -339,4 +340,4 @@ int			is_redirection(t_type type);
 void		print_tokens(t_token *token);
 void		ft_print_cmds(t_cmd *cmd);
 
-# endif
+#endif
