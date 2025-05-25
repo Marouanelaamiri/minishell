@@ -6,27 +6,27 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 14:43:36 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:26:56 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	handle_permission_or_directory(char *target, char **argv)
+void	handle_permission_or_directory(char *target, char **argv)
 {
 	DIR	*dir;
 
-	if (access(target, X_OK) == -1)
-	{
-		print_error(target, "Permission denied");
-		free_argv(argv);
-		exit(126);
-	}
 	dir = opendir(target);
 	if (dir)
 	{
 		closedir(dir);
 		print_error(target, "is a directory");
+		free_argv(argv);
+		exit(126);
+	}
+	if (access(target, X_OK) == -1)
+	{
+		print_error(target, "Permission denied");
 		free_argv(argv);
 		exit(126);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils5.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 11:04:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:34:33 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,13 @@ static void	handle_input_pipe(t_child_args *args)
 pid_t	run_child_process(t_child_args *args)
 {
 	char	**argv;
-	char	*path;
 
 	handle_input_pipe(args);
 	setup_redirections(args->cmd);
 	argv = token_to_av(args->cmd->args);
 	check_args(argv);
-	if (is_builtin(args->cmd))
-		exit(handle_builtins(args->cmd, args->env));
-	path = find_executable(argv[0], *(args->env));
-	handle_exec_errors(argv, path);
-	if (execve(path, argv, args->envp) == -1)
-	{
-		free_argv(argv);
-		if (errno == ENOEXEC)
-			exit((free(path), 0));
-		else
-			perror("execve");
-	}
-	exit((free(path), 126));
+	launch_exec(argv, args);
+	return (-1);
 }
 
 int	start_command(t_cmd *cmd, t_cmd_exec *exec,

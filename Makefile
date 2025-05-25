@@ -33,6 +33,7 @@ execution/execution_utils2.c \
 execution/execution_utils3.c \
 execution/execution_utils4.c \
 execution/execution_utils5.c \
+execution/execution_utils6.c \
 execution/ft_export_utils.c \
 execution/env_utils.c \
 execution/env_utils2.c \

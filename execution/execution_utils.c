@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/21 10:26:27 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:30:47 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_strjoin_path(const char *dir, const char *cmd)
 
 static char	*check_direct_path(char *cmd)
 {
-	if (access(cmd, X_OK) == 0)
+	if (access(cmd, F_OK) == 0)
 		return (ft_strdup(cmd));
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 11:28:47 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:36:10 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ pid_t		run_child_process(t_child_args *args);
 size_t		count_env_vars(t_env *env);
 int			start_command(t_cmd *cmd, t_cmd_exec *exec,
 				char **envp, t_env **env);
+void		handle_permission_or_directory(char *target, char **argv);
+void		launch_exec(char **argv, t_child_args *args);
 
 //exe
 

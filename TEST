@@ -52,11 +52,3 @@ minishell$ cat
 ^C
 minishell$ echo $?
 176// 130 
-
-minishell: /mnt/homes/malaamir/.brew/bin/.: is a directory
-minishell$ echo $?
-126
-minishell$ ..
-minishell: /mnt/homes/malaamir/.brew/bin/..: is a directory
-minishell$ echo $?
-126
