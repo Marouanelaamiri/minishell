@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 16:39:43 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 11:28:47 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 # include <readline/history.h>
 
 extern int	g_exit_status;
+
+typedef struct s_alloc
+{
+	void			*ptr;
+	struct s_alloc	*next;
+}	t_alloc;
 
 // ENV
 
@@ -233,46 +239,102 @@ void		handle_single_builtin(t_cmd *cmd, t_env **env);
 int			handle_one_line(t_env **env);
 void		delim_of_heredoc(t_token *tokens);
 
-// PARSING PART //
+/* Token creation and manipulation */
+t_token		*lst_new_token(t_type type, char *value);
+t_token		*ft_tokeniz(char *input);
+void		lst_add_back_token(t_data *data, t_token *new);
+void		lst_insert_before(t_token **head, t_token *node, t_token *new_token);
+void		lst_remove_token(t_token **head, t_token *node);
 
-// token
+/* Token handlers during lexing */
+int			ft_handle_pipe(t_data *data);
+int			ft_handle_quotes(t_data *data, char *input);
+int			ft_handle_redir(t_data *data, char *input);
+int			ft_handle_space(t_data *data, char *input);
+int			ft_handle_var(t_data *data, char *input);
+int			ft_handle_word(t_data *data, char *input);
 
-t_token	*lst_new_token(t_type type, char *value);
-t_token *ft_tokeniz(char *input);
-void	lst_add_back_token(t_data *data, t_token *new);
-int		ft_handle_quotes(t_data *data, char *input);
-int	ft_handle_space(t_data *data, char *input);
-int	ft_handle_var(t_data *data, char *input);
-int	ft_handle_word(t_data *data, char *input);
-int	ft_handle_pipe(t_data *data);
-int	ft_handle_redir(t_data *data, char *input);
+/* Signal handling */
+void		ft_signal_handler(void);
 
-// expansion
-void	escape_from_dollars(t_token *t);
-void	starboy_expansion(t_token *t, t_env *env);
-void	starboy_quote_expansion(t_token *t, t_env *env);
-void	starboy_expand_heredoc(char **line, t_env *env);
+/* Parsing */
+int			ambiguous_redirection(t_token *tokens);
+void		clean_hidden_dollars(t_token *tokens);
+int			ft_check_quotes(char *input);
+t_cmd		*ft_parse_commands(t_token *tokens);
+char		*remove_quotes(char *str);
+char		*remove_squotes(char *str);
+char		*remove_dquotes(char *str, int quoted);
+void		field_split_tokens(t_token **tokens);
+void		fix_heredoc_delimiters(t_token *tokens);
+t_cmd		*process_input(char *input, t_env *env);
+int			syntax_check(t_token *tokens);
+void		unmask_quoted_chars(t_token *token_list);
+void		mask_quoted_chars(char *str);
+int			ft_valid_var(t_token *t);
 
-// signale
-void ft_signal_handler(void);
+/* Expansion */
+void		escape_from_dollars(t_token *token_list);
+void		expand_env_dollar(t_token *token, t_env *env);
+void		number_before_dollar(t_token *token);
+void		process_var_node(t_token *current);
+void		starboy_expansion(t_token *token, t_env *env);
+void		starboy_quote_expansion(t_token *t, t_env *env);
+void		starboy_expand_heredoc(char **line, t_env *env);
+void		convert_exit_code(t_token *token);
+int			ft_update_exit_status(int status, int x);
 
-// parsing
-void	nodes_join(t_token *tokens);
-int ft_syntax_check(t_token *tokens);
-int ft_check_quotes(char *input);
-int ft_valid_var(t_token *t);
-t_cmd *ft_parse_commands(t_token *tokens);
-char	*remove_squotes(char *str);
-void	remove_empty_tokens(t_token **tokens);
-void	clean_hidden_dollars(t_token *tokens);
-int	ambiguous_redirection(t_token *tokens);
-void field_split_tokens(t_token **tokens);
-t_cmd *ft_process_input(char *input, t_env *env);
-// debug
-void	print_tokens(t_token *token);
+/* Expansion helpers */
+int			find_dollar(char *str);
+int			find_number(char *str);
+int			find_question(char *str);
+char		*get_variable(char *str, int index);
+char		*get_value(t_env *env, char *key_val);
+char		*replace_dollar(char *str, int index, t_env *env);
+char		*replace_number(char *str, int index);
+char		*replace_question(char *str, int index);
 
-// string manipulation
-void	ft_putchar_fd(char c, int fd);
-void	ft_putstr_fd(char *s, int fd);
+/* Heredoc expansion helpers */
+int			find_dollar_heredoc(char *str);
+int			find_number_heredoc(char *str);
+int			find_question_heredoc(char *str);
+char		*get_variable_heredoc(char *str, int index);
+char		*get_value_heredoc(t_env *env, char *key_val);
+char		*replace_dollar_heredoc(char *str, int index, t_env *env);
+char		*replace_number_heredoc(char *str, int index);
+char		*replace_question_heredoc(char *str, int index);
+
+/* Token joining and cleanup */
+void		nodes_join(t_token *tokens);
+void		nodes_join_part2(t_token *tokens);
+void		remove_empty_tokens(t_token **tokens);
+
+/* Word joining helpers */
+void		handle_next(t_token *current, t_token *next);
+void		handle_prev(t_token *current, t_token *prev);
+void		handle_prev_next(t_token *current, t_token *prev, t_token *next);
+void		handle_single(t_token *current);
+int			not_redir(t_token *node);
+
+/* Garbage-collected string functions */
+void		*gc_malloc(size_t size, int mode);
+char		**ft_split_gc(char const *s, char c);
+char		*ft_strdup_gc(const char *src);
+char		*ft_strdup_full(const char *src, int q);
+char		*ft_strdup_spec(const char *src, int *q);
+char		*ft_strjoin_gc(const char *s1, const char *s2);
+char		*ft_strjoin3(char *s1, char *s2, char *s3);
+char		*ft_substr_gc(const char *s, unsigned int start, size_t len);
+char		*ft_itoa_gc(int n);
+
+/* Utilities */
+int			like_that(char c);
+void		ft_putchar_fd(char c, int fd);
+void		ft_putstr_fd(char *s, int fd);
+int			is_redirection(t_type type);
+
+/* Debug */
+void		print_tokens(t_token *token);
+void		ft_print_cmds(t_cmd *cmd);
 
 # endif

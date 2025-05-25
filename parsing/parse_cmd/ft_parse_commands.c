@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 21:46:06 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/17 23:09:10 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:24:06 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_cmd	*ft_create_cmd(void)
 {
-	t_cmd *cmd = malloc(sizeof(t_cmd));
+	t_cmd *cmd = gc_malloc(sizeof(t_cmd), 63);
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
@@ -26,7 +26,7 @@ static t_cmd	*ft_create_cmd(void)
 // Adds a redirection to the command's redir list
 static void	ft_add_redir_to_cmd(t_cmd *cmd, t_type type, char *value, int quoted)
 {
-	t_redir *new = malloc(sizeof(t_redir));
+	t_redir *new = gc_malloc(sizeof(t_redir), 63);
 	if (!new || !value)
 		return;
 	new->type = type;
@@ -102,7 +102,7 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 				tokens = tokens->next;
 			if (!tokens || !tokens->value)
         		return NULL;
-			char *file = ft_strdup(tokens->value);
+			char *file = ft_strdup_gc(tokens->value);
 			if (!file)
 				return (NULL);
 			ft_add_redir_to_cmd(current, redir_type, file, tokens->quoted);
@@ -118,11 +118,11 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 				tokens = tokens->next;
 				continue;
 			}
-			t_token *arg = malloc(sizeof(t_token));
+			t_token *arg = gc_malloc(sizeof(t_token), 63);
 			if (!arg)
 				return (NULL);
 			arg->type = tokens->type;
-			arg->value = ft_strdup(tokens->value);
+			arg->value = ft_strdup_gc(tokens->value);
 			arg->next = NULL;
 			arg->prev = NULL;
 			ft_add_arg_to_cmd(current, arg);
@@ -130,6 +130,5 @@ t_cmd	*ft_parse_commands(t_token *tokens)
 
 		tokens = tokens->next;
 	}
-
 	return head;
 }

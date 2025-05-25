@@ -50,19 +50,38 @@ parsing/tokenizing/ft_token_quotes.c \
 parsing/tokenizing/ft_token_pipe.c \
 parsing/tokenizing/ft_string_utils.c \
 parsing/quotes_check/ft_check_quotes.c \
+parsing/quotes_check/dquotes_utils.c \
+parsing/quotes_check/squotes_utils.c \
+parsing/quotes_check/quote_masking.c \
 parsing/parse_cmd/ft_parse_commands.c\
 parsing/syntax_checker/ft_syntax_check.c \
-parsing/syntax_checker/ft_valid_var.c \
 parsing/sig_handler/ft_signal_handler.c \
 parsing/expansion/escape_from_dollars.c \
 parsing/expansion/starboy_expand.c \
-parsing/expansion/starboy_expand2.c \
+parsing/expansion/starboy_expand_p2.c \
+parsing/expansion/q_dollar_expand.c \
+parsing/expansion/q_env_expand.c \
 parsing/expansion/starboy_expand3.c \
+parsing/expansion/starboy_quote_expand.c \
+parsing/expansion/heredoc_utils_env.c \
+parsing/expansion/heredoc_utils_number.c \
+parsing/expansion/heredoc_utils_question.c \
+parsing/expansion/utils_expansion.c \
 parsing/debug_func/ft_debug.c \
 parsing/parsing_utils/ft_status.c \
+parsing/parsing_utils/clean_dollars.c \
+parsing/parsing_utils/nodes_join_v1.c \
+parsing/parsing_utils/nodes_join_v1_utils.c \
+parsing/parsing_utils/nodes_join_v2.c \
+parsing/parsing_utils/remove_tokens.c \
 parsing/parsing_utils/ft_ambiguous.c \
 parsing/parsing_utils/filed.c \
+parsing/parsing_utils/ft_split_gc.c \
+parsing/parsing_utils/string.c \
+parsing/parsing_utils/itoa_gc.c \
 parsing/memory_management/ft_free.c \
+parsing/memory_management/gc.c \
+parsing/main_pars.c \
 
 #------------------------------ Object Files ------------------------------------#
 OBJ = $(SRC:.c=.o)
@@ -74,7 +93,7 @@ LDLIB = -L$(READLINE_LIB) -lreadline
 
 #------------------------------ Compiler and Flags ------------------------------#
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -g3
 
 #------------------------------ Executable --------------------------------------#
 NAME = minishell

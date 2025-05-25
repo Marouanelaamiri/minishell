@@ -6,13 +6,21 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:59:46 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/01 20:17:18 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:20:57 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int ft_check_quotes(char *input)
+static void	print_unclosed_quote_error(char quote)
+{
+	if (quote == '\'')
+		ft_putstr_fd("minishell: syntax error near unexpected token `'\n", 2);
+	else
+		ft_putstr_fd("minishell: syntax error near unexpected token `\"\n", 2);
+}
+
+int	ft_check_quotes(char *input)
 {
 	int		i;
 	char	quote;
@@ -28,10 +36,7 @@ int ft_check_quotes(char *input)
 				i++;
 			if (!input[i])
 			{
-				if (quote == '\'')
-					ft_putstr_fd("minishell: syntax error near unexpected token `'\n", 2);
-				else
-					ft_putstr_fd("minishell: syntax error near unexpected token `\"\n", 2);
+				print_unclosed_quote_error(quote);
 				return (0);
 			}
 		}

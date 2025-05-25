@@ -1,0 +1,62 @@
+export a="A B C"
+export $a=$a
+
+===============================
+
+$A ls
+
+================================
+export a="A B C"
+export "f"=$a
+cd
+================================
+
+export a="A B C"
+expor't' b=$a
+
+================================
+export a="A B C"
+$VAR export b=$a
+
+================================
+
+export a="A B C"
+export $=$a     ✅ 
+
+================================
+
+ echo "$?$?$$?$USER""""""""""""""""""$PATH00"
+
+=================================
+
+minishell$ echo "$"USER""
+$SER
+
+==================================
+
+minishell$ ""
+minishell: : command not found
+minishell$ echo $?
+186// 127
+
+====================================
+
+minishell$ << .
+> 
+minishell$ echo $?
+0// 1
+minishell$ 
+
+=========================
+minishell$ cat 
+^C
+minishell$ echo $?
+176// 130 
+
+minishell: /mnt/homes/malaamir/.brew/bin/.: is a directory
+minishell$ echo $?
+126
+minishell$ ..
+minishell: /mnt/homes/malaamir/.brew/bin/..: is a directory
+minishell$ echo $?
+126

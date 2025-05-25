@@ -6,92 +6,75 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 22:30:17 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/15 17:11:12 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:19:53 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static int	dollar_length(const char *str)
+static char	*join_gc(char *s1, const char *s2)
 {
-	int	count = 0;
-	int i = 0;
-	while (str[i])
+	char	*joined;
+
+	joined = ft_strjoin_gc(s1, s2);
+	return (joined);
+}
+
+static int	handle_dollar_sequence(char *value, int i, char **result)
+{
+	int	dcount;
+
+	dcount = 0;
+	while (value[i + dcount] == '$')
+		dcount++;
+	if (dcount % 2 != 0)
+		*result = join_gc(*result, "$");
+	return (dcount);
+}
+
+static void	transform_dollar_value(t_token *token)
+{
+	int		h;
+	char	*result;
+	char	buf[2];
+
+	h = 0;
+	result = ft_strdup_gc("");
+	while (token->value[h])
 	{
-		if (str[i] == '$')
-			count++;
-		i++;
-		
+		if (token->value[h] == '$')
+			h += handle_dollar_sequence(token->value, h, &result);
+		else
+		{
+			buf[0] = token->value[h];
+			buf[1] = '\0';
+			result = join_gc(result, buf);
+			h++;
+		}
 	}
-	return (count);
+	token->value = result;
 }
 
-// Hide ALL dollar signs (replace with ASCII 1 as garbage value)
-static void	ft_hide_all(t_token *token, int count)
+static void	process_dollar_token(t_token *token, int in_squote)
 {
-	int	i = 0;
-	while (token->value[i])
-	{
-		if (token->value[i] == '$' && count % 2 == 0)
-			token->value[i] *= -1;
-		i++;
-	}
+	if (!token || !token->value || in_squote)
+		return ;
+	if (token->value[0] == '$' && token->value[1] == '\0')
+		return ;
+	transform_dollar_value(token);
 }
 
-// Keep only one dollar sign, shift rest of the string
-static void	ft_single_dollar(t_token *token, int count)
+void	escape_from_dollars(t_token *token_list)
 {
-	// (void)count; // Unused variable
-	int	i = 1;
-	int	j = 1;
+	t_token	*cur;
+	int		in_squote;
 
-	while (token->value[i + (count - 1)])
-	{
-		token->value[j] = token->value[i + (count - 1)];
-		i++;
-		j++;
-	}
-	token->value[j] = '\0';
-}
-
-// Process a token depending on quote context
-static void	process_dollar_token(t_token *token, int inside_d, int inside_s)
-{
-	(void)inside_d; // Unused variable
-	int	dollar_len;
-
-	if (!token || !token->value || inside_s)
-		return;
-
-	dollar_len = dollar_length(token->value);
-	if (dollar_len == 0)
-		return;
-
-	if (dollar_len % 2 == 0)
-		ft_hide_all(token, dollar_len);
-	else if (dollar_len % 2 != 0)
-		ft_single_dollar(token, dollar_len);
-}
-
-// Main loop that tracks quotes and applies dollar logic
-void	escape_from_dollars(t_token *t)
-{
-	t_token	*cur = t;
-	int	inside_d = 0;
-	int	inside_s = 0;
-
+	cur = token_list;
 	while (cur)
 	{
-		inside_d = 0;
-		inside_s = 0;
-		if (cur->type == SQUOTE)
-			inside_s = 1;
-		else if (cur->type == DQUOTE)
-			inside_d = 1;
-		
-		if (cur->type == WORD || (ft_strchr(cur->value, '$') && !inside_s))
-			process_dollar_token(cur, inside_d, inside_s);
+		in_squote = (cur->type == SQUOTE);
+		if (cur->type == WORD || (ft_strchr(cur->value, '$') && !in_squote))
+			process_dollar_token(cur, in_squote);
 		cur = cur->next;
 	}
 }
-

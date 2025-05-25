@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 22:09:24 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/16 22:40:24 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:00:44 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@ int	ambiguous_redirection(t_token *tokens)
 
 	while (tokens)
 	{
-		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT 
+		if (tokens->type == REDIR_IN
+			|| tokens->type == REDIR_OUT
 			|| tokens->type == APPEND)
 		{
 			hmstr = tokens->next;
 			while (hmstr && hmstr->type == SPCE)
 				hmstr = hmstr->next;
-			if ((!hmstr->value || hmstr->value[0] == '\0') 
-				|| ft_strchr(hmstr->value, ' ') || ft_strchr(hmstr->value, '\t'))
+			if (!hmstr->value
+				|| hmstr->value[0] == '\0'
+				|| ft_strchr(hmstr->value, ' ')
+				|| ft_strchr(hmstr->value, '\t'))
 			{
 				ft_putstr_fd("minishell: ambiguous redirection\n", 2);
 				return (1);

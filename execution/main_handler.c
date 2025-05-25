@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_handler.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/24 17:07:28 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 11:55:17 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,28 @@ int	handle_one_line(t_env **env)
 {
 	char	*line;
 	t_cmd	*cmd;
+	char	*prompt;
 
 	line = readline("minishell$ ");
 	if (!line)
-	{
-		ft_update_exit_status(0, 63);
-		printf("exit\n");
-		return (clear_history(), 0);
-	}
+		return (ft_update_exit_status(0, 63), printf("exit\n"),
+			clear_history(), gc_malloc(0, 12), 0);
 	if (*line)
 		add_history(line);
-	cmd = ft_process_input(line, *env);
+	prompt = ft_strdup_gc(line);
+	if (!prompt)
+		return (gc_malloc(0, 12), 1);
 	free(line);
-	if (!cmd)
-		return (1);
-	if (preprocess_heredocs(cmd, *env) != 0)
-		return ((ft_free_cmds(cmd)), 1);
+	cmd = process_input(prompt, *env);
+	if (!cmd || preprocess_heredocs(cmd, *env) != 0)
+		return (gc_malloc(0, 12), 1);
 	if (!cmd->next && cmd->args && ft_strcmp(cmd->args->value, "exit") == 0)
 		ft_exit(cmd, env);
 	if (!cmd->next && is_builtin(cmd))
 		handle_single_builtin(cmd, env);
 	else
 		ft_update_exit_status(execute_commands(cmd, *env), 63);
-	return ((ft_free_cmds(cmd)), 1);
+	return (gc_malloc(0, 12), 1);
 }
 
 void	delim_of_heredoc(t_token *tokens)
@@ -74,8 +73,7 @@ void	delim_of_heredoc(t_token *tokens)
 			&& (current->next->type == DQUOTE
 				|| current->next->type == SQUOTE))
 		{
-			free(current->value);
-			current->value = ft_strdup("");
+			current->value = ft_strdup_gc("");
 			if (!current->value)
 				return ;
 		}

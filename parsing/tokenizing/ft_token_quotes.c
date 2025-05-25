@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 00:52:27 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/17 23:49:07 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:06:31 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,12 @@ static int	ft_process_quote(t_data *data, char *input, char quote)
 			data->i++;
 	}
 	if (input[data->i] != quote)
-	{
-		data->error = 1;
-		return (0);
-	}
+		return (data->error = 1, 0);
 	if (quote == '\'')
 		type = SQUOTE;
 	else
 		type = DQUOTE;
-	value = ft_substr(input, start, data->i - start + 1);
+	value = ft_substr_gc(input, start, data->i - start + 1);
 	token = lst_new_token(type, value);
 	token->quoted = 1;
 	lst_add_back_token(data, token);

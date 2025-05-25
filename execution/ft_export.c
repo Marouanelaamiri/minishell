@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 10:29:51 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/23 19:02:42 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,9 @@ int	apply_assign(char *copy, t_env **env)
 {
 	char	*eq;
 	char	*name;
-	char	*value;
 
 	eq = ft_strchr(copy, '=');
 	name = NULL;
-	value = NULL;
 	if (eq)
 		return (process_assignment(copy, eq, env));
 	else

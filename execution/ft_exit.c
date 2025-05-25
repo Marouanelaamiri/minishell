@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 15:20:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 10:56:47 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,20 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	arg = cmd->args->next;
 	write(1, "exit\n", 5);
 	if (!arg)
-		exit(g_exit_status);
+		exit (g_exit_status);
 	if (!ft_isllnum(arg->value))
 	{
-		print_error("exit: numeric argument required\n", arg->value);
+		ft_update_exit_status(255, 63);
+		print_error("exit: numeric argument required", arg->value);
 		exit(255);
 	}
 	if (arg->next)
+	{
+		ft_update_exit_status(1, 63);
 		return (write (1, "minishell : exit: too many arguments\n", 38), 1);
+	}
 	status = ft_atoll(arg->value);
-	status = (status % 256);
-	exit((unsigned char)status);
+	status = status % 256;
+	ft_update_exit_status(status, 63);
+	exit ((unsigned int)status);
 }

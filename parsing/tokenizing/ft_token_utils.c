@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 00:36:01 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/16 18:42:08 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/23 01:37:02 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 t_token	*lst_new_token(t_type type, char *value)
 {
-	t_token	*token = malloc(sizeof(t_token));
+	t_token	*token;
+
+	token = gc_malloc(sizeof(t_token), 63);
 	if (!token)
 		return (NULL);
-	
 	token->type = type;
 	token->value = value;
 	token->quoted = 0;
@@ -31,7 +32,7 @@ void	lst_add_back_token(t_data *data, t_token *new)
 	if (!new)
 	{
 		data->error = 1;
-		return;
+		return ;
 	}
 	if (!data->token)
 	{
@@ -46,8 +47,7 @@ void	lst_add_back_token(t_data *data, t_token *new)
 	}
 }
 
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t');
 }
-

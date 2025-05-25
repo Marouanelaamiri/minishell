@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/24 21:45:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 14:24:33 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
 {
 	char	*line;
+	char	*l_dup;
 
 	line = readline("> ");
+	if (!line)
+		return (1);
 	if (g_exit_status == 1)
 	{
 		free(line);
@@ -24,15 +27,17 @@ static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
 		close(fds[1]);
 		return (-2);
 	}
-	if (!line)
-		return (1);
-	if (ft_strcmp(line, heredoc->delim) == 0)
-		return (free(line), 1);
+	l_dup = ft_strdup(line);
+	if (!l_dup)
+		return (free(line), close(fds[0]), close(fds[1]), -1);
+	if (ft_strcmp(l_dup, heredoc->delim) == 0)
+		return (free(line), free(l_dup), 1);
 	if (!heredoc->quoted)
-		starboy_expand_heredoc(&line, heredoc->env);
-	write(fds[1], line, ft_strlen(line));
+		starboy_expand_heredoc(&l_dup, heredoc->env);
+	write(fds[1], l_dup, ft_strlen(l_dup));
 	write(fds[1], "\n", 1);
 	free(line);
+	free(l_dup);
 	return (0);
 }
 
@@ -112,7 +117,7 @@ int	preprocess_heredocs(t_cmd *cmd_list, t_env *env)
 {
 	if (count_heredocs(cmd_list) < 0)
 	{
-		print_error ("", "maximum here-document count exceeded");
+		print_error ("heredoc", "maximum here-document count exceeded");
 		exit(2);
 	}
 	while (cmd_list)

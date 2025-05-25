@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_token_space.c                                   :+:      :+:    :+:   */
+/*   heredoc_utils_number.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 17:00:07 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/23 01:26:07 by sojammal         ###   ########.fr       */
+/*   Created: 2025/05/23 00:52:23 by sojammal          #+#    #+#             */
+/*   Updated: 2025/05/23 00:52:43 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_handle_space(t_data *data, char *input)
+int	find_number_heredoc(char *str)
 {
-	int	count;
+	int	i;
 
-	count = 0;
-	while (ft_isspace(input[data->i + count]))
-		count++;
-	lst_add_back_token(data, lst_new_token(SPCE, ft_strdup_gc(" ")));
-	return (count);
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == '$' && ft_isdigit(str[i + 1]))
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*replace_number_heredoc(char *str, int index)
+{
+	char	*prefix;
+	char	*suffix;
+
+	prefix = ft_substr_gc(str, 0, index);
+	suffix = ft_substr_gc(str, index + 2, ft_strlen(str) - (index + 2));
+	return (ft_strjoin_gc(prefix, suffix));
 }

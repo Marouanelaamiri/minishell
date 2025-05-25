@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 15:52:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 14:38:24 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
 {
 	int	status;
 
-	waitpid(exec->last_pid, &status, 0);
+	if (exec->last_pid > 0)
+		waitpid(exec->last_pid, &status, 0);
+	else
+		status = (g_exit_status << 8);
 	wait_for_all_children(exec->pids, exec->cmd_count, exec->last_pid);
 	free(exec->pids);
 	free_envp(envp);
@@ -27,11 +30,33 @@ static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
 	return (1);
 }
 
+static int	handle_command_loop(t_cmd *cmd_list, t_cmd_exec *exec,
+					char **envp, t_env **env)
+{
+	t_cmd	*current;
+
+	current = cmd_list;
+	while (current)
+	{
+		if ((!current->args || !current->args[0].value
+				|| current->args[0].value[0] == '\0') && !current->redir)
+		{
+			write(2, "minishell: : command not found\n", 31);
+			g_exit_status = 127;
+			current = current->next;
+			continue ;
+		}
+		if (start_command(current, exec, envp, env))
+			exit(1);
+		current = current->next;
+	}
+	return (0);
+}
+
 int	execute_commands(t_cmd *cmd_list, t_env *env)
 {
 	t_cmd_exec	exec;
 	char		**envp;
-	t_cmd		*current;
 
 	envp = env_list_to_envp(env);
 	if (!envp)
@@ -42,12 +67,6 @@ int	execute_commands(t_cmd *cmd_list, t_env *env)
 		return (free_envp(envp), 1);
 	exec.read_end = -1;
 	exec.index = 0;
-	current = cmd_list;
-	while (current)
-	{
-		if (start_command(current, &exec, envp, &env))
-			exit(1);
-		current = current->next;
-	}
+	handle_command_loop(cmd_list, &exec, envp, &env);
 	return (wait_and_cleanup(&exec, envp));
 }
