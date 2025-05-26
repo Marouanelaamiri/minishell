@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 17:33:46 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:05:04 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-extern int	g_exit_status;
+extern int	g_sig;
 
 typedef struct s_alloc
 {
@@ -261,12 +261,21 @@ int			ft_handle_word(t_data *data, char *input);
 
 /* Signal handling */
 void		ft_signal_handler(void);
+void		ft_ctre_c(int sig);
 
 /* Parsing */
 int			ambiguous_redirection(t_token *tokens);
 void		clean_hidden_dollars(t_token *tokens);
 int			ft_check_quotes(char *input);
 t_cmd		*ft_parse_commands(t_token *tokens);
+void		init_struct(t_cmd **head, t_cmd **last, t_cmd **current);
+int			ft_prepare_cmd(t_cmd **current, t_cmd **head, t_cmd **last);
+int			ft_handle_word_t(t_token *tokens, t_cmd *current);
+int			ft_handle_redir_t(t_token **tokens, t_cmd *current);
+void		ft_add_arg_to_cmd(t_cmd *cmd, t_token *arg);
+void		ft_add_redir_to_cmd(t_cmd *cmd, t_type type,
+				char *value, int quoted);
+t_cmd		*ft_create_cmd(void);
 char		*remove_quotes(char *str);
 char		*remove_squotes(char *str);
 char		*remove_dquotes(char *str, int quoted);

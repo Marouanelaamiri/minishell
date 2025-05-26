@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:43:13 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/24 19:11:47 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:24:11 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_strdup_full(const char *src, int q)
 	if (!dst)
 		return (NULL);
 	i = 0;
-	while (ft_isalnum(src[i]))
+	while (src[i])
 	{
 		dst[i] = src[i];
 		i++;

@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 21:53:17 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/24 18:33:42 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:56:42 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	ft_init_data(t_data *data)
 t_token	*ft_tokeniz(char *input)
 {
 	t_data	data;
-	
+
 	ft_init_data(&data);
 	if (!input)
 		return (NULL);

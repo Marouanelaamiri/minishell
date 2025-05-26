@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal_handler.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:26:31 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/24 21:23:07 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:55:59 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	ft_ctre_c(int sig)
+void	ft_ctre_c(int sig)
 {
 	(void)sig;
 	while (waitpid(-1, NULL, WNOHANG) == 0)
@@ -29,5 +29,3 @@ void	ft_signal_handler(void)
 	signal(SIGINT, ft_ctre_c);
 	signal(SIGQUIT, SIG_IGN);
 }
-
-

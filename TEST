@@ -32,23 +32,12 @@ export $=$a     ✅
 minishell$ echo "$"USER""
 $SER
 
-==================================
+===========================================
 
-minishell$ ""
+minishell$ $ASDFGHJK
 minishell: : command not found
-minishell$ echo $?
-186// 127
-
-====================================
-
-minishell$ << .
-> 
-minishell$ echo $?
-0// 1
+minishell$ $a
+minishell: A: command not found
+minishell$ $k
+minishell: : command not found
 minishell$ 
-
-=========================
-minishell$ cat 
-^C
-minishell$ echo $?
-176// 130 

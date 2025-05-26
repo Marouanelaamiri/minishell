@@ -55,6 +55,7 @@ parsing/quotes_check/dquotes_utils.c \
 parsing/quotes_check/squotes_utils.c \
 parsing/quotes_check/quote_masking.c \
 parsing/parse_cmd/ft_parse_commands.c\
+parsing/parse_cmd/ft_cmd_utils.c\
 parsing/syntax_checker/ft_syntax_check.c \
 parsing/sig_handler/ft_signal_handler.c \
 parsing/expansion/escape_from_dollars.c \
@@ -94,7 +95,7 @@ LDLIB = -L$(READLINE_LIB) -lreadline
 
 #------------------------------ Compiler and Flags ------------------------------#
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 #------------------------------ Executable --------------------------------------#
 NAME = minishell

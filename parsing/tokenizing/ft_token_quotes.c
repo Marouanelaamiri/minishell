@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 00:52:27 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/24 15:06:31 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:56:29 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ft_process_quote(t_data *data, char *input, char quote)
 	t_type	type;
 	char	*value;
 	t_token	*token;
-	
+
 	start = data->i;
 	data->i++;
 	while (input[data->i] && input[data->i] != quote)

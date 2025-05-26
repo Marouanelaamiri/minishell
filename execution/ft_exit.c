@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 16:16:26 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:41:33 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	arg = cmd->args->next;
 	write(1, "exit\n", 5);
 	if (!arg)
-		exit (g_exit_status);
+		exit (ft_update_exit_status(0, 0));
 	if (!ft_isllnum(arg->value))
 	{
 		ft_update_exit_status(255, 63);
@@ -31,7 +31,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	if (arg->next)
 	{
 		ft_update_exit_status(1, 63);
-		return (write (1, "minishell : exit: too many arguments\n", 38), 1);
+		return (write (2, "minishell : exit: too many arguments\n", 38), 1);
 	}
 	status = ft_atoll(arg->value);
 	status = status % 256;

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:31 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 14:13:29 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:54:21 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,11 @@ static void	print_invalid_id_error(const char *value)
 	write(2, "': not a valid identifier\n", 27);
 }
 
-static int	count_words(t_token *token)
-{
-	int		count;
-
-	count = 0;
-	while (token)
-	{
-		if (token->type == WORD)
-			count++;
-		token = token->next;
-	}
-	return (count);
-}
-
 static void	process_unset_token(t_token *token, t_env **env,
 	t_cmd *cmd, int *status)
 {
-	if (ft_strcmp(token->value, "_") == 0
-		&& count_words(cmd->args->next) == 1)
+	(void)cmd;
+	if (ft_strcmp(token->value, "_") == 0)
 		return ;
 	if (!is_valid_id(token->value))
 	{

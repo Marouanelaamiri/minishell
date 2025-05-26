@@ -3,39 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 17:34:26 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:53:34 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static int	handle_heredoc_line(int *fds, t_heredoc *heredoc)
+{
+	char	*line;
+	char	*l_dup;
+
+	line = readline("> ");
+	if (!line)
+	{
+		if (!ttyname(0))
+		{
+			if (open("/dev/tty", O_RDONLY) == -1)
+				return (-1);
+			return (g_sig = 1, -1);
+		}
+		return (-1);
+	}
+	l_dup = ft_strdup_gc(line);
+	if (!l_dup)
+		return (free(line), close(fds[0]), close(fds[1]), -1);
+	free(line);
+	if (ft_strcmp(l_dup, heredoc->delim) == 0)
+		return (1);
+	if (!heredoc->quoted)
+		starboy_expand_heredoc(&l_dup, heredoc->env);
+	write(fds[1], l_dup, ft_strlen(l_dup));
+	write(fds[1], "\n", 1);
+	return (0);
+}
+
 int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 {
-	int		fds[2];
-	pid_t	pid;
-	int		wstatus;
+	int					fds[2];
+	int					status;
+	t_heredoc			heredoc;
 
+	heredoc.delim = delim;
+	heredoc.env = env;
+	heredoc.quoted = quoted;
+	g_sig = 0;
+	ft_update_exit_status(0, 63);
 	if (pipe(fds) < 0)
 		return (perror("pipe"), 1);
-	pid = fork();
-	if (pid < 0)
-		return (perror("fork"), close(fds[0]), close(fds[1]), 1);
-	if (pid == 0)
-		handle_child(delim, env, fds, quoted);
-	close(fds[1]);
-	waitpid(pid, &wstatus, 0);
-	if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGINT)
+	signal(SIGINT, heredoc_sigint_handler);
+	while (1)
 	{
-		close(fds[0]);
-		g_exit_status = 130;
-		return (-2);
+		status = handle_heredoc_line(fds, &heredoc);
+		ft_update_exit_status(1, 63);
+		if (status != 0)
+			break ;
 	}
-	if (!WIFEXITED(wstatus) || WEXITSTATUS(wstatus) != 0)
-		return (close (fds[0]), -1);
-	g_exit_status = 0;
+	close(fds[1]);
+	signal(SIGINT, ft_ctre_c);
 	return (fds[0]);
 }
 
@@ -74,9 +102,11 @@ static int	handle_heredoc(t_redir *redir, t_env *env)
 			fd = heredoc_pipe(redir->value, env, redir->quoted);
 			if (fd == -1)
 				return (-1);
+			else if (g_sig == 1)
+				return (-1);
 			if (fd == -2)
 			{
-				g_exit_status = 1;
+				ft_update_exit_status(130, 63);
 				return (-1);
 			}
 			redir->fd = fd;

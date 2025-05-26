@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 14:38:24 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:48:34 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
 	if (exec->last_pid > 0)
 		waitpid(exec->last_pid, &status, 0);
 	else
-		status = (g_exit_status << 8);
+		status = (ft_update_exit_status(0, 0) << 8);
 	wait_for_all_children(exec->pids, exec->cmd_count, exec->last_pid);
 	free(exec->pids);
 	free_envp(envp);
@@ -42,7 +42,7 @@ static int	handle_command_loop(t_cmd *cmd_list, t_cmd_exec *exec,
 				|| current->args[0].value[0] == '\0') && !current->redir)
 		{
 			write(2, "minishell: : command not found\n", 31);
-			g_exit_status = 127;
+			ft_update_exit_status(127, 63);
 			current = current->next;
 			continue ;
 		}
