@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 21:41:33 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:36:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 
 	(void)env;
 	arg = cmd->args->next;
-	write(1, "exit\n", 5);
+	if (isatty(STDIN_FILENO))
+		write(1, "exit\n", 5);
 	if (!arg)
 		exit (ft_update_exit_status(0, 0));
 	if (!ft_isllnum(arg->value))

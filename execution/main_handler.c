@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 16:16:18 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:51:53 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ int	handle_one_line(t_env **env)
 	cmd = process_input(prompt, *env);
 	if (!cmd || preprocess_heredocs(cmd, *env) != 0)
 		return (gc_malloc(0, 12), 1);
-	if (!cmd->next && cmd->args && ft_strcmp(cmd->args->value, "exit") == 0)
-		ft_exit(cmd, env);
 	if (!cmd->next && is_builtin(cmd))
 		handle_single_builtin(cmd, env);
 	else

@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:10:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 15:26:56 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:19:22 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,18 @@ void	handle_exec_errors(char **argv, char *path)
 	char	*target;
 
 	if (path)
-		target = path;
-	else
-		target = argv[0];
-	if (access(target, F_OK) == 0)
 	{
+		target = path;
+		if (access(target, F_OK) == -1)
+		{
+			print_error(target, "No such file or directory");
+			free_argv(argv);
+			exit(127);
+		}
 		handle_permission_or_directory(target, argv);
 	}
-	if (!path)
-	{
-		print_error(argv[0], "command not found");
-		free_argv(argv);
-		exit(127);
-	}
+	else
+		handle_path_null(argv);
 }
 
 static void	loop_free_envp(char **envp, size_t i)

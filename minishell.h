@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/26 14:05:04 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:20:01 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,9 +162,6 @@ size_t		count_tokens(t_token *token);
 
 // memory management
 
-void		ft_free_tokens(t_token *tokens);
-void		ft_free_redirs(t_redir *redir);
-void		ft_free_cmds(t_cmd *cmd);
 void		ft_free_env(t_env *env);
 void		free_argv(char **av);
 void		free_split(char **arr);
@@ -206,8 +203,6 @@ char		*find_executable(char *cmd, t_env *env);
 char		**token_to_av(t_token *token);
 char		**env_list_to_envp(t_env *env);
 int			heredoc_pipe(const char *delim, t_env *env, int quoted);
-void		setup_signal(void);
-int			handle_line(char *line, const char *delim, int write_fd);
 void		check_args(char **argv);
 void		wait_for_all_children(pid_t *pids, int total, pid_t last_pid);
 void		handle_exec_errors(char **argv, char *path);
@@ -217,7 +212,7 @@ int			start_command(t_cmd *cmd, t_cmd_exec *exec,
 				char **envp, t_env **env);
 void		handle_permission_or_directory(char *target, char **argv);
 void		launch_exec(char **argv, t_child_args *args);
-int			handle_child(const char *delim, t_env *env, int *fds, int quoted);
+void		handle_path_null(char **argv);
 
 //exe
 

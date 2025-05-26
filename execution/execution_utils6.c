@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 15:35:07 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 15:35:57 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:19:28 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,7 @@ void	launch_exec(char **argv, t_child_args *args)
 	if (is_builtin(args->cmd))
 		exit(handle_builtins(args->cmd, args->env));
 	path = find_executable(argv[0], *(args->env));
-	if (!path)
-	{
-		print_error(argv[0], "command not found");
-		free_argv(argv);
-		exit(127);
-	}
-	handle_permission_or_directory(path, argv);
+	handle_exec_errors(argv, path);
 	if (execve(path, argv, args->envp) == -1)
 	{
 		free_argv(argv);
@@ -54,4 +48,24 @@ void	launch_exec(char **argv, t_child_args *args)
 		perror("execve");
 	}
 	exit((free(path), 126));
+}
+
+void	handle_path_null(char **argv)
+{
+	char	*target;
+
+	target = argv[0];
+	if (!ft_strchr(target, '/'))
+	{
+		print_error(target, "command not found");
+		free_argv(argv);
+		exit(127);
+	}
+	if (access(target, F_OK) == -1)
+	{
+		print_error(target, "No such file or directory");
+		free_argv(argv);
+		exit(127);
+	}
+	handle_permission_or_directory(target, argv);
 }
