@@ -35,9 +35,15 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		env_list = env_list->next;
 	}
 	if (val)
+	{
 		token->value = val;
+		token->hidden = 0;
+	}
 	else
+	{
 		token->value = ft_strdup_gc("");
+		token->hidden = 1;
+	}
 }
 
 void	convert_exit_code(t_token *token)

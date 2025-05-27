@@ -40,11 +40,6 @@ static int	expand_and_check_redirs(t_token *tokens, t_env *env)
 	escape_from_dollars(tokens);
 	delim_of_heredoc(tokens);
 	starboy_expansion(tokens, env);
-	if (ambiguous_redirection(tokens))
-	{
-		ft_update_exit_status(1, 63);
-		return (0);
-	}
 	return (1);
 }
 
@@ -55,9 +50,14 @@ static int	sanitize_tokens(t_token **tokens)
 	remove_empty_tokens(tokens);
 	clean_hidden_dollars(*tokens);
 	field_split_tokens(tokens);
+	if (ambiguous_redirection(*tokens))
+	{
+		ft_update_exit_status(1, 63);
+		return (0);
+	}
 	if (!*tokens)
 	{
-		ft_update_exit_status(258, 63);
+		ft_update_exit_status(0, 63);
 		return (0);
 	}
 	return (1);

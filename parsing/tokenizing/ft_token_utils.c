@@ -22,6 +22,7 @@ t_token	*lst_new_token(t_type type, char *value)
 	token->type = type;
 	token->value = value;
 	token->quoted = 0;
+	token->hidden = 0;
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);

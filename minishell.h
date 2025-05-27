@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/26 16:20:01 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:24:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_token
 	t_type			type;
 	char			*value;
 	int				quoted;
+	int				hidden;
 	struct s_token	*next;
 	struct s_token	*prev;
 }			t_token;

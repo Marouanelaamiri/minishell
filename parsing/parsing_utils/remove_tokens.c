@@ -24,6 +24,28 @@ static void	remove_token(t_token **head, t_token *to_remove)
 		to_remove->next->prev = to_remove->prev;
 }
 
+static int	should_remove_token(t_token *curr)
+{
+	if (!(curr->value && curr->value[0] == '\0' && curr->type != SPCE))
+		return 0;
+
+	if (curr->prev && curr->prev->type == SPCE
+		&& curr->prev->prev
+		&& curr->prev->prev->type != HEREDOC
+		&& curr->prev->prev->type != WORD)
+		return 1;
+
+	if (curr->prev && curr->prev->type == SPCE
+		&& curr->prev->prev && curr->prev->prev->type == WORD
+		&& curr->hidden == 1)
+		return 1;
+
+	if (!curr->prev && curr->hidden == 1)
+		return 1;
+
+	return 0;
+}
+
 void	remove_empty_tokens(t_token **tokens)
 {
 	t_token	*curr;
@@ -33,17 +55,8 @@ void	remove_empty_tokens(t_token **tokens)
 	while (curr)
 	{
 		tmp = curr->next;
-		if (curr->value && curr->value[0] == '\0'
-			&& curr->type != SPCE)
-		{
-			if (curr->prev && curr->prev->type == SPCE
-				&& curr->prev->prev
-				&& curr->prev->prev->type != HEREDOC
-				&& curr->prev->prev->type != WORD)
-			{
-				remove_token(tokens, curr);
-			}
-		}
+		if (should_remove_token(curr))
+			remove_token(tokens, curr);
 		curr = tmp;
 	}
 }

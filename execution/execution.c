@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/26 16:06:21 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:32:16 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	handle_command_loop(t_cmd *cmd_list, t_cmd_exec *exec,
 	while (current)
 	{
 		if ((!current->args || !current->args[0].value
-				|| current->args[0].value[0] == '\0') && !current->redir)
+				|| current->args[0].value[0] == '\0') && !current->redir
+			&& current->next == NULL)
 		{
 			write(2, "minishell: : command not found\n", 31);
 			ft_update_exit_status(127, 63);

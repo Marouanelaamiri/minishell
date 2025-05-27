@@ -27,11 +27,11 @@ int	main(int argc, char **argv, char **envp)
 	// atexit(on_exit1);
 	(void)argc;
 	(void)argv;
-	if (!isatty(0) || !isatty(1) || !isatty(2))
-	{
-		ft_update_exit_status(0, 63);
-		return (1);
-	}
+	// if (!isatty(0) || !isatty(1) || !isatty(2))
+	// {
+	// 	ft_update_exit_status(0, 63);
+	// 	return (1);
+	// }
 	env = init_env(envp);
 	env_unset(&env, "OLDPWD");
 	update_shell_level(&env);
