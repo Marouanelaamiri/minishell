@@ -199,7 +199,7 @@ void		heredoc_sigint_handler(int sig);
 
 // exe utils
 
-void		setup_redirections(t_cmd *cmd);
+int		setup_redirections(t_cmd *cmd);
 char		*find_executable(char *cmd, t_env *env);
 char		**token_to_av(t_token *token);
 char		**env_list_to_envp(t_env *env);

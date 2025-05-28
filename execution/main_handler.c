@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/26 15:51:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:45:26 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ void	handle_single_builtin(t_cmd *cmd, t_env **env)
 	if (cmd->redir)
 	{
 		saved_stdout = dup(STDOUT_FILENO);
-		setup_redirections(cmd);
+		if (setup_redirections(cmd) != 0)
+		{
+			ft_update_exit_status(1, 63);
+			return ;
+		}
 	}
 	status = handle_builtins(cmd, env);
 	if (cmd->redir && saved_stdout != -1)
@@ -31,6 +35,18 @@ void	handle_single_builtin(t_cmd *cmd, t_env **env)
 		close(saved_stdout);
 	}
 	ft_update_exit_status(status, 63);
+}
+
+void	fd_cleaner(void)
+{
+	int	i;
+
+	i = 3;
+	while (i < 10240)
+	{
+		close(i);
+		i++;
+	}
 }
 
 int	handle_one_line(t_env **env)
@@ -56,6 +72,7 @@ int	handle_one_line(t_env **env)
 		handle_single_builtin(cmd, env);
 	else
 		ft_update_exit_status(execute_commands(cmd, *env), 63);
+	fd_cleaner();
 	return (gc_malloc(0, 12), 1);
 }
 

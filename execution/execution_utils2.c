@@ -33,22 +33,23 @@ static int	open_redirection(t_redir *redir, bool *process)
 	return (fd);
 }
 
-static void	apply_redirection(t_redir *redir, int fd)
+static int	apply_redirection(t_redir *redir, int fd)
 {
 	if (fd < 0)
 	{
 		write(2, "minishell ", 10);
 		perror(redir->value);
-		exit(1);
+		return (1);
 	}
 	if (redir->type == REDIR_IN || redir->type == HEREDOC)
 		dup2(fd, STDIN_FILENO);
 	else
 		dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }
 
-void	setup_redirections(t_cmd *cmd)
+int	setup_redirections(t_cmd *cmd)
 {
 	t_redir	*redir;
 	int		fd;
@@ -59,9 +60,13 @@ void	setup_redirections(t_cmd *cmd)
 	{
 		fd = open_redirection(redir, &process);
 		if (process)
-			apply_redirection(redir, fd);
+		{
+			if (apply_redirection(redir, fd))
+				return (1);
+		}
 		redir = redir->next;
 	}
+	return (0);
 }
 
 int	count_cmds(t_cmd *cmd_list)

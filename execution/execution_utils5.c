@@ -59,7 +59,8 @@ pid_t	run_child_process(t_child_args *args)
 	char	**argv;
 
 	handle_input_pipe(args);
-	setup_redirections(args->cmd);
+	if (setup_redirections(args->cmd))
+		exit(1);
 	argv = token_to_av(args->cmd->args);
 	check_args(argv);
 	launch_exec(argv, args);
