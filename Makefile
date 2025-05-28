@@ -87,19 +87,15 @@ parsing/main_pars.c \
 
 #------------------------------ Object Files ------------------------------------#
 OBJ = $(SRC:.c=.o)
-
 #------------------------------ Readline Paths ----------------------------------#
 READLINE_INCLUDE = $(shell brew --prefix readline)/include
 READLINE_LIB = $(shell brew --prefix readline)/lib
 LDLIB = -L$(READLINE_LIB) -lreadline
-
 #------------------------------ Compiler and Flags ------------------------------#
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
-
 #------------------------------ Executable --------------------------------------#
 NAME = minishell
-
 #------------------------------ Rules -------------------------------------------#
 all: $(NAME)
 
@@ -119,7 +115,6 @@ $(NAME): $(OBJ)
 %.o: %.c minishell.h
 	@$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
 	@echo "\033[1;34m🔹 Compiling: $< -> $@\033[0m"
-
 #------------------------------ Cleaning ----------------------------------------#
 clean:
 	@echo "\033[0;33m🧼 Removing compiled object files to clean up...\033[0m"

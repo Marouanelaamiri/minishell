@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/27 12:24:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:56:16 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void		heredoc_sigint_handler(int sig);
 
 // exe utils
 
-int		setup_redirections(t_cmd *cmd);
+int			setup_redirections(t_cmd *cmd);
 char		*find_executable(char *cmd, t_env *env);
 char		**token_to_av(t_token *token);
 char		**env_list_to_envp(t_env *env);
