@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 16:54:24 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 22:26:19 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,23 @@ static int	handle_command_loop(t_cmd *cmd_list, t_cmd_exec *exec,
 					char **envp, t_env **env)
 {
 	t_cmd	*current;
+	int		ret;
 
 	current = cmd_list;
 	while (current)
 	{
 		if ((!current->args || !current->args[0].value
-				|| current->args[0].value[0] == '\0') && !current->redir
-			&& current->next == NULL)
+				|| current->args[0].value[0] == '\0')
+			&& !current->redir && current->next == NULL)
 		{
 			write(2, "minishell: : command not found\n", 31);
 			ft_update_exit_status(127, 63);
 			current = current->next;
 			continue ;
 		}
-		if (start_command(current, exec, envp, env) == 1)
-		{
-			ft_update_exit_status(1, 63);
+		ret = start_command(current, exec, envp, env);
+		if (ret != 0)
 			return (1);
-		}
 		current = current->next;
 	}
 	return (0);
@@ -73,6 +72,12 @@ int	execute_commands(t_cmd *cmd_list, t_env *env)
 	exec.read_end = -1;
 	exec.index = 0;
 	ret = handle_command_loop(cmd_list, &exec, envp, &env);
-	wait_and_cleanup(&exec, envp);
-	return (ret);
+	if (ret != 0)
+	{
+		wait_for_all_children(exec.pids, exec.index, -1);
+		free(exec.pids);
+		free_envp(envp);
+		return (ret);
+	}
+	return (wait_and_cleanup(&exec, envp));
 }

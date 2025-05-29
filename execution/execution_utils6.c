@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 15:35:07 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/27 12:24:41 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 22:26:36 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,43 @@ void	handle_path_null(char **argv)
 		exit(127);
 	}
 	handle_permission_or_directory(target, argv);
+}
+
+int	handle_pipe_and_fork(t_cmd *cmd, t_cmd_exec *exec)
+{
+	int	i;
+
+	if (cmd->next && pipe(exec->pipe_fds) < 0)
+	{
+		perror("pipe");
+		return (ft_update_exit_status(1, 63), 1);
+	}
+	exec->pids[exec->index] = fork();
+	if (exec->pids[exec->index] < 0)
+	{
+		perror("fork");
+		i = 0;
+		while (i < exec->index)
+		{
+			kill(exec->pids[i], SIGTERM);
+			i++;
+		}
+		return (ft_update_exit_status(1, 63), 1);
+	}
+	return (0);
+}
+
+void	setup_after_fork(t_cmd *cmd, t_cmd_exec *exec)
+{
+	if (exec->read_end != -1)
+		close(exec->read_end);
+	if (cmd->next)
+	{
+		close(exec->pipe_fds[1]);
+		exec->read_end = exec->pipe_fds[0];
+	}
+	else
+	{
+		exec->last_pid = exec->pids[exec->index];
+	}
 }

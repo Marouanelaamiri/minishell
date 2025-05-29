@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/27 12:24:58 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 22:25:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ int			start_command(t_cmd *cmd, t_cmd_exec *exec,
 void		handle_permission_or_directory(char *target, char **argv);
 void		launch_exec(char **argv, t_child_args *args);
 void		handle_path_null(char **argv);
+void		setup_after_fork(t_cmd *cmd, t_cmd_exec *exec);
+int			handle_pipe_and_fork(t_cmd *cmd, t_cmd_exec *exec);
 
 //exe
 

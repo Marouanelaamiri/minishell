@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 16:52:47 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 22:26:32 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,28 +70,11 @@ pid_t	run_child_process(t_child_args *args)
 int	start_command(t_cmd *cmd, t_cmd_exec *exec,
 					char **envp, t_env **env)
 {
-	if (cmd->next && pipe(exec->pipe_fds) < 0)
-	{
-		perror("pipe");
-		return(ft_update_exit_status(1, 63), 1);
-	}
-	exec->pids[exec->index] = fork();
-	if (exec->pids[exec->index] < 0)
-	{
-		perror("fork");
-		return (ft_update_exit_status(1, 63), 1);
-	}
+	if (handle_pipe_and_fork(cmd, exec))
+		return (1);
 	if (exec->pids[exec->index] == 0)
 		spawn_child_process(cmd, exec, envp, env);
-	if (exec->read_end != -1)
-		close(exec->read_end);
-	if (cmd->next)
-	{
-		close(exec->pipe_fds[1]);
-		exec->read_end = exec->pipe_fds[0];
-	}
-	else
-		exec->last_pid = exec->pids[exec->index];
+	setup_after_fork(cmd, exec);
 	exec->index++;
 	return (0);
 }
