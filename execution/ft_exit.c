@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:59:58 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/27 11:18:24 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:54:29 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_exit(t_cmd *cmd, t_env **env)
 	if (isatty(STDIN_FILENO))
 		write(1, "exit\n", 5);
 	if (!arg)
-		exit (ft_update_exit_status(0, 0));
+		exit (ft_update_exit_status(0, 63));
 	if (!ft_isllnum(arg->value))
 	{
 		ft_update_exit_status(255, 63);

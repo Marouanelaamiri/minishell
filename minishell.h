@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/28 15:56:16 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:24:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,9 +342,7 @@ int			like_that(char c);
 void		ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(char *s, int fd);
 int			is_redirection(t_type type);
-
-/* Debug */
-void		print_tokens(t_token *token);
-void		ft_print_cmds(t_cmd *cmd);
+int			ft_error(t_data *data);
+int			ft_count_dollars(const char *input, int i);
 
 #endif

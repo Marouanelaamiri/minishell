@@ -44,6 +44,7 @@ execution/main_handler.c \
 parsing/tokenizing/ft_tokenize.c \
 parsing/tokenizing/ft_token_word.c \
 parsing/tokenizing/ft_token_var.c \
+parsing/tokenizing/ft_token_var_utils.c \
 parsing/tokenizing/ft_token_utils.c \
 parsing/tokenizing/ft_token_space.c \
 parsing/tokenizing/ft_token_redir.c \
@@ -69,7 +70,6 @@ parsing/expansion/heredoc_utils_env.c \
 parsing/expansion/heredoc_utils_number.c \
 parsing/expansion/heredoc_utils_question.c \
 parsing/expansion/utils_expansion.c \
-parsing/debug_func/ft_debug.c \
 parsing/parsing_utils/ft_status.c \
 parsing/parsing_utils/clean_dollars.c \
 parsing/parsing_utils/nodes_join_v1.c \
@@ -87,15 +87,19 @@ parsing/main_pars.c \
 
 #------------------------------ Object Files ------------------------------------#
 OBJ = $(SRC:.c=.o)
+
 #------------------------------ Readline Paths ----------------------------------#
 READLINE_INCLUDE = $(shell brew --prefix readline)/include
 READLINE_LIB = $(shell brew --prefix readline)/lib
 LDLIB = -L$(READLINE_LIB) -lreadline
+
 #------------------------------ Compiler and Flags ------------------------------#
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
+
 #------------------------------ Executable --------------------------------------#
 NAME = minishell
+
 #------------------------------ Rules -------------------------------------------#
 all: $(NAME)
 
@@ -115,6 +119,7 @@ $(NAME): $(OBJ)
 %.o: %.c minishell.h
 	@$(CC) $(CFLAGS) -I$(READLINE_INCLUDE) -c $< -o $@
 	@echo "\033[1;34m🔹 Compiling: $< -> $@\033[0m"
+
 #------------------------------ Cleaning ----------------------------------------#
 clean:
 	@echo "\033[0;33m🧼 Removing compiled object files to clean up...\033[0m"

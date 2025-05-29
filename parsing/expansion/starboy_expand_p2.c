@@ -12,28 +12,19 @@
 
 #include "../../minishell.h"
 
-void	expand_env_dollar(t_token *token, t_env *env)
+static char	*get_env_value(char *key, int has_equal, t_env *env)
 {
-	t_env	*env_list;
-	char	*key_val;
-	char	*val;
-	int		has_equal;
-
-	if (!token->value)
-		return ;
-	has_equal = 0;
-	env_list = env;
-	key_val = ft_strdup_spec(token->value + 1, &has_equal);
-	val = NULL;
-	while (env_list)
+	while (env)
 	{
-		if (ft_strcmp(env_list->name, key_val) == 0)
-		{
-			val = ft_strdup_full(env_list->value, has_equal);
-			break ;
-		}
-		env_list = env_list->next;
+		if (ft_strcmp(env->name, key) == 0)
+			return (ft_strdup_full(env->value, has_equal));
+		env = env->next;
 	}
+	return (NULL);
+}
+
+static void	set_token_value(t_token *token, char *val)
+{
 	if (val)
 	{
 		token->value = val;
@@ -44,6 +35,20 @@ void	expand_env_dollar(t_token *token, t_env *env)
 		token->value = ft_strdup_gc("");
 		token->hidden = 1;
 	}
+}
+
+void	expand_env_dollar(t_token *token, t_env *env)
+{
+	char	*key_val;
+	char	*val;
+	int		has_equal;
+
+	if (!token->value)
+		return ;
+	has_equal = 0;
+	key_val = ft_strdup_spec(token->value + 1, &has_equal);
+	val = get_env_value(key_val, has_equal, env);
+	set_token_value(token, val);
 }
 
 void	convert_exit_code(t_token *token)

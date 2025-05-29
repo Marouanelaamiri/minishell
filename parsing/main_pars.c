@@ -74,8 +74,6 @@ t_cmd	*process_input(char *input, t_env *env)
 		return (NULL);
 	if (!sanitize_tokens(&tokens))
 		return (NULL);
-	// print_tokens(tokens);
 	cmd_list = ft_parse_commands(tokens);
-	// ft_print_cmds(cmd_list);
 	return (cmd_list);
 }

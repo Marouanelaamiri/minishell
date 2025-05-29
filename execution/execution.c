@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/28 15:43:44 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:11:42 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ static int	handle_command_loop(t_cmd *cmd_list, t_cmd_exec *exec,
 			current = current->next;
 			continue ;
 		}
-		if (start_command(current, exec, envp, env))
+		if (start_command(current, exec, envp, env) == 1)
+		{
+			ft_update_exit_status(1, 63);
 			return (1);
+		}
 		current = current->next;
 	}
 	return (0);

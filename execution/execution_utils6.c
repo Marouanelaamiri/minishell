@@ -20,6 +20,7 @@ void	handle_dot_commands(char **argv)
 	{
 		print_error("..", "command not found");
 		free_argv(argv);
+		ft_update_exit_status(127, 63);
 		exit(127);
 	}
 	if (ft_strcmp(argv[0], ".") == 0)
@@ -27,6 +28,7 @@ void	handle_dot_commands(char **argv)
 		print_error(".", "filename argument required");
 		write(2, ".: usage: . filename [arguments]\n", 34);
 		free_argv(argv);
+		ft_update_exit_status(2, 63);
 		exit(2);
 	}
 }
@@ -59,12 +61,14 @@ void	handle_path_null(char **argv)
 	{
 		print_error(target, "command not found");
 		free_argv(argv);
+		ft_update_exit_status(127, 63);
 		exit(127);
 	}
 	if (access(target, F_OK) == -1)
 	{
 		print_error(target, "No such file or directory");
 		free_argv(argv);
+		ft_update_exit_status(127, 63);
 		exit(127);
 	}
 	handle_permission_or_directory(target, argv);

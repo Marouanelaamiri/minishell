@@ -121,6 +121,7 @@ int	preprocess_heredocs(t_cmd *cmd_list, t_env *env)
 	if (count_heredocs(cmd_list) < 0)
 	{
 		print_error ("heredoc", "maximum here-document count exceeded");
+		ft_update_exit_status(2, 63);
 		exit(2);
 	}
 	while (cmd_list)

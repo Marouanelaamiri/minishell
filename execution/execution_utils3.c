@@ -22,12 +22,14 @@ void	handle_permission_or_directory(char *target, char **argv)
 		closedir(dir);
 		print_error(target, "is a directory");
 		free_argv(argv);
+		ft_update_exit_status(126, 63);
 		exit(126);
 	}
 	if (access(target, X_OK) == -1)
 	{
 		print_error(target, "Permission denied");
 		free_argv(argv);
+		ft_update_exit_status(126, 63);
 		exit(126);
 	}
 }
@@ -43,6 +45,7 @@ void	handle_exec_errors(char **argv, char *path)
 		{
 			print_error(target, "No such file or directory");
 			free_argv(argv);
+			ft_update_exit_status(127, 63);
 			exit(127);
 		}
 		handle_permission_or_directory(target, argv);

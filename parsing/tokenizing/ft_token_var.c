@@ -12,25 +12,6 @@
 
 #include "../../minishell.h"
 
-static int	ft_count_dollars(const char *input, int i)
-{
-	int	count;
-
-	count = 0;
-	while (input[i] == '$')
-	{
-		count++;
-		i++;
-	}
-	return (count);
-}
-
-static int	ft_error(t_data *data)
-{
-	data->error = 1;
-	return (0);
-}
-
 static char	*ft_extract_var(t_data *data, char *input, int start, int j)
 {
 	if (input[data->i] == '?')

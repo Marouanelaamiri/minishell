@@ -12,18 +12,11 @@
 
 #include "../../minishell.h"
 
-// int	add_var_token(t_data *data, char *value)
-// {
-// 	t_token	*token;
-
-// 	if (!value)
-// 		return (data->error = 1, 0);
-// 	token = lst_new_token(VAR, value);
-// 	if (!token)
-// 		return (data->error = 1, 0);
-// 	lst_add_back_token(data, token);
-// 	return (1);
-// }
+int	ft_error(t_data *data)
+{
+	data->error = 1;
+	return (0);
+}
 
 int	ft_count_dollars(const char *input, int i)
 {
