@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:48:53 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/29 16:07:46 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:54:00 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	main(int argc, char **argv, char **envp)
 	// atexit(on_exit1);
 	(void)argc;
 	(void)argv;
-	// if (!isatty(0) || !isatty(1) || !isatty(2))
-	// {
-	// 	ft_update_exit_status(0, 63);
-	// 	return (1);
-	// }
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+	{
+		ft_update_exit_status(0, 63);
+		return (1);
+	}
 	env = init_env(envp);
 	env_unset(&env, "OLDPWD");
 	update_shell_level(&env);
