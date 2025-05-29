@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 16:29:16 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:40:45 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	start_command(t_cmd *cmd, t_cmd_exec *exec,
 	if (cmd->next && pipe(exec->pipe_fds) < 0)
 	{
 		perror("pipe");
-		retrun(ft_update_exit_status(1, 63), 1);
+		return(ft_update_exit_status(1, 63), 1);
 	}
 	exec->pids[exec->index] = fork();
 	if (exec->pids[exec->index] < 0)
