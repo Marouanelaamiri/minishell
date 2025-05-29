@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 16:04:53 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:29:16 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,33 +67,31 @@ pid_t	run_child_process(t_child_args *args)
 	return (-1);
 }
 
-int start_command(t_cmd *cmd, t_cmd_exec *exec,
-                         char **envp, t_env **env)
+int	start_command(t_cmd *cmd, t_cmd_exec *exec,
+					char **envp, t_env **env)
 {
-    if (cmd->next && pipe(exec->pipe_fds) < 0)
-    {
-        perror("pipe");
-        ft_update_exit_status(1, 63);
-        return (1);
-    }
-    exec->pids[exec->index] = fork();
-    if (exec->pids[exec->index] < 0)
-    {
-        perror("fork");
-        ft_update_exit_status(1, 63);
-        return (1);
-    }
-    if (exec->pids[exec->index] == 0)
-        spawn_child_process(cmd, exec, envp, env);
-    if (exec->read_end != -1)
-        close(exec->read_end);
-    if (cmd->next)
-    {
-        close(exec->pipe_fds[1]);
-        exec->read_end = exec->pipe_fds[0];
-    }
-    else
-        exec->last_pid = exec->pids[exec->index];
-    exec->index++;
-    return (0);
+	if (cmd->next && pipe(exec->pipe_fds) < 0)
+	{
+		perror("pipe");
+		retrun(ft_update_exit_status(1, 63), 1);
+	}
+	exec->pids[exec->index] = fork();
+	if (exec->pids[exec->index] < 0)
+	{
+		perror("fork");
+		return (ft_update_exit_status(1, 63), 1);
+	}
+	if (exec->pids[exec->index] == 0)
+		spawn_child_process(cmd, exec, envp, env);
+	if (exec->read_end != -1)
+		close(exec->read_end);
+	if (cmd->next)
+	{
+		close(exec->pipe_fds[1]);
+		exec->read_end = exec->pipe_fds[0];
+	}
+	else
+		exec->last_pid = exec->pids[exec->index];
+	exec->index++;
+	return (0);
 }
