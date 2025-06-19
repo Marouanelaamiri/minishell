@@ -1,3 +1,9 @@
+all you need to know about minihell
+
+https://medium.com/@laamirimarouane8/42-minishell-guide-53600f49742b
+
+
+
 https://www.tldraw.com/f/KX1LRECf1JUbFSfkS85xm?d=v366.-1576.4214.2444.4OuGjwzBxcGqYD1ISRl22
 
 https://www.tldraw.com/f/8h_KuwCanHOf-YLyaUQd5?d=v-587.3663.3473.2014.fikwP3jBcMNHdsNcCAwEl
