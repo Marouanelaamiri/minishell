@@ -6,15 +6,38 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 22:26:19 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:00:05 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static int	handle_signal_exit(int status)
+{
+	int	sig;
+
+	sig = WTERMSIG(status);
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		ft_update_exit_status(130, 63);
+		g_sig = 0;
+		return (130);
+	}
+	else if (sig == SIGQUIT)
+	{
+		write(1, "Quit: 3\n", 8);
+		ft_update_exit_status(131, 63);
+		return (131);
+	}
+	ft_update_exit_status(128 + sig, 63);
+	return (128 + sig);
+}
+
 static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
 {
 	int	status;
+	int	exit_code;
 
 	if (exec->last_pid > 0)
 		waitpid(exec->last_pid, &status, 0);
@@ -23,10 +46,14 @@ static int	wait_and_cleanup(t_cmd_exec *exec, char **envp)
 	wait_for_all_children(exec->pids, exec->cmd_count, exec->last_pid);
 	free(exec->pids);
 	free_envp(envp);
+	if (WIFSIGNALED(status))
+		return (handle_signal_exit(status));
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
+	{
+		exit_code = WEXITSTATUS(status);
+		ft_update_exit_status(exit_code, 63);
+		return (exit_code);
+	}
 	return (1);
 }
 
@@ -80,4 +107,16 @@ int	execute_commands(t_cmd *cmd_list, t_env *env)
 		return (ret);
 	}
 	return (wait_and_cleanup(&exec, envp));
+}
+
+void	fd_cleaner(void)
+{
+	int	i;
+
+	i = 3;
+	while (i < 10240)
+	{
+		close(i);
+		i++;
+	}
 }

@@ -6,35 +6,11 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:18 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 10:21:48 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:11:51 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-t_env	*init_env(char **envp)
-{
-	t_env	*head;
-	t_env	*tail;
-	int		i;
-
-	head = NULL;
-	tail = NULL;
-	i = 0;
-	if (envp[i] == NULL)
-		head = handel_null_env(head);
-	else
-	{
-		while (envp[i])
-		{
-			head = append_env_node(head, &tail, envp[i]);
-			if (!head)
-				return (NULL);
-			i++;
-		}
-	}
-	return (head);
-}
 
 int	env_set(t_env **env, const char *name, const char *value)
 {

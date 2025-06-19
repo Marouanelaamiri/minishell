@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 16:08:32 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/23 17:10:33 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/05 01:12:24 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ft_strdup_gc(const char *src)
 	dst = gc_malloc(ft_strlen(src) + 1, 63);
 	if (!src)
 		return (NULL);
-	if (dst == NULL)
+	if (!dst)
 		return (NULL);
 	while (src[i])
 	{

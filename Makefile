@@ -94,8 +94,8 @@ READLINE_LIB = $(shell brew --prefix readline)/lib
 LDLIB = -L$(READLINE_LIB) -lreadline
 
 #------------------------------ Compiler and Flags ------------------------------#
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
 #------------------------------ Executable --------------------------------------#
 NAME = minishell

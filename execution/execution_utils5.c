@@ -6,13 +6,13 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:26:11 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/29 22:26:32 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:25:35 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	spawn_child_process(t_cmd *cmd, t_cmd_exec *exec,
+static void	spawn_child_process(t_cmd *cmd, t_cmd_exec *exec,
 	char **envp, t_env **env)
 {
 	t_child_args	args;
@@ -23,7 +23,6 @@ static int	spawn_child_process(t_cmd *cmd, t_cmd_exec *exec,
 	args.envp = envp;
 	args.env = env;
 	run_child_process(&args);
-	return (0);
 }
 
 void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
@@ -37,6 +36,7 @@ void	wait_for_all_children(pid_t *pids, int total, pid_t last_pid)
 			waitpid(pids[i], NULL, 0);
 		i++;
 	}
+	ft_signal_handler();
 }
 
 static void	handle_input_pipe(t_child_args *args)
@@ -54,16 +54,20 @@ static void	handle_input_pipe(t_child_args *args)
 	}
 }
 
-pid_t	run_child_process(t_child_args *args)
+pid_t	run_child_process(t_child_args *child_ctx)
 {
 	char	**argv;
+	int		redir_status;
 
-	handle_input_pipe(args);
-	if (setup_redirections(args->cmd))
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	handle_input_pipe(child_ctx);
+	redir_status = setup_redirections(child_ctx->cmd);
+	if (redir_status != 0)
 		exit(1);
-	argv = token_to_av(args->cmd->args);
+	argv = token_to_av(child_ctx->cmd->args);
 	check_args(argv);
-	launch_exec(argv, args);
+	launch_exec(argv, child_ctx);
 	return (-1);
 }
 

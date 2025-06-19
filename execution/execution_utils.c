@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 15:30:47 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:31:13 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ char	*find_executable(char *cmd, t_env *env)
 		return (check_direct_path(cmd));
 	env_path = ft_getenv(env, "PATH");
 	if (!env_path)
-		return (NULL);
+	{
+		if (ft_strchr (cmd, '/'))
+			return (check_direct_path(cmd));
+		else
+			return (ft_strdup(cmd));
+	}
 	return (search_in_path(cmd, env_path));
 }

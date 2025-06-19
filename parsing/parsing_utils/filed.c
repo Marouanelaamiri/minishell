@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 14:42:38 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/23 16:51:41 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/15 20:26:51 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,24 @@ void	lst_insert_before(t_token **head, t_token *node, t_token *new_token)
 	node->prev = new_token;
 }
 
-static int	is_assignment_word(const char *str)
+int	is_assignment_word(const char *str)
 {
 	int	i;
 
-	i = 0;
-	while (str[i] && str[i] != '=')
+	if (!str || !ft_isalpha(str[0]))
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=' && !(str[i] == '+' && str[i + 1] == '='))
 	{
-		if (!ft_isalnum(str[i]))
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
-	return (str[i] == '=');
+	if (str[i] == '=')
+		return (1);
+	if (str[i] == '+' && str[i + 1] == '=')
+		return (1);
+	return (0);
 }
 
 static t_token	*split_and_insert(t_token **tokens, t_token *current)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 12:13:16 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/25 23:53:34 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:27:31 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	heredoc_pipe(const char *delim, t_env *env, int quoted)
 	g_sig = 0;
 	ft_update_exit_status(0, 63);
 	if (pipe(fds) < 0)
-		return (perror("pipe"), 1);
+		return (perror("pipe"), -1);
 	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
@@ -104,11 +104,6 @@ static int	handle_heredoc(t_redir *redir, t_env *env)
 				return (-1);
 			else if (g_sig == 1)
 				return (-1);
-			if (fd == -2)
-			{
-				ft_update_exit_status(130, 63);
-				return (-1);
-			}
 			redir->fd = fd;
 		}
 		redir = redir->next;

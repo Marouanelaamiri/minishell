@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 20:42:05 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/23 17:00:25 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/05 01:12:03 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ void	*gc_malloc(size_t size, int mode)
 		(void)prev_node;
 		mem = malloc(size);
 		if (!mem)
-			exit(1);
+			return (NULL);
 		new_node = create_track_node(mem);
 		if (!new_node)
-			return (free(mem), exit(1), NULL);
+			return (free(mem), NULL);
 		track_add_node(&track, new_node);
 		return (mem);
 	}

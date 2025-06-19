@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 20:12:02 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 15:17:59 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:46:15 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ size_t	count_env_vars(t_env *env)
 	return (count);
 }
 
-static void	free_av_partial(char **av, size_t i)
+static void	free_av(char **av, size_t i)
 {
 	while (i > 0)
 		free(av[--i]);
@@ -60,7 +60,7 @@ static char	**fill_av_array(t_token *token, size_t count)
 		av[i] = ft_strdup(token->value);
 		if (!av[i])
 		{
-			free_av_partial(av, i);
+			free_av(av, i);
 			return (NULL);
 		}
 		i++;

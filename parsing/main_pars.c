@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 16:39:48 by sojammal          #+#    #+#             */
-/*   Updated: 2025/05/26 00:58:23 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/15 20:15:00 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static int	expand_and_check_redirs(t_token *tokens, t_env *env)
 
 static int	sanitize_tokens(t_token **tokens)
 {
+	remove_empty_tokens(tokens);
 	nodes_join(*tokens);
 	nodes_join_part2(*tokens);
-	remove_empty_tokens(tokens);
 	clean_hidden_dollars(*tokens);
 	field_split_tokens(tokens);
 	if (ambiguous_redirection(*tokens))
@@ -63,11 +63,13 @@ static int	sanitize_tokens(t_token **tokens)
 	return (1);
 }
 
-t_cmd	*process_input(char *input, t_env *env)
+t_cmd	*ft_build_pipeline(char *input, t_env *env)
 {
 	t_token	*tokens;
 	t_cmd	*cmd_list;
 
+	if (!input || !*input)
+		return (NULL);
 	if (!validate_and_tokenize(input, &tokens))
 		return (NULL);
 	if (!expand_and_check_redirs(tokens, env))

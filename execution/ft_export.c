@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:13:40 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/23 19:02:42 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:44:58 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,15 @@ int	ft_export(t_cmd *cmd, t_env **env)
 int	handle_one_export(const char *arg, t_env **env)
 {
 	char	*copy;
+	char	*eq;
 	int		err;
 
 	copy = ft_strdup(arg);
 	err = 0;
 	if (!copy)
 		return (1);
-	if (ft_strstr(copy, "+="))
+	eq = ft_strchr(copy, '=');
+	if (eq && eq > copy && *(eq - 1) == '+')
 		err = apply_append(copy, env);
 	else
 		err = apply_assign(copy, env);
@@ -98,11 +100,11 @@ int	apply_append(char *copy, t_env **env)
 	char	*old;
 	char	*combined;
 
-	pos = ft_strstr(copy, "+=");
-	if (!pos)
+	pos = ft_strchr(copy, '=');
+	if (!pos || pos == copy || *(pos - 1) != '+')
 		return (1);
-	name = ft_strndup(copy, pos - copy);
-	value = ft_strdup(pos + 2);
+	name = ft_strndup(copy, (pos - copy) - 1);
+	value = ft_strdup(pos + 1);
 	if (!name || !value)
 		return (free(name), free(value), 1);
 	if (!is_valid_id(name))

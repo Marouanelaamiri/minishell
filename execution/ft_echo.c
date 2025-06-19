@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 19:58:23 by malaamir          #+#    #+#             */
-/*   Updated: 2025/05/22 10:49:27 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:30:17 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	ft_echo(t_cmd *cmd, t_env **env)
 {
 	t_token	*token;
 	int		newline;
+	size_t	len;
 
 	(void)env;
 	token = cmd->args->next;
@@ -44,12 +45,16 @@ int	ft_echo(t_cmd *cmd, t_env **env)
 	while (token)
 	{
 		if (token->type == WORD)
-			printf("%s", token->value);
+		{
+			len = ft_strlen(token->value);
+			if (len > 0)
+				write(STDOUT_FILENO, token->value, len);
+		}
 		token = token->next;
 		if (token)
-			printf(" ");
+			write(STDOUT_FILENO, " ", 1);
 	}
 	if (newline)
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }
