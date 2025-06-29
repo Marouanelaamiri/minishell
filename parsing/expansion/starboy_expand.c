@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   starboy_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sojammal <sojammal@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 22:42:56 by sojammal          #+#    #+#             */
-/*   Updated: 2025/06/07 22:17:55 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/20 01:22:18 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,40 @@ static void	expand_variable(t_token *token, t_env *env)
 		expand_env_dollar(token, env);
 }
 
+static void	heredoc_process(t_token *token)
+{
+	t_token	*curr;
+
+	curr = token;
+	if (curr->type == DQUOTE)
+	{
+		curr->value = remove_dquotes(curr->value, curr->quoted);
+		curr->type = WORD;
+	}
+	else if (curr->type == SQUOTE)
+	{
+		curr->type = WORD;
+		curr->value = remove_squotes(curr->value);
+	}
+}
+
 void	starboy_expansion(t_token *token, t_env *env)
 {
 	t_token	*curr;
 
 	curr = token;
+	if (!curr)
+		return ;
 	while (curr)
 	{
-		if (curr->type == VAR && curr->value && curr->value[0] == '$')
+		if (is_in_heredoc(curr))
 		{
-			if (is_in_heredoc(curr))
-			{
-				curr = curr->next;
-				continue ;
-			}
-			expand_variable(curr, env);
+			heredoc_process(curr);
+			curr = curr->next;
+			continue ;
 		}
+		if (curr->type == VAR && curr->value && curr->value[0] == '$')
+			expand_variable(curr, env);
 		else if (curr->type == DQUOTE)
 			starboy_quote_expansion(curr, env);
 		else if (curr->type == SQUOTE)

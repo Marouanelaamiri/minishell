@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:02:37 by malaamir          #+#    #+#             */
-/*   Updated: 2025/06/18 17:00:05 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/20 01:30:47 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	handle_signal_exit(int status)
 	{
 		write(1, "\n", 1);
 		ft_update_exit_status(130, 63);
-		g_sig = 0;
 		return (130);
 	}
 	else if (sig == SIGQUIT)

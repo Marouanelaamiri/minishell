@@ -6,7 +6,7 @@
 /*   By: sojammal <sojammal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:14:50 by malaamir          #+#    #+#             */
-/*   Updated: 2025/06/18 04:03:54 by sojammal         ###   ########.fr       */
+/*   Updated: 2025/06/20 01:18:15 by sojammal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_alloc
 	struct s_alloc	*next;
 }	t_alloc;
 
-// ENV
 typedef struct l_env
 {
 	char			*value;
@@ -46,7 +45,6 @@ typedef struct l_env
 	struct l_env	*next;
 }			t_env;
 
-// EXECUTE COMMANDS
 typedef struct s_cmd_exec
 {
 	int		index;
@@ -57,7 +55,6 @@ typedef struct s_cmd_exec
 	pid_t	*pids;
 }	t_cmd_exec;
 
-// TOKEN & COMMAND
 typedef enum e_type
 {
 	SQUOTE,
@@ -92,7 +89,6 @@ typedef struct s_data
 	int			exit_status;
 }			t_data;
 
-// REDIRECTIONS
 typedef struct s_redir
 {
 	t_type			type;
@@ -102,7 +98,6 @@ typedef struct s_redir
 	struct s_redir	*next;
 }			t_redir;
 
-// COMMANDS
 typedef struct s_cmd
 {
 	t_token			*args;
@@ -110,7 +105,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }			t_cmd;
 
-// PROCESS
 typedef struct s_child_args
 {
 	t_cmd		*cmd;
@@ -120,7 +114,6 @@ typedef struct s_child_args
 	t_env		**env;
 }			t_child_args;
 
-// HEREDOC
 typedef struct s_heredoc
 {
 	const char		*delim;
@@ -128,7 +121,6 @@ typedef struct s_heredoc
 	int				quoted;
 }			t_heredoc;
 
-// helpers
 int			ft_atoi(const char *str);
 char		*ft_strchr(const char *s, int c);
 int			ft_strcmp(const char *s1, const char *s2);
@@ -153,7 +145,6 @@ int			ft_isspace(char c);
 long long	ft_atoll(const char *str);
 size_t		count_tokens(t_token *token);
 
-// memory management
 void		ft_free_env(t_env *env);
 void		free_argv(char **av);
 void		free_split(char **arr);
@@ -327,5 +318,6 @@ int			is_redirection(t_type type);
 int			ft_error(t_data *data);
 int			ft_count_dollars(const char *input, int i);
 void		fd_cleaner(void);
+int			is_heredoc_delim(t_token *token);
 
 #endif

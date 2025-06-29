@@ -6,7 +6,7 @@
 /*   By: malaamir <malaamir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:15:45 by malaamir          #+#    #+#             */
-/*   Updated: 2025/06/19 17:33:00 by malaamir         ###   ########.fr       */
+/*   Updated: 2025/06/29 18:23:02 by malaamir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,20 +96,20 @@ void	delim_of_heredoc(t_token *tokens)
 {
 	t_token	*current;
 
+	if (!tokens)
+		return ;
 	current = tokens;
 	while (current)
 	{
-		if (current->prev && (current->prev->type == HEREDOC
-				|| (current->prev->type == SPCE
-					&& current->prev->prev->type == HEREDOC))
-			&& current->type == VAR && current->value
-			&& current->value[1] == '\0' && current->next
-			&& (current->next->type == DQUOTE
-				|| current->next->type == SQUOTE))
+		if (current->type == VAR)
 		{
-			current->value = ft_strdup_gc("");
-			if (!current->value)
-				return ;
+			if (is_heredoc_delim(current))
+			{
+				current->value = ft_strdup_gc("");
+				current->quoted = 1;
+				if (!current->value)
+					return ;
+			}
 		}
 		current = current->next;
 	}
